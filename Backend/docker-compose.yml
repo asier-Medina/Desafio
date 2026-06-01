@@ -2,7 +2,7 @@ services:
 
   db:
     image: postgres:16
-    container_name: IsWorking_db
+    container_name: Desafio_db
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
@@ -19,11 +19,11 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - IsWorking_net
+      - Desafio_net
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: Elnombrequequeramos
+    container_name: Desafio_pgadmin
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
@@ -34,13 +34,13 @@ services:
       db:
         condition: service_healthy
     networks:
-      - IsWorking_net
+      - Desafio_net
 
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: IsWorking_app
+    container_name: Desafio_app
     restart: always
     environment:
       NODE_ENV: development
@@ -53,23 +53,21 @@ services:
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN}
+      FRONTEND_URL: ${FRONTEND_URL}
       PORT: 3000
     ports:
       - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
-      mongo:
-        condition: service_started
     volumes:
       - ./src:/usr/src/app/src
     networks:
-      - IsWorking_net
-
+      - Desafio_net
 
 volumes:
   postgres-data:
 
 networks:
-  IsWorking_net:
+  Desafio_net:
     driver: bridge

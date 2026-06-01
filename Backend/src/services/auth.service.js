@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import User from '../models/User.js'
-import LogAuth from '../models/mongo/LogAuth.js'
-
-// ── Helpers de token ──────────────────────────────────────
+import LogAuth from '../models/LogAuth.js'   // ← antes apuntaba a models/mongo/LogAuth.js
 
 const generateAccessToken = (user) =>
   jwt.sign(
@@ -19,7 +17,6 @@ const generateRefreshToken = (user) =>
     { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN }
   )
 
-// ── Register ────────────────────────────────────────────────
 export const register = async ({ name, email, password, company_id, role = 'employee' }) => {
   const normalizedEmail = email?.trim().toLowerCase()
 
@@ -37,22 +34,15 @@ export const register = async ({ name, email, password, company_id, role = 'empl
     active: true
   })
 
-  await LogAuth.create({
-    user_id:  user.id,
-    email:    user.email,
-    action:   'register',
-    success:  true
-  })
+  await LogAuth.create({ user_id: user.id, email: user.email, action: 'register', success: true })
 
   return { id: user.id, name: user.name, role: user.role, company_id: user.company_id }
 }
-// ── Login ─────────────────────────────────────────────────
 
 export const login = async ({ email, password, ip, userAgent }) => {
   const normalizedEmail = email?.trim().toLowerCase()
   const user = await User.findOne({ where: { email: normalizedEmail } })
 
-  // Usuario no existe o contraseña incorrecta — mismo mensaje por seguridad
   if (!user || !(await bcrypt.compare(password, user.password_hash))) {
     await LogAuth.create({
       user_id: user?.id || 0,
@@ -63,7 +53,6 @@ export const login = async ({ email, password, ip, userAgent }) => {
       success: false,
       reason: !user ? 'user_not_found' : 'wrong_password'
     })
-
     throw new Error('Credenciales incorrectas')
   }
 
@@ -73,12 +62,8 @@ export const login = async ({ email, password, ip, userAgent }) => {
   const refreshToken = generateRefreshToken(user)
 
   await LogAuth.create({
-    user_id:    user.id,
-    email:      user.email,
-    action:     'login',
-    ip,
-    user_agent: userAgent,
-    success:    true
+    user_id: user.id, email: user.email, action: 'login',
+    ip, user_agent: userAgent, success: true
   })
 
   return {
@@ -88,8 +73,6 @@ export const login = async ({ email, password, ip, userAgent }) => {
   }
 }
 
-// ── Refresh token ─────────────────────────────────────────
-
 export const refresh = async (refreshToken) => {
   const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
   const user = await User.findByPk(decoded.id)
@@ -98,24 +81,16 @@ export const refresh = async (refreshToken) => {
 
   const newAccessToken = generateAccessToken(user)
 
-  await LogAuth.create({
-    user_id:    user.id,
-    email:      user.email,
-    action:     'token_refresh',
-    success:    true
-  })
+  await LogAuth.create({ user_id: user.id, email: user.email, action: 'token_refresh', success: true })
 
   return newAccessToken
 }
 
-// ── Logout ────────────────────────────────────────────────
-
 export const logout = async (userId, email) => {
   await LogAuth.create({
     user_id: userId,
-    email:   email || 'unknown',  // evita el error si viene vacío
+    email:   email || 'unknown',
     action:  'logout',
     success: true
   })
 }
-
