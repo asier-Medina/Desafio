@@ -17,7 +17,7 @@ const generateRefreshToken = (user) =>
     { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN }
   )
 
-export const register = async ({ name, email, password, company_id, role = 'employee' }) => {
+export const register = async ({ name, email, password, role = 'employee' }) => {
   const normalizedEmail = email?.trim().toLowerCase()
 
   const exists = await User.findOne({ where: { email: normalizedEmail } })
@@ -29,14 +29,13 @@ export const register = async ({ name, email, password, company_id, role = 'empl
     name,
     email: normalizedEmail,
     password_hash,
-    company_id,
     role,
     active: true
   })
 
   await LogAuth.create({ user_id: user.id, email: user.email, action: 'register', success: true })
 
-  return { id: user.id, name: user.name, role: user.role, company_id: user.company_id }
+  return { id: user.id, name: user.name, role: user.role}
 }
 
 export const login = async ({ email, password, ip, userAgent }) => {
@@ -69,7 +68,7 @@ export const login = async ({ email, password, ip, userAgent }) => {
   return {
     accessToken,
     refreshToken,
-    user: { id: user.id, name: user.name, role: user.role, company_id: user.company_id }
+    user: { id: user.id, name: user.name, role: user.role}
   }
 }
 
