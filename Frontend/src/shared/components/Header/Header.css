@@ -41,29 +41,57 @@
 }
 
 /* Logo */
-.header__logo-btn {
+.header__logo-title {
+  margin: 0;
+  line-height: 0;
+}
+
+.header__logo-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-md);
-  color: var(--color-primary);
 }
 
 .header__logo-img {
   height: 36px;
   width: auto;
+  display: block;
 }
 
-.header__logo-placeholder {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+/* Navegación principal (centro) */
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.header__nav-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-md);
-  padding: 0.25rem 0.75rem;
+  color: var(--color-text-soft);
+  text-decoration: none;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.header__nav-link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-surface-soft);
+}
+
+.header__nav-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+@media (max-width: 767px) {
+  .header__nav {
+    display: none;
+  }
 }
 
 /* Acciones (derecha) */
@@ -108,6 +136,12 @@
 .header__login-btn:hover {
   background-color: var(--color-primary);
   color: var(--color-text-on-dark);
+}
+
+@media (max-width: 402px) {
+  .header__login-btn > span {
+    display: none;
+  }
 }
 
 /* Usuario autenticado */

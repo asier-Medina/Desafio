@@ -230,6 +230,18 @@ input[type="radio"] {
 }
 
 /* 5. Utilidades de layout*/
+
+/* Padding inferior para que el MobileNav fijo no tape contenido */
+body {
+  padding-bottom: 70px;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 0;
+  }
+}
+
 .container {
   width: 100%;
   max-width: 1200px;
