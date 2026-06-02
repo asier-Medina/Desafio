@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Navigate } from 'react-router'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import LoginSection from './sections/LoginSection'
@@ -9,6 +9,14 @@ function AuthContent() {
   const [isLogin, setIsLogin] = useState(true)
   const navigate = useNavigate()
   const { user, loading } = useAuth()
+
+  useEffect(() => {
+    const meta = document.createElement('meta')
+    meta.httpEquiv = 'Cache-Control'
+    meta.content = 'no-store, no-cache, must-revalidate'
+    document.head.appendChild(meta)
+    return () => meta.remove()
+  }, [])
 
   if (loading) return null
 

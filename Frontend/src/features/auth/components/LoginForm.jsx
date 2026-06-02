@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useAuth } from '../context/AuthContext'
 import InputField from './InputField'
 import PasswordInput from './PasswordInput'
 import SubmitButton from './SubmitButton'
+import { sanitize, sanitizePassword, validateEmail } from '../utils/validation'
 
 export default function LoginForm({ onSuccess }) {
   const { login, loading, error, clearError } = useAuth()
@@ -11,10 +12,25 @@ export default function LoginForm({ onSuccess }) {
 
   function validate() {
     const errors = {}
-    if (!form.email.trim()) errors.email = 'El correo es obligatorio'
+    const emailErr = validateEmail(form.email)
+    if (emailErr) errors.email = emailErr
     if (!form.password) errors.password = 'La contraseña es obligatoria'
+    else if (form.password.length < 8) errors.password = 'Mínimo 8 caracteres'
+    else if (form.password.length > 128) errors.password = 'Contraseña demasiado larga'
     return errors
   }
+
+  const handleEmailChange = useCallback((e) => {
+    const raw = e.target.value
+    const cleaned = sanitize(raw)
+    const lower = cleaned.toLowerCase()
+    setForm((prev) => ({ ...prev, email: lower }))
+  }, [])
+
+  const handlePasswordChange = useCallback((e) => {
+    const cleaned = sanitizePassword(e.target.value)
+    setForm((prev) => ({ ...prev, password: cleaned }))
+  }, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -24,7 +40,9 @@ export default function LoginForm({ onSuccess }) {
 
     clearError()
     try {
-      await login({ email: form.email, password: form.password })
+      const cleanEmail = sanitize(form.email).toLowerCase()
+      const cleanPassword = sanitizePassword(form.password)
+      await login({ email: cleanEmail, password: cleanPassword })
       onSuccess?.()
     } catch {
       // Error manejado por el contexto
@@ -32,10 +50,10 @@ export default function LoginForm({ onSuccess }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="auth-card__form" noValidate>
+    <form onSubmit={handleSubmit} className="auth-card__form" noValidate autoComplete="off">
       {error && (
-        <div className="auth-card__error">
-          {error}
+        <div className="auth-card__error" role="alert">
+          Credenciales inválidas. Intente de nuevo.
         </div>
       )}
 
@@ -45,9 +63,10 @@ export default function LoginForm({ onSuccess }) {
         type="email"
         placeholder="tucorreo@ejemplo.com"
         value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
+        onChange={handleEmailChange}
         error={fieldErrors.email}
         autoComplete="email"
+        maxLength={254}
       />
 
       <PasswordInput
@@ -55,7 +74,7 @@ export default function LoginForm({ onSuccess }) {
         id="login-password"
         placeholder="••••••••"
         value={form.password}
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
+        onChange={handlePasswordChange}
         error={fieldErrors.password}
         autoComplete="current-password"
       />
