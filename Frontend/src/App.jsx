@@ -4,6 +4,7 @@ import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 import Header from './shared/components/Header/Header.jsx'
+import Footer from './shared/components/Footer/Footer.jsx'
 
 function App() {
   const [count, setCount] = useState(0)

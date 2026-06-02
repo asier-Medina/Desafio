@@ -1,13 +1,15 @@
 import { Outlet } from "react-router";
-import Header from "@shared/components/Header/Header.jsx";
+import Header from "../components/Header/Header.jsx";
+import Footer from "../components/Footer/Footer.jsx";
 
-export default function MainLayout() {
+export default function Main() {
   return (
-    <div className="min-h-screen">
-      <Header />
+    <>
+      <Header lang="es" />
       <main>
         <Outlet />
       </main>
-    </div>
+      <Footer />
+    </>
   );
 }

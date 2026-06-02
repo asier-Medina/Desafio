@@ -11,5 +11,8 @@ export {
   FaLandmark,                // cultura
   FaMagnifyingGlass,         // búsqueda
   FaArrowLeft,               // volver atrás
-  FaArrowUpRightFromSquare,  // enlace externo (comprar entradas / ir a la web)
+  FaArrowUpRightFromSquare,  // enlace externo (blog / comprar entradas)
+  FaInstagram,               // social
+  FaFacebookF,               // social
+  FaXTwitter,                // social
 } from "react-icons/fa6";
