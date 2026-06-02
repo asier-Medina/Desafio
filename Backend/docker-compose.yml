@@ -2,7 +2,7 @@ services:
 
   db:
     image: postgres:16
-    container_name: Desafio_db
+    container_name: Sustraiapp_db
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
@@ -23,7 +23,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: Desafio_pgadmin
+    container_name: Sustraiapp_pgadmin
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
@@ -34,13 +34,13 @@ services:
       db:
         condition: service_healthy
     networks:
-      - Desafio_net
+      - Sustraiapp_net
 
-  app:
+  Sustraiapp_app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: Desafio_app
+    container_name: Sustraiapp_app
     restart: always
     environment:
       NODE_ENV: development
@@ -63,11 +63,11 @@ services:
     volumes:
       - ./src:/usr/src/app/src
     networks:
-      - Desafio_net
+      - Sustraiapp_net
 
 volumes:
   postgres-data:
 
 networks:
-  Desafio_net:
+  Sustraiapp_net:
     driver: bridge
