@@ -5,7 +5,7 @@ import "./Header.css";
 const LABELS = {
   es: {
     appBar: "Cabecera principal",
-    home: "Ir al inicio",
+    home: "Bilbao Insider, ir a Eventos",
     login: "Iniciar sesión",
     register: "Crear cuenta",
     filters: "Filtros",
@@ -22,7 +22,7 @@ const LABELS = {
   },
   eu: {
     appBar: "Goiburu nagusia",
-    home: "Hasierara joan",
+    home: "Bilbao Insider, Ekitaldietara joan",
     login: "Saioa hasi",
     register: "Kontua sortu",
     filters: "Iragazkiak",
@@ -54,8 +54,8 @@ export default function Header({
   showFilters = false,
   onToggleFilters = () => {},
   lang = "es",
-  logoSrc = "",
-  appName = "Bilbao Insider",
+  logoSrc = "/logos/sustrai_logo_horizontal.svg",
+  homePath = "/",
 }) {
   const t = LABELS[lang] ?? LABELS.es;
   const isAuthenticated = Boolean(user);
@@ -101,22 +101,28 @@ export default function Header({
     action();
   }
 
+  // El logo es un <a> real (permite Ctrl/Cmd+clic para abrir en pestaña nueva),
+  // pero en clic normal hace navegación SPA vía onNavigate.
+  function handleLogoClick(e) {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    onNavigate(homePath);
+  }
+
   return (
     <header aria-label={t.appBar} className="header">
       <div className="header__inner">
-        {/* Logo */}
-        <button
-          type="button"
-          onClick={() => onNavigate("/")}
-          aria-label={t.home}
-          className="header__logo-btn"
-        >
-          {logoSrc ? (
-            <img src={logoSrc} alt={appName} className="header__logo-img" />
-          ) : (
-            <span className="header__logo-placeholder">LOGO</span>
-          )}
-        </button>
+        {/* Logo: h1 > a > svg (imagen). Lleva a Eventos (inicio). */}
+        <h1 className="header__logo-title">
+          <a
+            href={homePath}
+            onClick={handleLogoClick}
+            aria-label={t.home}
+            className="header__logo-link"
+          >
+            <img src={logoSrc} alt="" className="header__logo-img" />
+          </a>
+        </h1>
 
         {/* Acciones */}
         <div className="header__actions">

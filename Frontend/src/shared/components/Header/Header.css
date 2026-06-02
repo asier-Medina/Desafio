@@ -41,29 +41,21 @@
 }
 
 /* Logo */
-.header__logo-btn {
+.header__logo-title {
+  margin: 0;
+  line-height: 0;
+}
+
+.header__logo-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-md);
-  color: var(--color-primary);
 }
 
 .header__logo-img {
   height: 36px;
   width: auto;
-}
-
-.header__logo-placeholder {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
-  border-radius: var(--radius-md);
-  padding: 0.25rem 0.75rem;
+  display: block;
 }
 
 /* Acciones (derecha) */
