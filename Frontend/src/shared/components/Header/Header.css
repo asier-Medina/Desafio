@@ -1,0 +1,253 @@
+/* Header.css — Bilbao Insider. Usa los tokens de index.css. */
+
+/* Contenedor */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  min-height: 64px;
+  padding-inline: var(--space-md);
+}
+
+/* Iconos */
+.header__icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.header__chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.header__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* Logo */
+.header__logo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+}
+
+.header__logo-img {
+  height: 36px;
+  width: auto;
+}
+
+.header__logo-placeholder {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 0.25rem 0.75rem;
+}
+
+/* Acciones (derecha) */
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.header__filters-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-inline: var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: background-color 0.15s ease;
+}
+
+.header__filters-btn:hover {
+  background-color: var(--color-surface-soft);
+}
+
+.header__login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-inline: var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.header__login-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-dark);
+}
+
+/* Usuario autenticado */
+.header__user {
+  position: relative;
+}
+
+.header__user-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.25rem var(--space-sm) 0.25rem 0.25rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  transition: background-color 0.15s ease;
+}
+
+.header__user-trigger:hover {
+  background-color: var(--color-surface-soft);
+}
+
+.header__avatar-img {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  object-fit: cover;
+}
+
+.header__avatar-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary);
+  color: var(--color-text-on-dark);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  line-height: 1;
+}
+
+/* Menú desplegable */
+.header__menu {
+  position: absolute;
+  top: calc(100% + var(--space-xs));
+  right: 0;
+  width: 16rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transform-origin: top right;
+  animation: header-menu-in 0.15s ease;
+}
+
+@keyframes header-menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.header__menu-header {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header__menu-name {
+  max-width: 100%;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header__menu-email {
+  max-width: 100%;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header__menu-role {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  padding: 0.1rem 0.6rem;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--color-text-on-dark);
+  background-color: var(--color-primary);
+  border-radius: var(--radius-pill);
+}
+
+.header__menu-list {
+  list-style: none;
+  padding: var(--space-xs) 0;
+  margin: 0;
+}
+
+.header__menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  background-color: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.header__menu-item:hover {
+  background-color: var(--color-surface-soft);
+}
+
+.header__menu-item--highlight {
+  font-weight: 600;
+  color: var(--color-primary);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Acción destructiva: rojo con contraste AA sobre blanco (~6.5:1) */
+.header__menu-item--danger {
+  color: var(--brand-red);
+  border-top: 1px solid var(--color-border);
+}
+
+.header__menu-item--danger:hover {
+  background-color: var(--color-surface-soft);
+}
