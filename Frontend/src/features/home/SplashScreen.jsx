@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import './SplashScreen.css';
 
 export default function SplashScreen({ onFinish }) {
   const [fadeOut, setFadeOut] = useState(false);
@@ -91,8 +92,8 @@ export default function SplashScreen({ onFinish }) {
     };
     animate();
 
-    const fadeTimeout = setTimeout(() => setFadeOut(true), 9100);
-    const componentTimeout = setTimeout(() => onFinish(), 10000);
+    const fadeTimeout = setTimeout(() => setFadeOut(true), 2500);
+    const componentTimeout = setTimeout(() => onFinish(), 3000);
 
     return () => {
       window.removeEventListener('resize', resize);

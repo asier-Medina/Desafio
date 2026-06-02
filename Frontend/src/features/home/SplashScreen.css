@@ -1,9 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Inter:wght@400;500;600&display=swap');
-
 .splash-container {
   position: fixed;
   inset: 0;
-  background-color: #fcfffe;
+  background-color: var(--color-background);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,11 +26,11 @@
   align-items: center;
   text-align: center;
   padding: 40px;
-  background-color: rgba(252, 255, 254, 0.85);
+  background-color: color-mix(in srgb, var(--color-background) 85%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-radius: 16px;
-  box-shadow: 0 20px 50px rgba(41, 54, 109, 0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
 .splash-logo-box {
@@ -44,8 +42,8 @@
 }
 
 .splash-logo-title {
-  font-family: 'Italiana', serif;
-  color: #29366d;
+  font-family: var(--font-heading);
+  color: var(--color-primary);
   font-size: 72px;
   font-weight: 400;
   line-height: 0.9;
@@ -53,8 +51,8 @@
 }
 
 .splash-logo-sub {
-  font-family: 'Italiana', serif;
-  color: #5e3d59;
+  font-family: var(--font-heading);
+  color: var(--color-secondary);
   font-size: 36px;
   margin-top: -5px;
   letter-spacing: 0.05em;
@@ -62,9 +60,9 @@
 
 .splash-loading-bar {
   width: 160px;
-  height: 2px;
-  background-color: rgba(41, 54, 109, 0.1);
-  border-radius: 2px;
+  height: 4px;
+  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  border-radius: 4px;
   overflow: hidden;
   margin: 16px 0;
 }
@@ -72,14 +70,14 @@
 .splash-loading-fill {
   height: 100%;
   width: 0%;
-  background-color: #7f557b;
-  animation: fillProgress 8.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  background-color: var(--color-accent);
+  animation: fillProgress 2.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .splash-slogan {
-  font-family: 'Inter', sans-serif;
-  color: #5e3d59;
-  font-size: 11px;
+  font-family: var(--font-body);
+  color: var(--color-text-soft);
+  font-size: var(--font-size-sm);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.18em;

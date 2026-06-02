@@ -6,12 +6,13 @@ import SubmitButton from './SubmitButton'
 
 export default function RegisterForm({ onSuccess }) {
   const { register, loading, error, clearError } = useAuth()
-  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' })
+  const [form, setForm] = useState({ name: '', lastName: '', email: '', password: '', confirmPassword: '' })
   const [fieldErrors, setFieldErrors] = useState({})
 
   function validate() {
     const errors = {}
     if (!form.name.trim()) errors.name = 'El nombre es obligatorio'
+    if (!form.lastName.trim()) errors.lastName = 'El apellido es obligatorio'
     if (!form.email.trim()) errors.email = 'El correo es obligatorio'
     if (!form.password) errors.password = 'La contraseña es obligatoria'
     else if (form.password.length < 6) errors.password = 'Mínimo 6 caracteres'
@@ -27,7 +28,7 @@ export default function RegisterForm({ onSuccess }) {
 
     clearError()
     try {
-      await register({ name: form.name, email: form.email, password: form.password })
+      await register({ name: form.name, lastName: form.lastName, email: form.email, password: form.password })
       onSuccess?.()
     } catch {
       // Error manejado por el contexto
@@ -35,22 +36,33 @@ export default function RegisterForm({ onSuccess }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+    <form onSubmit={handleSubmit} className="auth-card__form" noValidate>
       {error && (
-        <div className="bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg">
+        <div className="auth-card__error">
           {error}
         </div>
       )}
 
       <InputField
-        label="Nombre completo"
+        label="Nombre"
         id="register-name"
         type="text"
         placeholder="Tu nombre"
         value={form.name}
         onChange={(e) => setForm({ ...form, name: e.target.value })}
         error={fieldErrors.name}
-        autoComplete="name"
+        autoComplete="given-name"
+      />
+
+      <InputField
+        label="Apellido"
+        id="register-lastname"
+        type="text"
+        placeholder="Tu apellido"
+        value={form.lastName}
+        onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+        error={fieldErrors.lastName}
+        autoComplete="family-name"
       />
 
       <InputField

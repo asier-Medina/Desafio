@@ -3,6 +3,7 @@ import { useNavigate, Navigate } from 'react-router'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import LoginSection from './sections/LoginSection'
 import RegisterSection from './sections/RegisterSection'
+import './auth.css'
 
 function AuthContent() {
   const [isLogin, setIsLogin] = useState(true)
@@ -14,8 +15,8 @@ function AuthContent() {
   if (user) return <Navigate to="/" replace />
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+    <div className="auth-page">
+      <div className="auth-card">
         {isLogin ? (
           <LoginSection
             onToggle={() => setIsLogin(false)}

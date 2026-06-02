@@ -42,7 +42,7 @@ export async function login({ email, password }) {
   return { user: safeUser }
 }
 
-export async function register({ name, email, password }) {
+export async function register({ name, lastName, email, password }) {
   await delay()
   const db = getDB()
 
@@ -53,6 +53,7 @@ export async function register({ name, email, password }) {
   const newUser = {
     id: db.nextId++,
     name,
+    lastName,
     email,
     passwordHash: hashPassword(password),
     role: 'user',

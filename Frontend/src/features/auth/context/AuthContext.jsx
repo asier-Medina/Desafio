@@ -50,11 +50,11 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
-  const register = useCallback(async ({ name, email, password }) => {
+  const register = useCallback(async ({ name, lastName, email, password }) => {
     setLoading(true)
     setError(null)
     try {
-      const data = await authService.register({ name, email, password })
+      const data = await authService.register({ name, lastName, email, password })
       setUser(data.user)
       return data.user
     } catch (err) {

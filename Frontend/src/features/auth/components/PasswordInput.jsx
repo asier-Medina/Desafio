@@ -5,7 +5,7 @@ export default function PasswordInput({ label, id, error, ...props }) {
   const [visible, setVisible] = useState(false)
 
   return (
-    <div className="relative">
+    <div className="auth-card__password">
       <InputField
         label={label}
         id={id}
@@ -16,7 +16,7 @@ export default function PasswordInput({ label, id, error, ...props }) {
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
-        className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 text-sm"
+        className="auth-card__toggle-btn"
         tabIndex={-1}
       >
         {visible ? 'Ocultar' : 'Mostrar'}

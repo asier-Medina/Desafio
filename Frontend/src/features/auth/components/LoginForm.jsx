@@ -32,9 +32,9 @@ export default function LoginForm({ onSuccess }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+    <form onSubmit={handleSubmit} className="auth-card__form" noValidate>
       {error && (
-        <div className="bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg">
+        <div className="auth-card__error">
           {error}
         </div>
       )}
@@ -64,6 +64,3 @@ export default function LoginForm({ onSuccess }) {
     </form>
   )
 }
-
-
-/*Cuando VITE_API_BASE_URL está vacío (el .env.example viene así), automáticamente usa auth.mock.js. Los usuarios se guardan en localStorage bajo sustrai_mock_db. Cuando tengas la API real, solo pones la URL en .env y ya usa auth.api.js sin tocar nada más.*/
