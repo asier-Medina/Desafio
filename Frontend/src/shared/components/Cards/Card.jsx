@@ -1,4 +1,4 @@
-import { FaLocationDot, FaRegCalendar, FaUtensils, FaStar } from "../../ui/icons";
+import { FaLocationDot, FaRegCalendar, FaUtensils, FaStar, FaRegHeart, FaHeart } from "../../ui/icons";
 import michelinLogo from "./logos/michelin.png";
 import repsolLogo from "./logos/repsol.jpeg";
 import "./Card.css";
@@ -148,6 +148,8 @@ export default function Card({
   variant = "event",
   data = {},
   onAction,
+  onToggleFavorite,
+  isFavorite = false,
   lang = "es",
 }) {
   const t = LABELS[lang] ?? LABELS.es;
@@ -169,6 +171,15 @@ export default function Card({
           <img src={imageUrl} alt="" className="card__img" loading="lazy" />
         ) : (
           <div className={`card__img-placeholder card__img-placeholder--${variant}`} />
+        )}
+        {onToggleFavorite && (
+          <button
+            className="card__favorite-btn"
+            onClick={(e) => { e.stopPropagation(); onToggleFavorite(data); }}
+            aria-label={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
+          >
+            {isFavorite ? <FaHeart /> : <FaRegHeart />}
+          </button>
         )}
       </div>
 

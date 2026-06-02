@@ -8,7 +8,7 @@ export default function Home() {
 
   function handleFinish() {
     setShowSplash(false)
-    navigate('/login', { replace: true })
+    navigate('/events', { replace: true })
   }
 
   if (showSplash) return <SplashScreen onFinish={handleFinish} />

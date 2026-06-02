@@ -1,57 +1,65 @@
 import { Card } from "@components/Cards";
+import { useFavorites } from "@shared/context/FavoritesContext";
 
-const mockEvent = {
-  id: 1,
-  nombre_es: "Concierto de jazz en el Café Iruña",
-  typeEs: "Concierto",
-  images: [{ imageUrl: "https://picsum.photos/seed/jazz/600/400" }],
-  startDate: "2026-06-21T20:30:00Z",
-  endDate: "2026-06-21T23:00:00Z",
-  establishmentEs: "Café Iruña",
-  municipalityEs: "Bilbao",
-};
-
-const mockRestaurant = {
-  id: 1,
-  nombre: "Restaurante Mina",
-  tipo_comida: "asador",
-  url_imagen: "https://picsum.photos/seed/mina/600/400",
-  municipio: "Bilbao",
-  valoracion: 4.7,
-  num_resenas: 312,
-  michelin: true,
-  repsol: true,
-};
-
-const mockPlace = {
-  id: 1,
-  nombre: "Museo Guggenheim Bilbao",
-  tipo_lugar: "museo",
-  imagen_url: "https://picsum.photos/seed/guggenheim/600/400",
-  direccion: "Abandoibarra Etorbidea, 2",
-  municipio: "Bilbao",
-  valoracion: 4.8,
-  num_valoraciones: 45230,
-};
+const mockEvents = [
+  {
+    id: 1,
+    nombre_es: "Concierto de jazz en el Café Iruña",
+    typeEs: "Concierto",
+    images: [{ imageUrl: "https://picsum.photos/seed/jazz/600/400" }],
+    startDate: "2026-06-21T20:30:00Z",
+    endDate: "2026-06-21T23:00:00Z",
+    establishmentEs: "Café Iruña",
+    municipalityEs: "Bilbao",
+  },
+  {
+    id: 2,
+    nombre_es: "Feria de artesanía vasca",
+    typeEs: "Feria",
+    images: [{ imageUrl: "https://picsum.photos/seed/feria/600/400" }],
+    startDate: "2026-07-05T10:00:00Z",
+    endDate: "2026-07-07T21:00:00Z",
+    establishmentEs: "Plaza Nueva",
+    municipalityEs: "Bilbao",
+  },
+  {
+    id: 3,
+    nombre_es: "Teatro: La casa de Bernarda Alba",
+    typeEs: "Teatro",
+    images: [{ imageUrl: "https://picsum.photos/seed/teatro/600/400" }],
+    startDate: "2026-06-28T19:00:00Z",
+    endDate: "2026-06-28T21:30:00Z",
+    establishmentEs: "Teatro Arriaga",
+    municipalityEs: "Bilbao",
+  },
+];
 
 export default function Events() {
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+
+  function handleToggleFavorite(data) {
+    if (isFavorite(data.id, "event")) {
+      removeFavorite(data.id, "event");
+    } else {
+      addFavorite({ ...data, _variant: "event" });
+    }
+  }
+
   return (
-    <div className="p-8 flex flex-col gap-6 max-w-4xl">
-      <h1 className="text-2xl font-semibold">Vista previa de Cards</h1>
+    <div className="p-8 flex flex-col gap-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-semibold">Eventos</h1>
 
-      <section>
-        <h2 className="text-lg font-medium mb-3">Card variant=&quot;event&quot;</h2>
-        <Card variant="event" data={mockEvent} onAction={(d) => console.log(d.nombre_es)} />
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium mb-3">Card variant=&quot;gastronomy&quot;</h2>
-        <Card variant="gastronomy" data={mockRestaurant} onAction={(d) => console.log(d.nombre)} />
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium mb-3">Card variant=&quot;culture&quot;</h2>
-        <Card variant="culture" data={mockPlace} onAction={(d) => console.log(d.nombre)} />
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {mockEvents.map((event) => (
+          <Card
+            key={event.id}
+            variant="event"
+            data={event}
+            isFavorite={isFavorite(event.id, "event")}
+            onToggleFavorite={handleToggleFavorite}
+            onAction={(d) => console.log(d.nombre_es)}
+          />
+        ))}
       </section>
     </div>
   );

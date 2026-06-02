@@ -219,3 +219,28 @@
   color: var(--color-secondary);
   background: color-mix(in srgb, var(--brand-plum) 8%, transparent);
 }
+
+.card__favorite-btn {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: #e53e3e;
+  font-size: 1.1rem;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 2;
+  transition: transform 0.15s;
+}
+
+.card__favorite-btn:hover {
+  transform: scale(1.15);
+}
+
+.card__favorite-btn:active {
+  transform: scale(0.95);
+}
