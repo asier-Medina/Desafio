@@ -58,6 +58,42 @@
   display: block;
 }
 
+/* Navegación principal (centro) */
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.header__nav-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  color: var(--color-text-soft);
+  text-decoration: none;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.header__nav-link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-surface-soft);
+}
+
+.header__nav-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+@media (max-width: 767px) {
+  .header__nav {
+    display: none;
+  }
+}
+
 /* Acciones (derecha) */
 .header__actions {
   display: flex;
@@ -100,6 +136,12 @@
 .header__login-btn:hover {
   background-color: var(--color-primary);
   color: var(--color-text-on-dark);
+}
+
+@media (max-width: 402px) {
+  .header__login-btn > span {
+    display: none;
+  }
 }
 
 /* Usuario autenticado */

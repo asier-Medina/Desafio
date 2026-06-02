@@ -4,6 +4,7 @@ import Auth from "@features/auth/Auth";
 import Culture from "@features/culture/Culture";
 import Events from "@features/events/Events";
 import Gastronomy from "@features/gastronomy/Gastronomy";
+import Favorite from "@features/Favorite/favorite";
 import Profile from "@features/profile/Profile";
 
 import MainLayout from "@shared/layout/Main";
@@ -54,6 +55,11 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [{ index: true, element: <Profile /> }],
     /*loader: mainLoader,*/
+  },
+  {
+    path: "/favoritos",
+    element: <MainLayout />,
+    children: [{ index: true, element: <Favorite /> }],
   },
 
   {

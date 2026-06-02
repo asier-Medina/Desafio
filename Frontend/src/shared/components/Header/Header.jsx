@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useId } from "react";
 import { FaRegUser, FaSliders, FaChevronDown } from "../../ui/icons";
+import HeaderNav from "./HeaderNav";
 import "./Header.css";
 
 const LABELS = {
@@ -123,6 +124,8 @@ export default function Header({
             <img src={logoSrc} alt="" className="header__logo-img" />
           </a>
         </h1>
+
+        <HeaderNav onNavigate={onNavigate} lang={lang} />
 
         {/* Acciones */}
         <div className="header__actions">
