@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import InputField from './InputField'
+import { getPasswordStrength } from '../utils/validation'
 
-export default function PasswordInput({ label, id, error, ...props }) {
+export default function PasswordInput({ label, id, error, showStrength, value, ...props }) {
   const [visible, setVisible] = useState(false)
+  const strength = showStrength && value ? getPasswordStrength(value) : null
 
   return (
     <div className="auth-card__password">
@@ -11,6 +13,8 @@ export default function PasswordInput({ label, id, error, ...props }) {
         id={id}
         type={visible ? 'text' : 'password'}
         error={error}
+        value={value}
+        maxLength={128}
         {...props}
       />
       <button
@@ -18,9 +22,16 @@ export default function PasswordInput({ label, id, error, ...props }) {
         onClick={() => setVisible((v) => !v)}
         className="auth-card__toggle-btn"
         tabIndex={-1}
+        aria-label={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
       >
         {visible ? 'Ocultar' : 'Mostrar'}
       </button>
+      {strength && (
+        <div className="auth-card__strength" role="meter" aria-valuenow={strength.score} aria-valuemin={0} aria-valuemax={5} aria-label={`Fortaleza: ${strength.label}`}>
+          <div className={`auth-card__strength-bar auth-card__strength-bar--${strength.level}`} style={{ width: `${(strength.score / 5) * 100}%` }} />
+          <span className={`auth-card__strength-label auth-card__strength-label--${strength.level}`}>{strength.label}</span>
+        </div>
+      )}
     </div>
   )
 }

@@ -12,4 +12,6 @@ export {
   FaMagnifyingGlass,         // búsqueda
   FaArrowLeft,               // volver atrás
   FaArrowUpRightFromSquare,  // enlace externo (comprar entradas / ir a la web)
+  FaStar,                    // valoración / estrella
+  FaArrowRight,              // flecha derecha
 } from "react-icons/fa6";

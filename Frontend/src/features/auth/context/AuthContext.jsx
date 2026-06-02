@@ -27,14 +27,6 @@ export function AuthProvider({ children }) {
     return () => { cancelled = true }
   }, [])
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user))
-    } else {
-      localStorage.removeItem('user')
-    }
-  }, [user])
-
   const login = useCallback(async ({ email, password }) => {
     setLoading(true)
     setError(null)
@@ -43,7 +35,7 @@ export function AuthProvider({ children }) {
       setUser(data.user)
       return data.user
     } catch (err) {
-      setError(err.message)
+      setError('Credenciales inválidas')
       throw err
     } finally {
       setLoading(false)
@@ -58,7 +50,7 @@ export function AuthProvider({ children }) {
       setUser(data.user)
       return data.user
     } catch (err) {
-      setError(err.message)
+      setError('No se pudo completar el registro')
       throw err
     } finally {
       setLoading(false)
