@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { FaLocationDot, FaRegCalendar, FaUtensils, FaStar } from "../../ui/icons";
+import FavoriteButton from "../Favorite/FavoriteButton";
 import michelinLogo from "./logos/michelin.png";
 import repsolLogo from "./logos/repsol.jpeg";
 import "./Card.css";
@@ -148,6 +150,7 @@ export default function Card({
   variant = "event",
   data = {},
   onAction,
+  onFavoriteToggle,
   lang = "es",
 }) {
   const t = LABELS[lang] ?? LABELS.es;
@@ -162,9 +165,18 @@ export default function Card({
 
   if (data.active === false) return null;
 
+  const [isFavorited, setIsFavorited] = useState(false);
+
   return (
     <article className="card" data-key={uid}>
       <div className="card__media">
+        <FavoriteButton
+          isFavorited={isFavorited}
+          onToggle={() => {
+            setIsFavorited((prev) => !prev);
+            onFavoriteToggle?.(data);
+          }}
+        />
         {imageUrl ? (
           <img src={imageUrl} alt="" className="card__img" loading="lazy" />
         ) : (
