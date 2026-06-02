@@ -9,8 +9,6 @@ export default function SplashScreen({ onFinish }) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    const isDark = document.body.classList.contains('dark-mode');
-
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -60,9 +58,7 @@ export default function SplashScreen({ onFinish }) {
       roots.push(new RootBranch(centerX, centerY, angle, speed, color, width));
     }
 
-    const trailColor = isDark
-      ? 'rgba(25, 23, 36, 0.06)'
-      : 'rgba(252, 255, 254, 0.06)';
+    const trailColor = 'rgba(252, 255, 254, 0.06)';
 
     let animId;
     const animate = () => {

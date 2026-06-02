@@ -11,10 +11,6 @@
   overflow: hidden;
 }
 
-.dark-mode .splash-container {
-  background-color: #191724;
-}
-
 .splash-canvas {
   position: absolute;
   inset: 0;
@@ -24,7 +20,6 @@
   pointer-events: none;
 }
 
-/* Tarjeta central translúcida */
 .splash-content {
   position: relative;
   z-index: 2;
@@ -40,12 +35,6 @@
   box-shadow: 0 20px 50px rgba(41, 54, 109, 0.06);
 }
 
-.dark-mode .splash-content {
-  background-color: rgba(25, 23, 36, 0.85);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-}
-
-/* Logo editorial */
 .splash-logo-box {
   display: flex;
   flex-direction: column;
@@ -63,10 +52,6 @@
   letter-spacing: -0.03em;
 }
 
-.dark-mode .splash-logo-title {
-  color: #fcfaf3;
-}
-
 .splash-logo-sub {
   font-family: 'Italiana', serif;
   color: #5e3d59;
@@ -75,11 +60,6 @@
   letter-spacing: 0.05em;
 }
 
-.dark-mode .splash-logo-sub {
-  color: #b894b2;
-}
-
-/* Barra de carga */
 .splash-loading-bar {
   width: 160px;
   height: 2px;
@@ -89,10 +69,6 @@
   margin: 16px 0;
 }
 
-.dark-mode .splash-loading-bar {
-  background-color: rgba(252, 250, 243, 0.12);
-}
-
 .splash-loading-fill {
   height: 100%;
   width: 0%;
@@ -100,11 +76,6 @@
   animation: fillProgress 8.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
-.dark-mode .splash-loading-fill {
-  background-color: #b894b2;
-}
-
-/* Eslogan */
 .splash-slogan {
   font-family: 'Inter', sans-serif;
   color: #5e3d59;
@@ -116,18 +87,12 @@
   opacity: 0.8;
 }
 
-.dark-mode .splash-slogan {
-  color: #c4bfd5;
-}
-
-/* Logo SVG dentro de la caja */
 .splash-logo-box svg {
   width: 100%;
   height: auto;
   display: block;
 }
 
-/* Fade out */
 .splash-container--fade-out {
   opacity: 0;
   transform: scale(1.01);
@@ -135,7 +100,6 @@
   pointer-events: none;
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .splash-content {
     padding: 28px 20px;

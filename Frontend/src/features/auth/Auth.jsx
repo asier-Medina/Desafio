@@ -14,8 +14,8 @@ function AuthContent() {
   if (user) return <Navigate to="/" replace />
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50 dark:bg-gray-900">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         {isLogin ? (
           <LoginSection
             onToggle={() => setIsLogin(false)}

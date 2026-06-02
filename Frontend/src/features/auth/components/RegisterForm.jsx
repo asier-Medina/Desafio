@@ -37,7 +37,7 @@ export default function RegisterForm({ onSuccess }) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm px-3 py-2 rounded-lg">
+        <div className="bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg">
           {error}
         </div>
       )}
