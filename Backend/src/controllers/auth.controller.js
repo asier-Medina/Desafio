@@ -2,8 +2,8 @@ import * as authService from '../services/auth.service.js'
 const cookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' }
 export const registerHandler = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body
-    const user = await authService.register({ name, email, password, role })
+    const { name, lastName, email, password, role } = req.body
+    const user = await authService.register({ name, lastName, email, password, role })
     res.status(201).json({ user })
   } catch (error) { res.status(400).json({ error: error.message }) }
 }

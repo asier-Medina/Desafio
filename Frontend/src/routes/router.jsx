@@ -1,4 +1,4 @@
-import { createBrowserRouter, redirect } from "react-router";
+import { createBrowserRouter } from "react-router";
 import Home from "@features/home/Home";
 import Auth from "@features/auth/Auth";
 import Culture from "@features/culture/Culture";

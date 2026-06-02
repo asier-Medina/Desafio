@@ -1,3 +1,3 @@
 export default function Events() {
-  return <h1>Eventos</h1>;
+  return <div className="p-8"><h1 className="text-2xl font-semibold">Eventos</h1></div>
 }

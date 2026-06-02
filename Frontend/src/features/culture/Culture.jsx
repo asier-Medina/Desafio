@@ -1,3 +1,3 @@
 export default function Culture() {
-  return <h1>Cultura</h1>;
+  return <div className="p-8"><h1 className="text-2xl font-semibold">Cultura</h1></div>
 }
