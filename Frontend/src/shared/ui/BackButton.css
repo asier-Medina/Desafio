@@ -1,8 +1,4 @@
 .back-btn {
-  position: fixed;
-  top: 88px;
-  left: 16px;
-  z-index: 10;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -21,4 +17,11 @@
 .back-btn:hover {
   transform: scale(1.08);
   box-shadow: var(--shadow-lg);
+}
+
+.back-btn--fixed {
+  position: fixed;
+  top: 88px;
+  left: 16px;
+  z-index: 10;
 }

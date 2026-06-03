@@ -26,7 +26,9 @@ function AuthContent() {
 
   return (
     <div className="auth-page">
-      <BackButton onClick={() => navigate(-1)} />
+      <div className="auth-page__back">
+        <BackButton onClick={() => navigate(-1)} />
+      </div>
       <Card display="auth">
         {isLogin ? (
           <LoginSection

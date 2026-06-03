@@ -15,7 +15,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
 
   return (
     <article className="detail">
-      <BackButton onClick={onBack} />
+      <BackButton onClick={onBack} variant="fixed" />
 
       <div className="detail__hero">
         {imageUrl ? (
