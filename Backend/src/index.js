@@ -14,6 +14,7 @@ import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 dotenv.config();
 
 const app = express();
+app.disable("x-powered-by");
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
