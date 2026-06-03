@@ -18,24 +18,24 @@ export const LABELS = {
 
 export const VARIANTS = {
   event: {
-    badge: (d) => d.typeEs,
-    title: (d) => d.nombre_es,
+    badge: (d) => d.type,
+    title: (d) => d.nombre_es || d.nombre || `${d.type} · ${d.establishment || ""}`,
     badgeIcon: null,
     meta: (d, t, lang) => (
       <>
-        {d.startDate && (
+        {d.start_date && (
           <span className="card__meta-item">
             <FaRegCalendar className="card__icon" aria-hidden="true" />
-            <time dateTime={d.startDate}>
-              {formatDate(d.startDate, lang)}
-              {d.endDate && new Date(d.endDate) < new Date() && ` · ${t.ended}`}
+            <time dateTime={d.start_date}>
+              {formatDate(d.start_date, lang)}
+              {d.end_date && new Date(d.end_date) < new Date() && ` · ${t.ended}`}
             </time>
           </span>
         )}
-        {(d.establishmentEs || d.municipalityEs) && (
+        {(d.establishment || d.place) && (
           <span className="card__meta-item">
             <FaLocationDot className="card__icon" aria-hidden="true" />
-            <span>{d.establishmentEs || d.municipalityEs}</span>
+            <span>{d.establishment || d.place}</span>
           </span>
         )}
       </>
@@ -59,16 +59,16 @@ export const VARIANTS = {
     badgeIcon: null,
     meta: (d) => (
       <>
-        {(d.direccion || d.municipio) && (
+        {d.direccion && (
           <span className="card__meta-item">
             <FaLocationDot className="card__icon" aria-hidden="true" />
-            <span>{d.direccion || d.municipio}</span>
+            <span>{d.direccion}</span>
           </span>
         )}
       </>
     ),
     rating: (d) => d.valoracion,
-    reviews: (d) => d.num_valoraciones,
+    reviews: (d) => d.numero_valoraciones,
   },
 
   gastronomy: {
@@ -88,10 +88,10 @@ export const VARIANTS = {
     badgeIcon: FaUtensils,
     meta: (d) => (
       <>
-        {d.municipio && (
+        {d.direccion && (
           <span className="card__meta-item">
             <FaLocationDot className="card__icon" aria-hidden="true" />
-            <span>{d.municipio}</span>
+            <span>{d.direccion}</span>
           </span>
         )}
       </>
