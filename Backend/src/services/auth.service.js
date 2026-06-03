@@ -18,27 +18,24 @@ const generateRefreshToken = (user) =>
   )
 
 // ── register ────────────────────────────────────────────────
-export const register = async ({ nombre, apellido, email, password, municipio, provincia, sexo, age, role = 'user' }) => {
+export const register = async ({ nombre, apellido, email, password, tlf, municipality_id, sexo, age, role = 'user' }) => {
   const normalizedEmail = email?.trim().toLowerCase()
-
   const exists = await User.findOne({ where: { email: normalizedEmail } })
   if (exists) throw new Error('El email ya está registrado')
 
   const password_hash = await bcrypt.hash(password, 10)
-
   const user = await User.create({
     nombre,
     apellido,
     email: normalizedEmail,
     password_hash,
-    municipio,
-    provincia,
+    tlf,
+    municipality_id,
     sexo,
     age,
     role,
   })
-
-  return { id: user.id_user, nombre: user.nombre, role: user.role }
+  return { id: user.id_user, nombre: user.nombre, email: user.email, role: user.role }
 }
 
 // ── login ───────────────────────────────────────────────────
@@ -56,7 +53,7 @@ export const login = async ({ email, password }) => {
   return {
     accessToken,
     refreshToken,
-    user: { id: user.id_user, nombre: user.nombre, role: user.role }
+    user: { id: user.id_user, nombre: user.nombre, email: user.email, role: user.role }
   }
 }
 
