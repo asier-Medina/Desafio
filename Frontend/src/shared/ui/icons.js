@@ -20,4 +20,6 @@ export {
   FaEuroSign,                // precio / euro
   FaLink,                    // enlace
   FaArrowRightFromBracket,   // cerrar sesión
+  FaCheck,                   // confirmar / hecho
+  FaPen,                     // editar / lápiz
 } from "react-icons/fa6";
