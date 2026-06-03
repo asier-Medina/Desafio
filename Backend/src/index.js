@@ -4,8 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import sequelize from "./config/postgres.js";
-import authRouter from "./routes/auth.routes.js";
-import eventsRouter from "./routes/events.js";
+import apiRouter from "./routes/api.routes.js";
 import userRouter from "./routes/user.routes.js";
 import favoriteRouter from './routes/favorite.routes.js'
 import reviewRouter from './routes/review.routes.js'
