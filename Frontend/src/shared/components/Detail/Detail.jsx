@@ -1,4 +1,5 @@
-import { FaArrowLeft, FaLocationDot, FaStar, FaRegClock, FaEuroSign, FaLink } from "../../ui/icons";
+import BackButton from "@ui/BackButton";
+import { FaLocationDot, FaStar, FaRegClock, FaEuroSign, FaLink } from "../../ui/icons";
 import { VARIANTS, LABELS } from "../Cards/cardVariants";
 import { getImage, formatDate, renderStars } from "../Cards/cardHelpers";
 import "./Detail.css";
@@ -14,9 +15,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
 
   return (
     <article className="detail">
-      <button className="detail__back" onClick={onBack} aria-label="Volver">
-        <FaArrowLeft />
-      </button>
+      <BackButton onClick={onBack} />
 
       <div className="detail__hero">
         {imageUrl ? (

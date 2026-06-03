@@ -3,6 +3,7 @@ import { useNavigate, Navigate } from 'react-router'
 import { useAuth } from './context/AuthContext'
 import LoginSection from './sections/LoginSection'
 import RegisterSection from './sections/RegisterSection'
+import BackButton from '@ui/BackButton'
 import { Card } from '@shared/components/Cards'
 import './auth.css'
 
@@ -25,6 +26,7 @@ function AuthContent() {
 
   return (
     <div className="auth-page">
+      <BackButton onClick={() => navigate(-1)} />
       <Card display="auth">
         {isLogin ? (
           <LoginSection
