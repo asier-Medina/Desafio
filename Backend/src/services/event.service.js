@@ -46,6 +46,17 @@ function nextWeekendRange() {
 const BASE_WHERE = { active: true };
 const include = [{ model: Municipality, attributes: ["nombre", "provincia"] }];
 
+export async function getAllEventos() {
+  const ml = await fromML("/eventos");
+  if (ml) return ml;
+
+  return Event.findAll({
+    where: BASE_WHERE,
+    include,
+    order: [["start_date", "ASC"]],
+  });
+}
+
 export async function getEstaSemana() {
   const ml = await fromML("/eventos/esta-semana");
   if (ml) return ml;
@@ -92,17 +103,34 @@ export async function getEnEuskera() {
 }
 
 export async function getEventoById(id) {
-  return Event.findOne({ where: { id, ...BASE_WHERE }, include });
+  return Event.findOne({ where: { id }, include });
 }
 
-export async function getAllEventos() {
-  const ml = await fromML("/eventos");
-  if (ml) return ml;
-
-  return Event.findAll({
-    where: BASE_WHERE,
-    include,
-    order: [["start_date", "ASC"]],
-  });
+export async function createEvento(data) {
+  return Event.create(data);
 }
 
+export async function updateEvento(id, data) {
+  const event = await Event.findByPk(id);
+  if (!event) return null;
+  return event.update(data);
+}
+
+export async function deleteEvento(id) {
+  const event = await Event.findByPk(id);
+  if (!event) return null;
+  await event.destroy();
+  return event;
+}
+
+export async function toggleActive(id) {
+  const event = await Event.findByPk(id);
+  if (!event) return null;
+  return event.update({ active: !event.active });
+}
+
+export async function toggleSponsored(id) {
+  const event = await Event.findByPk(id);
+  if (!event) return null;
+  return event.update({ is_sponsored: !event.is_sponsored });
+}

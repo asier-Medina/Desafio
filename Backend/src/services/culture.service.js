@@ -22,6 +22,17 @@ const include = [{ model: Municipality, attributes: ["nombre", "provincia"] }];
 const MUSEO_TIPOS = ["Museo", "museo", "Museos"];
 const PATRIMONIO_TIPOS = ["Patrimonio", "patrimonio", "Patrimonio Cultural", "Monumento", "monumento"];
 
+export async function getAllCultura() {
+  const ml = await fromML("/cultura");
+  if (ml) return ml;
+
+  return Culture.findAll({
+    where: BASE_WHERE,
+    include,
+    order: [["valoracion", "DESC"]],
+  });
+}
+
 export async function getMuseos() {
   const ml = await fromML("/cultura/museos");
   if (ml) return ml;
@@ -67,16 +78,34 @@ export async function getCercaDeTi(municipalityId) {
 }
 
 export async function getCulturaById(id) {
-  return Culture.findOne({ where: { id, ...BASE_WHERE }, include });
+  return Culture.findOne({ where: { id }, include });
 }
 
-export async function getAllCultura() {
-  const ml = await fromML("/cultura");
-  if (ml) return ml;
+export async function createCultura(data) {
+  return Culture.create(data);
+}
 
-  return Culture.findAll({
-    where: BASE_WHERE,
-    include,
-    order: [["valoracion", "DESC"]],
-  });
+export async function updateCultura(id, data) {
+  const item = await Culture.findByPk(id);
+  if (!item) return null;
+  return item.update(data);
+}
+
+export async function deleteCultura(id) {
+  const item = await Culture.findByPk(id);
+  if (!item) return null;
+  await item.destroy();
+  return item;
+}
+
+export async function toggleActive(id) {
+  const item = await Culture.findByPk(id);
+  if (!item) return null;
+  return item.update({ active: !item.active });
+}
+
+export async function toggleSponsored(id) {
+  const item = await Culture.findByPk(id);
+  if (!item) return null;
+  return item.update({ is_sponsored: !item.is_sponsored });
 }

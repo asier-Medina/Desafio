@@ -19,6 +19,17 @@ async function fromML(path) {
 const BASE_WHERE = { active: true };
 const include = [{ model: Municipality, attributes: ["nombre", "provincia"] }];
 
+export async function getAllGastronomia() {
+  const ml = await fromML("/gastronomia");
+  if (ml) return ml;
+
+  return Gastronomy.findAll({
+    where: BASE_WHERE,
+    include,
+    order: [["valoracion", "DESC"]],
+  });
+}
+
 export async function getMejorValorados() {
   const ml = await fromML("/gastronomia/mejor-valorados");
   if (ml) return ml;
@@ -64,17 +75,34 @@ export async function getCercaDeTi(municipalityId) {
 }
 
 export async function getGastronomiaById(id) {
-  return Gastronomy.findOne({ where: { id, ...BASE_WHERE }, include });
+  return Gastronomy.findOne({ where: { id }, include });
 }
 
+export async function createGastronomia(data) {
+  return Gastronomy.create(data);
+}
 
-export async function getAllGastronomia() {
-  const ml = await fromML("/gastronomia");
-  if (ml) return ml;
+export async function updateGastronomia(id, data) {
+  const item = await Gastronomy.findByPk(id);
+  if (!item) return null;
+  return item.update(data);
+}
 
-  return Gastronomy.findAll({
-    where: BASE_WHERE,
-    include,
-    order: [["valoracion", "DESC"]],
-  });
+export async function deleteGastronomia(id) {
+  const item = await Gastronomy.findByPk(id);
+  if (!item) return null;
+  await item.destroy();
+  return item;
+}
+
+export async function toggleActive(id) {
+  const item = await Gastronomy.findByPk(id);
+  if (!item) return null;
+  return item.update({ active: !item.active });
+}
+
+export async function toggleSponsored(id) {
+  const item = await Gastronomy.findByPk(id);
+  if (!item) return null;
+  return item.update({ is_sponsored: !item.is_sponsored });
 }

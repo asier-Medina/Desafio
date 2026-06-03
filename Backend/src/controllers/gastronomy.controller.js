@@ -35,3 +35,41 @@ export const porId           = async (req, res) => {
     res.json(item);
   } catch (e) { res.status(500).json({ error: e.message }); }
 };
+
+export const crear           = async (req, res) => {
+  try { res.status(201).json(await gastronomyService.createGastronomia(req.body)); }
+  catch (e) { res.status(400).json({ error: e.message }); }
+};
+
+export const actualizar      = async (req, res) => {
+  try {
+    const item = await gastronomyService.updateGastronomia(req.params.id, req.body);
+    if (!item) return res.status(404).json({ error: "Establecimiento no encontrado" });
+    res.json(item);
+  } catch (e) { res.status(400).json({ error: e.message }); }
+};
+
+export const eliminar        = async (req, res) => {
+  try {
+    const item = await gastronomyService.deleteGastronomia(req.params.id);
+    if (!item) return res.status(404).json({ error: "Establecimiento no encontrado" });
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+};
+
+export const cambiarActive   = async (req, res) => {
+  try {
+    const item = await gastronomyService.toggleActive(req.params.id);
+    if (!item) return res.status(404).json({ error: "Establecimiento no encontrado" });
+    res.json({ id: item.id, active: item.active });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+};
+
+export const cambiarSponsored = async (req, res) => {
+  try {
+    const item = await gastronomyService.toggleSponsored(req.params.id);
+    if (!item) return res.status(404).json({ error: "Establecimiento no encontrado" });
+    res.json({ id: item.id, is_sponsored: item.is_sponsored });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+};
+
