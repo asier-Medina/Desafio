@@ -1,9 +1,12 @@
 import { createBrowserRouter } from "react-router";
 import Home from "@features/home/Home";
 import Events from "../pages/events/Events";
+import EventDetail from "../pages/events/EventDetail";
 import Auth from "@features/auth/Auth";
 import Culture from "../pages/culture/Culture";
+import CultureDetail from "../pages/culture/CultureDetail";
 import Gastronomy from "../pages/gastronomy/Gastronomy";
+import GastronomyDetail from "../pages/gastronomy/GastronomyDetail";
 import Favorite from "../pages/Favorite/favorite";
 import Profile from "../pages/profile/Profile";
 
@@ -30,25 +33,26 @@ const router = createBrowserRouter([
   {
     path: "/culture",
     element: <MainLayout />,
-    children: [{ index: true, element: <Culture /> }],
-    /*loader: mainLoader,*/
+    children: [
+      { index: true, element: <Culture /> },
+      { path: ":id", element: <CultureDetail /> },
+    ],
   },
-  /* {
-    path: "/animals/:animalId",
-    element: <MainLayout />,
-    children: [{ index: true, element: <AnimalProfile /> }],
-    /*loader: mainLoader,
-  }, */
   {
     path: "/gastronomy",
     element: <MainLayout />,
-    children: [{ index: true, element: <Gastronomy /> }],
+    children: [
+      { index: true, element: <Gastronomy /> },
+      { path: ":id", element: <GastronomyDetail /> },
+    ],
   },
   {
     path: "/events",
     element: <MainLayout />,
-    children: [{ index: true, element: <Events /> }],
-    /*loader: mainLoader,*/
+    children: [
+      { index: true, element: <Events /> },
+      { path: ":id", element: <EventDetail /> },
+    ],
   },
   {
     path: "/profile",

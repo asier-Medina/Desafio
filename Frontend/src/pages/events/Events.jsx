@@ -1,40 +1,42 @@
+import { useNavigate } from "react-router";
 import { Card } from "@components/Cards";
 import { useFavorites } from "@shared/context/FavoritesContext";
 
 const mockEvents = [
   {
     id: 1,
-    nombre_es: "Concierto de jazz en el Café Iruña",
-    typeEs: "Concierto",
+    nombre: "Concierto de jazz en el Café Iruña",
+    type: "Concierto",
     images: [{ imageUrl: "https://picsum.photos/seed/jazz/600/400" }],
-    startDate: "2026-06-21T20:30:00Z",
-    endDate: "2026-06-21T23:00:00Z",
-    establishmentEs: "Café Iruña",
-    municipalityEs: "Bilbao",
+    start_date: "2026-06-21T20:30:00Z",
+    end_date: "2026-06-21T23:00:00Z",
+    establishment: "Café Iruña",
+    place: "Bilbao",
   },
   {
     id: 2,
-    nombre_es: "Feria de artesanía vasca",
-    typeEs: "Feria",
+    nombre: "Feria de artesanía vasca",
+    type: "Feria",
     images: [{ imageUrl: "https://picsum.photos/seed/feria/600/400" }],
-    startDate: "2026-07-05T10:00:00Z",
-    endDate: "2026-07-07T21:00:00Z",
-    establishmentEs: "Plaza Nueva",
-    municipalityEs: "Bilbao",
+    start_date: "2026-07-05T10:00:00Z",
+    end_date: "2026-07-07T21:00:00Z",
+    establishment: "Plaza Nueva",
+    place: "Bilbao",
   },
   {
     id: 3,
-    nombre_es: "Teatro: La casa de Bernarda Alba",
-    typeEs: "Teatro",
+    nombre: "Teatro: La casa de Bernarda Alba",
+    type: "Teatro",
     images: [{ imageUrl: "https://picsum.photos/seed/teatro/600/400" }],
-    startDate: "2026-06-28T19:00:00Z",
-    endDate: "2026-06-28T21:30:00Z",
-    establishmentEs: "Teatro Arriaga",
-    municipalityEs: "Bilbao",
+    start_date: "2026-06-28T19:00:00Z",
+    end_date: "2026-06-28T21:30:00Z",
+    establishment: "Teatro Arriaga",
+    place: "Bilbao",
   },
 ];
 
 export default function Events() {
+  const navigate = useNavigate();
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
   function handleToggleFavorite(data) {
@@ -57,7 +59,7 @@ export default function Events() {
             data={event}
             isFavorite={isFavorite(event.id, "event")}
             onToggleFavorite={handleToggleFavorite}
-            onAction={(d) => console.log(d.nombre_es)}
+            onAction={(d) => navigate(`/events/${d.id}`)}
           />
         ))}
       </section>

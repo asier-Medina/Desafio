@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { Card } from "@components/Cards";
 import { useFavorites } from "@shared/context/FavoritesContext";
 
@@ -7,7 +8,7 @@ const mockRestaurants = [
     nombre: "Restaurante Mina",
     tipo_comida: "asador",
     url_imagen: "https://picsum.photos/seed/mina/600/400",
-    municipio: "Bilbao",
+    direccion: "Calle de la Merced, 1, 48003 Bilbao",
     valoracion: 4.7,
     num_resenas: 312,
     michelin: true,
@@ -18,7 +19,7 @@ const mockRestaurants = [
     nombre: "Sidrería Petritegi",
     tipo_comida: "sidreria",
     url_imagen: "https://picsum.photos/seed/petritegi/600/400",
-    municipio: "San Sebastián",
+    direccion: "Barrio de Astigarraga, 20115",
     valoracion: 4.5,
     num_resenas: 890,
     michelin: false,
@@ -29,7 +30,7 @@ const mockRestaurants = [
     nombre: "Bar Gure Toki",
     tipo_comida: "bar",
     url_imagen: "https://picsum.photos/seed/gure/600/400",
-    municipio: "Bilbao",
+    direccion: "Calle del Perro, 3, 48001 Bilbao",
     valoracion: 4.3,
     num_resenas: 215,
     michelin: false,
@@ -38,6 +39,7 @@ const mockRestaurants = [
 ];
 
 export default function Gastronomy() {
+  const navigate = useNavigate();
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
   function handleToggleFavorite(data) {
@@ -60,7 +62,7 @@ export default function Gastronomy() {
             data={rest}
             isFavorite={isFavorite(rest.id, "gastronomy")}
             onToggleFavorite={handleToggleFavorite}
-            onAction={(d) => console.log(d.nombre)}
+            onAction={(d) => navigate(`/gastronomy/${d.id}`)}
           />
         ))}
       </section>

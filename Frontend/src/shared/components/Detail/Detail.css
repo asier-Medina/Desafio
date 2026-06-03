@@ -1,0 +1,205 @@
+.detail {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+
+.detail__back {
+  position: fixed;
+  top: 88px;
+  left: 16px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.detail__back:hover {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-lg);
+}
+
+.detail__hero {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.detail__hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail__hero-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.detail__hero-placeholder--event {
+  background: linear-gradient(135deg, var(--brand-cream) 0%, #e2e4d0 100%);
+}
+
+.detail__hero-placeholder--culture {
+  background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-mauve) 100%);
+  opacity: 0.12;
+}
+
+.detail__hero-placeholder--gastronomy {
+  background: linear-gradient(135deg, var(--brand-plum) 0%, var(--brand-mauve) 100%);
+  opacity: 0.12;
+}
+
+.detail__hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-md);
+  background: linear-gradient(transparent, rgba(0,0,0,0.5));
+}
+
+.detail__badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.detail__badge--event {
+  color: #6d4c41;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border: 1px solid rgba(109, 76, 65, 0.12);
+}
+
+.detail__badge--culture {
+  color: var(--color-primary);
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 1px solid rgba(41, 54, 109, 0.12);
+}
+
+.detail__badge--gastronomy {
+  color: #bf360c;
+  background: linear-gradient(135deg, #fbe9e7 0%, #ffccbc 100%);
+  border: 1px solid rgba(191, 54, 12, 0.12);
+}
+
+.detail__body {
+  padding: 0 var(--space-md) var(--space-xl);
+}
+
+.detail__title {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--space-sm);
+}
+
+.detail__rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: var(--color-text-soft);
+  margin-bottom: var(--space-md);
+}
+
+.detail__rating-icon {
+  color: #f59e0b;
+}
+
+.detail__rating-value {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.detail__reviews {
+  font-size: var(--font-size-xs);
+}
+
+.detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--brand-navy) 10%, transparent);
+  margin-bottom: var(--space-md);
+}
+
+.detail__info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--color-text-soft);
+}
+
+.detail__info-icon {
+  font-size: 0.85rem;
+  color: var(--brand-navy);
+  flex-shrink: 0;
+}
+
+.detail__free {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.detail__link {
+  color: var(--color-primary);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.detail__tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.detail__description {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-soft);
+  margin-bottom: var(--space-lg);
+}
+
+.detail__map-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 200px;
+  background: color-mix(in srgb, var(--brand-navy) 5%, transparent);
+  border-radius: var(--radius-md);
+  border: 1px dashed color-mix(in srgb, var(--brand-navy) 20%, transparent);
+  color: var(--color-text-soft);
+  font-size: 0.8125rem;
+}
+
+.detail__map-icon {
+  font-size: 1.5rem;
+  opacity: 0.4;
+}

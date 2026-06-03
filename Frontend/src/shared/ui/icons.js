@@ -16,4 +16,7 @@ export {
   FaArrowRight,              // flecha derecha
   FaBars,                    // menú hamburguesa
   FaXmark,                   // cerrar / equis
+  FaRegClock,                // reloj / hora
+  FaEuroSign,                // precio / euro
+  FaLink,                    // enlace
 } from "react-icons/fa6";

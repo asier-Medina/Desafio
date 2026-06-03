@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { Card } from "@components/Cards";
 import { useFavorites } from "@shared/context/FavoritesContext";
 
@@ -7,34 +8,32 @@ const mockPlaces = [
     nombre: "Museo Guggenheim Bilbao",
     tipo_lugar: "museo",
     imagen_url: "https://picsum.photos/seed/guggenheim/600/400",
-    direccion: "Abandoibarra Etorbidea, 2",
-    municipio: "Bilbao",
+    direccion: "Abandoibarra Etorbidea, 2, 48009 Bilbao",
     valoracion: 4.8,
-    num_valoraciones: 45230,
+    numero_valoraciones: 45230,
   },
   {
     id: 2,
     nombre: "Teatro Arriaga",
     tipo_lugar: "teatro",
     imagen_url: "https://picsum.photos/seed/arriaga/600/400",
-    direccion: "Plaza del Arriaga, 1",
-    municipio: "Bilbao",
+    direccion: "Plaza del Arriaga, 1, 48005 Bilbao",
     valoracion: 4.6,
-    num_valoraciones: 12890,
+    numero_valoraciones: 12890,
   },
   {
     id: 3,
     nombre: "Catedral de Santiago",
     tipo_lugar: "monumento",
     imagen_url: "https://picsum.photos/seed/santiago/600/400",
-    direccion: "Plaza de Santiago, 1",
-    municipio: "Bilbao",
+    direccion: "Plaza de Santiago, 1, 48005 Bilbao",
     valoracion: 4.5,
-    num_valoraciones: 8750,
+    numero_valoraciones: 8750,
   },
 ];
 
 export default function Culture() {
+  const navigate = useNavigate();
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
   function handleToggleFavorite(data) {
@@ -57,7 +56,7 @@ export default function Culture() {
             data={place}
             isFavorite={isFavorite(place.id, "culture")}
             onToggleFavorite={handleToggleFavorite}
-            onAction={(d) => console.log(d.nombre)}
+            onAction={(d) => navigate(`/culture/${d.id}`)}
           />
         ))}
       </section>
