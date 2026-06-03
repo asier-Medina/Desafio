@@ -16,7 +16,7 @@ const NAV_LINKS = {
   ],
 };
 
-export default function MobileNav({ onNavigate = () => {}, currentPath = "", lang = "es" }) {
+export default function MobileNav({ onNavigate = () => {}, currentPath = "", lang = "es", hidden = false }) {
   const links = NAV_LINKS[lang] ?? NAV_LINKS.es;
 
   function handleClick(e, path) {
@@ -29,6 +29,8 @@ export default function MobileNav({ onNavigate = () => {}, currentPath = "", lan
     if (path === "/") return currentPath === "/";
     return currentPath.startsWith(path);
   }
+
+  if (hidden) return null;
 
   return (
     <nav aria-label="Navegación móvil" className="mobile-nav">

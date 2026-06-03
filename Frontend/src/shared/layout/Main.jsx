@@ -26,7 +26,7 @@ export default function MainLayout() {
       <main>
         <Outlet />
       </main>
-      <MobileNav onNavigate={navigate} currentPath={pathname} />
+      <MobileNav onNavigate={navigate} currentPath={pathname} hidden={pathname === "/login"} />
     </FavoritesProvider>
   );
 }
