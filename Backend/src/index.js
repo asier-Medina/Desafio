@@ -7,6 +7,7 @@ import sequelize from "./config/postgres.js";
 import authRouter from "./routes/auth.routes.js";
 import eventsRouter from "./routes/events.js";
 import userRouter from "./routes/user.routes.js";
+import favoriteRouter from './routes/favorite.routes.js'
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 
 dotenv.config();
@@ -32,6 +33,7 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/auth",  authRouter);
 app.use("/api/users", userRouter);
+app.use('/api/users/me/favorites', favoriteRouter)
 app.use("/api",       eventsRouter);
 app.use(notFound);
 app.use(errorHandler);
