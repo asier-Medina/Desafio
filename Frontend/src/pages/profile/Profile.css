@@ -8,53 +8,85 @@
 }
 
 .profile__header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-lg);
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   border: 1px solid color-mix(in srgb, var(--brand-navy) 10%, transparent);
+  overflow: hidden;
 }
 
-.profile__avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand-navy), var(--brand-mauve));
-  color: #fff;
+.profile__header-top {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.profile__info {
-  flex: 1;
-  min-width: 0;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  flex-wrap: wrap;
 }
 
 .profile__name {
   font-family: var(--font-body);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--color-text);
   margin: 0;
 }
 
-.profile__email {
-  font-size: 0.875rem;
-  color: var(--color-text-soft);
-  margin: 2px 0 0;
+.profile__header-actions {
+  display: flex;
+  gap: var(--space-xs);
 }
 
-.profile__joined {
-  font-size: 0.75rem;
+.profile__card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--brand-navy) 10%, transparent);
+  padding: var(--space-lg);
+}
+
+.profile__card-title {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 var(--space-md);
+}
+
+.profile__info-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: 0;
+}
+
+.profile__info-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  font-size: 0.875rem;
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-navy) 6%, transparent);
+}
+
+.profile__info-row:last-child {
+  border-bottom: none;
+}
+
+.profile__info-row dt {
+  font-weight: 600;
   color: var(--color-text-soft);
-  margin: 4px 0 0;
-  opacity: 0.7;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.profile__info-row dd {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.profile__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
 }
 
 .profile__actions {

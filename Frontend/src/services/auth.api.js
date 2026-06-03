@@ -16,8 +16,8 @@ export function login({ email, password }) {
   return request('POST', '/login', { email, password })
 }
 
-export function register({ name, lastName, email, password }) {
-  return request('POST', '/register', { name, lastName, email, password })
+export function register({ name, lastName, email, password, tlf, municipality_id, sexo, age }) {
+  return request('POST', '/register', { name, lastName, email, password, tlf, municipality_id, sexo, age })
 }
 
 export function logout() {

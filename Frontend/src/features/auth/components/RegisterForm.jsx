@@ -1,14 +1,20 @@
 import { useState, useCallback } from 'react'
 import { useAuth } from '../context/AuthContext'
 import InputField from './InputField'
+import SelectField from './SelectField'
 import PasswordInput from './PasswordInput'
 import SubmitButton from './SubmitButton'
-import { sanitize, sanitizePassword, validateName, validateEmail, validatePassword } from '../utils/validation'
+import { getAll } from '@services/municipalities'
+import { sanitize, sanitizePassword, validateName, validateEmail, validatePassword, validatePhone, validateAge, validateSexo } from '../utils/validation'
 
 export default function RegisterForm({ onSuccess }) {
   const { register, loading, error, clearError } = useAuth()
-  const [form, setForm] = useState({ name: '', lastName: '', email: '', password: '', confirmPassword: '' })
+  const [form, setForm] = useState({
+    name: '', lastName: '', email: '', password: '', confirmPassword: '',
+    tlf: '', municipality_id: '', sexo: '', age: '',
+  })
   const [fieldErrors, setFieldErrors] = useState({})
+  const municipalities = getAll()
 
   function validate() {
     const errors = {}
@@ -21,34 +27,21 @@ export default function RegisterForm({ onSuccess }) {
     const passErr = validatePassword(form.password)
     if (passErr) errors.password = passErr
     if (form.password !== form.confirmPassword) errors.confirmPassword = 'Las contraseñas no coinciden'
+    const tlfErr = validatePhone(form.tlf)
+    if (tlfErr) errors.tlf = tlfErr
+    const ageErr = validateAge(form.age)
+    if (ageErr) errors.age = ageErr
+    const sexoErr = validateSexo(form.sexo)
+    if (sexoErr) errors.sexo = sexoErr
+    if (!form.municipality_id) errors.municipality_id = 'El municipio es obligatorio'
     return errors
   }
 
-  const handleNameChange = useCallback((e) => {
-    const cleaned = sanitize(e.target.value)
-    setForm((prev) => ({ ...prev, name: cleaned }))
-  }, [])
-
-  const handleLastNameChange = useCallback((e) => {
-    const cleaned = sanitize(e.target.value)
-    setForm((prev) => ({ ...prev, lastName: cleaned }))
-  }, [])
-
-  const handleEmailChange = useCallback((e) => {
-    const raw = e.target.value
-    const cleaned = sanitize(raw)
-    const lower = cleaned.toLowerCase()
-    setForm((prev) => ({ ...prev, email: lower }))
-  }, [])
-
-  const handlePasswordChange = useCallback((e) => {
-    const cleaned = sanitizePassword(e.target.value)
-    setForm((prev) => ({ ...prev, password: cleaned }))
-  }, [])
-
-  const handleConfirmChange = useCallback((e) => {
-    const cleaned = sanitizePassword(e.target.value)
-    setForm((prev) => ({ ...prev, confirmPassword: cleaned }))
+  const handleChange = useCallback((field) => (e) => {
+    const cleaned = ['name', 'lastName', 'email'].includes(field)
+      ? sanitize(e.target.value)
+      : e.target.value
+    setForm((prev) => ({ ...prev, [field]: field === 'email' ? cleaned.toLowerCase() : cleaned }))
   }, [])
 
   async function handleSubmit(e) {
@@ -59,11 +52,16 @@ export default function RegisterForm({ onSuccess }) {
 
     clearError()
     try {
-      const cleanName = sanitize(form.name)
-      const cleanLastName = sanitize(form.lastName)
-      const cleanEmail = sanitize(form.email).toLowerCase()
-      const cleanPassword = sanitizePassword(form.password)
-      await register({ name: cleanName, lastName: cleanLastName, email: cleanEmail, password: cleanPassword })
+      await register({
+        name: sanitize(form.name),
+        lastName: sanitize(form.lastName),
+        email: sanitize(form.email).toLowerCase(),
+        password: sanitizePassword(form.password),
+        tlf: sanitize(form.tlf),
+        municipality_id: Number(form.municipality_id),
+        sexo: form.sexo,
+        age: Number(form.age),
+      })
       onSuccess?.()
     } catch {
       // Error manejado por el contexto
@@ -84,7 +82,7 @@ export default function RegisterForm({ onSuccess }) {
         type="text"
         placeholder="Tu nombre"
         value={form.name}
-        onChange={handleNameChange}
+        onChange={handleChange('name')}
         error={fieldErrors.name}
         autoComplete="given-name"
         maxLength={100}
@@ -96,7 +94,7 @@ export default function RegisterForm({ onSuccess }) {
         type="text"
         placeholder="Tu apellido"
         value={form.lastName}
-        onChange={handleLastNameChange}
+        onChange={handleChange('lastName')}
         error={fieldErrors.lastName}
         autoComplete="family-name"
         maxLength={100}
@@ -108,10 +106,56 @@ export default function RegisterForm({ onSuccess }) {
         type="email"
         placeholder="tucorreo@ejemplo.com"
         value={form.email}
-        onChange={handleEmailChange}
+        onChange={handleChange('email')}
         error={fieldErrors.email}
         autoComplete="email"
         maxLength={254}
+      />
+
+      <InputField
+        label="Teléfono"
+        id="register-tlf"
+        type="tel"
+        placeholder="+34 600 000 000"
+        value={form.tlf}
+        onChange={handleChange('tlf')}
+        error={fieldErrors.tlf}
+        autoComplete="tel"
+        maxLength={20}
+      />
+
+      <SelectField
+        label="Municipio"
+        id="register-municipality"
+        options={municipalities}
+        value={form.municipality_id}
+        onChange={handleChange('municipality_id')}
+        error={fieldErrors.municipality_id}
+      />
+
+      <SelectField
+        label="Sexo"
+        id="register-sexo"
+        options={[
+          { value: 'hombre', label: 'Hombre' },
+          { value: 'mujer', label: 'Mujer' },
+          { value: 'otro', label: 'Otro' },
+        ]}
+        value={form.sexo}
+        onChange={handleChange('sexo')}
+        error={fieldErrors.sexo}
+      />
+
+      <InputField
+        label="Edad"
+        id="register-age"
+        type="number"
+        placeholder="30"
+        value={form.age}
+        onChange={handleChange('age')}
+        error={fieldErrors.age}
+        min={1}
+        max={119}
       />
 
       <PasswordInput
@@ -119,7 +163,7 @@ export default function RegisterForm({ onSuccess }) {
         id="register-password"
         placeholder="Mínimo 8 caracteres"
         value={form.password}
-        onChange={handlePasswordChange}
+        onChange={handleChange('password')}
         error={fieldErrors.password}
         autoComplete="new-password"
         showStrength
@@ -130,7 +174,7 @@ export default function RegisterForm({ onSuccess }) {
         id="register-confirm"
         placeholder="Repite la contraseña"
         value={form.confirmPassword}
-        onChange={handleConfirmChange}
+        onChange={handleChange('confirmPassword')}
         error={fieldErrors.confirmPassword}
         autoComplete="new-password"
       />

@@ -42,7 +42,7 @@ export async function login({ email, password }) {
   return { user: safeUser }
 }
 
-export async function register({ name, lastName, email, password }) {
+export async function register({ name, lastName, email, password, tlf, municipality_id, sexo, age }) {
   await delay()
   const db = getDB()
 
@@ -56,6 +56,10 @@ export async function register({ name, lastName, email, password }) {
     lastName,
     email,
     passwordHash: hashPassword(password),
+    tlf: tlf || null,
+    municipality_id: municipality_id || null,
+    sexo: sexo || null,
+    age: age || null,
     role: 'user',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

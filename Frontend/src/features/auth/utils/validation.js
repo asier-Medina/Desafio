@@ -26,6 +26,36 @@ export function validateName(value) {
   return null
 }
 
+export function validatePhone(value) {
+  const v = sanitize(value)
+  if (!v) return null
+  if (v.length > 20) return 'No debe exceder 20 caracteres'
+  if (!/^[\d\s+\-()]+$/.test(v)) return 'Solo números, espacios, +, -, ()'
+  return null
+}
+
+export function validateAge(value) {
+  if (!value) return 'La edad es obligatoria'
+  const n = Number(value)
+  if (isNaN(n) || !Number.isInteger(n)) return 'Debe ser un número entero'
+  if (n < 1) return 'Debe ser mayor a 0'
+  if (n >= 120) return 'Debe ser menor a 120'
+  return null
+}
+
+export function validateMunicipality(value) {
+  if (!value) return 'El municipio es obligatorio'
+  const n = Number(value)
+  if (isNaN(n) || !Number.isInteger(n)) return 'Selecciona un municipio'
+  return null
+}
+
+export function validateSexo(value) {
+  if (!value) return 'El sexo es obligatorio'
+  if (!['hombre', 'mujer', 'otro'].includes(value)) return 'Valor inválido'
+  return null
+}
+
 export function validateEmail(value) {
   const v = sanitize(value.toLowerCase())
   if (!v) return 'El correo es obligatorio'
