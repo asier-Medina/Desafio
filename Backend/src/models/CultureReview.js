@@ -9,3 +9,5 @@ const CultureReview = sequelize.define("CultureReview", {
   texto:      { type: DataTypes.TEXT },
   created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 }, { tableName: "culture_reviews", schema: "user_data", timestamps: false });
+
+export default CultureReview;

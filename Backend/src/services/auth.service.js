@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import User from '../models/index.js'
+import {User} from '../models/index.js'
 
 // ── Token generators ────────────────────────────────────────
 const generateAccessToken = (user) =>

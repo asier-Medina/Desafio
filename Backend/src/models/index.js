@@ -12,6 +12,7 @@ import UserInterest from "./UserInterest.js";
 import GastronomyReview from "./GastronomyReview.js"; 
 import CultureReview from "./CultureReview.js"; 
 import EventReview from "./EventReview.js"; 
+import Municipality from "./Municipality.js";
 
 
 // Municipality ↔ User / Culture / Gastronomy / Event

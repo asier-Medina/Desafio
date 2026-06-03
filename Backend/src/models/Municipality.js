@@ -14,3 +14,5 @@ const Municipality = sequelize.define("Municipality", {
     schema: "shared", 
     timestamps: false 
 });
+
+export default Municipality;

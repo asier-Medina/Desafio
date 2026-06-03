@@ -5,9 +5,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import sequelize from "./config/postgres.js";
 import apiRouter from "./routes/api.routes.js";
-import userRouter from "./routes/user.routes.js";
-import favoriteRouter from './routes/favorite.routes.js'
-import reviewRouter from './routes/review.routes.js'
+
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 
 dotenv.config();
@@ -32,11 +30,7 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", mensaje: "Backend en marcha 🚀" });
 });
 
-app.use("/api/auth",  authRouter);
-app.use("/api/users", userRouter);
-app.use('/api/users/me/favorites', favoriteRouter)
-app.use("/api",       eventsRouter);
-app.use('/api/reviews', reviewRouter)
+app.use("/api",       apiRouter);
 app.use(notFound);
 app.use(errorHandler);
 
