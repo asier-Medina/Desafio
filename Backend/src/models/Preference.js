@@ -14,4 +14,4 @@ const Preference = sequelize.define('Preference', {
   timestamps: false,
 })
 
-export default Preference
+export default Preference;

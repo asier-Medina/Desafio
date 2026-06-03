@@ -13,4 +13,4 @@ const Favorite = sequelize.define('Favorite', {
   timestamps: false,
 })
 
-export default Favorite
+export default Favorite;

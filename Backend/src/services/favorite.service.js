@@ -1,4 +1,4 @@
-import Favorite from '../models/Favorite.js'
+import Favorite from '../models/index.js'
 
 // ── getFavorites ─────────────────────────────────────────────
 // Devuelve todos los favoritos del usuario, con filtro opcional por tipo

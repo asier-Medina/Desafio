@@ -1,5 +1,6 @@
 import sequelize from '../config/postgres.js'
 
+
 // ── Mapa de configuración por tipo ───────────────────────────
 const TIPO_MAP = {
   evento: {

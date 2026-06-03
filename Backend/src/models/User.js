@@ -20,10 +20,4 @@ const User = sequelize.define("User", {
   timestamps: false,
 });
 
-//-Asociaciones luego iran al index
-import Preference from "./Preference.js";
-import Interest from "./Interest.js";
-User.hasOne(Preference, { foreignKey: "user_id", as: "preference" });
-User.belongsToMany(Interest, { through: "UserInterests", foreignKey: "user_id", otherKey: "id_interest", as: "interests", timestamps: false,});
-
 export default User;
