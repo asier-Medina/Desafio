@@ -3,6 +3,7 @@ import { useNavigate, Navigate } from 'react-router'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import LoginSection from './sections/LoginSection'
 import RegisterSection from './sections/RegisterSection'
+import { Card } from '@shared/components/Cards'
 import './auth.css'
 
 function AuthContent() {
@@ -24,7 +25,7 @@ function AuthContent() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card">
+      <Card display="auth">
         {isLogin ? (
           <LoginSection
             onToggle={() => setIsLogin(false)}
@@ -36,7 +37,7 @@ function AuthContent() {
             onSuccess={() => navigate('/', { replace: true })}
           />
         )}
-      </div>
+      </Card>
     </div>
   )
 }

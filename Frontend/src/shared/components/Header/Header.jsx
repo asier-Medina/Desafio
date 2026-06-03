@@ -2,11 +2,12 @@ import { useEffect, useRef, useState, useId } from "react";
 import { FaRegUser, FaSliders, FaChevronDown } from "../../ui/icons";
 import HeaderNav from "./HeaderNav";
 import "./Header.css";
+import logoSvg from "../../../assets/images/logofinal.svg";
 
 const LABELS = {
   es: {
     appBar: "Cabecera principal",
-    home: "Bilbao Insider, ir a Eventos",
+    home: "Bilbao Insider, ir a inicio",
     login: "Iniciar sesión",
     register: "Crear cuenta",
     filters: "Filtros",
@@ -20,10 +21,12 @@ const LABELS = {
     roleAdmin: "Administrador",
     roleUser: "Usuario",
     avatarAlt: (name) => `Avatar de ${name}`,
+    langSelector: "Seleccionar idioma",
+    lang: "Idioma",
   },
   eu: {
     appBar: "Goiburu nagusia",
-    home: "Bilbao Insider, Ekitaldietara joan",
+    home: "Bilbao Insider, hasierara joan",
     login: "Saioa hasi",
     register: "Kontua sortu",
     filters: "Iragazkiak",
@@ -37,8 +40,16 @@ const LABELS = {
     roleAdmin: "Administratzailea",
     roleUser: "Erabiltzailea",
     avatarAlt: (name) => `${name}(r)en avatarra`,
+    langSelector: "Hizkuntza hautatu",
+    lang: "Hizkuntza",
   },
 };
+
+const LANGUAGES = [
+  { code: "es", label: "ES" },
+  { code: "eu", label: "EU" },
+  { code: "en", label: "EN" },
+];
 
 function getInitial(name) {
   if (!name || typeof name !== "string") return "?";
@@ -55,19 +66,44 @@ export default function Header({
   showFilters = false,
   onToggleFilters = () => {},
   lang = "es",
-  logoSrc = "/logos/sustrai_logo_horizontal.svg",
+  onLangChange = () => {},
+  logoSrc = logoSvg,
   homePath = "/",
 }) {
   const t = LABELS[lang] ?? LABELS.es;
   const isAuthenticated = Boolean(user);
   const isAdmin = user?.role === "admin";
 
+  const [langOpen, setLangOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const langRef = useRef(null);
   const menuRef = useRef(null);
   const triggerRef = useRef(null);
   const menuId = useId();
+  const langId = useId();
 
-  // Cerrar el menú al hacer clic fuera
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 16);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!langOpen) return;
+    function handleClickOutside(e) {
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setLangOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [langOpen]);
+
   useEffect(() => {
     if (!menuOpen) return;
     function handleClickOutside(e) {
@@ -84,7 +120,6 @@ export default function Header({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [menuOpen]);
 
-  // Cerrar con Escape y devolver el foco al disparador
   useEffect(() => {
     if (!menuOpen) return;
     function handleKey(e) {
@@ -97,23 +132,43 @@ export default function Header({
     return () => document.removeEventListener("keydown", handleKey);
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!langOpen) return;
+    function handleKey(e) {
+      if (e.key === "Escape") {
+        setLangOpen(false);
+      }
+    }
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [langOpen]);
+
   function handleMenuAction(action) {
     setMenuOpen(false);
     action();
   }
 
-  // El logo es un <a> real (permite Ctrl/Cmd+clic para abrir en pestaña nueva),
-  // pero en clic normal hace navegación SPA vía onNavigate.
   function handleLogoClick(e) {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
     onNavigate(homePath);
   }
 
+  function handleLangSelect(code) {
+    if (code !== lang) onLangChange(code);
+    setLangOpen(false);
+  }
+
+  function currentLangLabel() {
+    return LANGUAGES.find((l) => l.code === lang)?.label ?? "ES";
+  }
+
   return (
-    <header aria-label={t.appBar} className="header">
+    <header
+      aria-label={t.appBar}
+      className={`header${scrolled ? " header--scrolled" : ""}`}
+    >
       <div className="header__inner">
-        {/* Logo: h1 > a > svg (imagen). Lleva a Eventos (inicio). */}
         <h1 className="header__logo-title">
           <a
             href={homePath}
@@ -127,19 +182,55 @@ export default function Header({
 
         <HeaderNav onNavigate={onNavigate} lang={lang} />
 
-        {/* Acciones */}
         <div className="header__actions">
           {showFilters && (
             <button
               type="button"
               onClick={onToggleFilters}
               aria-label={t.openFilters}
-              className="header__filters-btn"
+              className="header__filters-btn header__desktop-only"
             >
               <FaSliders className="header__icon" aria-hidden="true" />
-              <span>{t.filters}</span>
+              <span className="header__desktop-only">{t.filters}</span>
             </button>
           )}
+
+          <div ref={langRef} className="header__lang">
+            <button
+              type="button"
+              onClick={() => setLangOpen((o) => !o)}
+              aria-haspopup="listbox"
+              aria-expanded={langOpen}
+              aria-label={t.langSelector}
+              className="header__lang-trigger"
+            >
+              <span className="header__lang-current">{currentLangLabel()}</span>
+              <FaChevronDown
+                className={`header__chevron${langOpen ? " header__chevron--open" : ""}`}
+                aria-hidden="true"
+              />
+            </button>
+            {langOpen && (
+              <ul
+                role="listbox"
+                aria-label={t.lang}
+                id={langId}
+                className="header__lang-menu"
+              >
+                {LANGUAGES.map((l) => (
+                  <li
+                    key={l.code}
+                    role="option"
+                    aria-selected={l.code === lang}
+                    onClick={() => handleLangSelect(l.code)}
+                    className={`header__lang-option${l.code === lang ? " header__lang-option--active" : ""}`}
+                  >
+                    {l.label}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
           {!isAuthenticated && (
             <button type="button" onClick={onLogin} className="header__login-btn">
@@ -192,7 +283,6 @@ export default function Header({
                       {isAdmin ? t.roleAdmin : t.roleUser}
                     </span>
                   </div>
-
                   <ul className="header__menu-list">
                     <li>
                       <MenuItem onSelect={() => handleMenuAction(() => onNavigate("/perfil"))}>
@@ -209,18 +299,13 @@ export default function Header({
                         {t.settings}
                       </MenuItem>
                     </li>
-
                     {isAdmin && (
                       <li>
-                        <MenuItem
-                          onSelect={() => handleMenuAction(() => onNavigate("/admin"))}
-                          highlight
-                        >
+                        <MenuItem onSelect={() => handleMenuAction(() => onNavigate("/admin"))} highlight>
                           {t.adminPanel}
                         </MenuItem>
                       </li>
                     )}
-
                     <li>
                       <MenuItem onSelect={() => handleMenuAction(onLogout)} danger>
                         {t.logout}

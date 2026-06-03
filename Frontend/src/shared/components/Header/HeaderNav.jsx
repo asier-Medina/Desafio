@@ -34,7 +34,7 @@ export default function HeaderNav({ onNavigate = () => {}, lang = "es" }) {
           aria-label={label}
           className="header__nav-link"
         >
-          <Icon className="header__icon" aria-hidden="true" />
+          <Icon className="header__nav-icon" aria-hidden="true" />
           <span className="header__nav-label">{label}</span>
         </a>
       ))}

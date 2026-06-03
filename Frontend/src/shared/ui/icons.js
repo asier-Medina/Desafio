@@ -14,4 +14,6 @@ export {
   FaArrowUpRightFromSquare,  // enlace externo (comprar entradas / ir a la web)
   FaStar,                    // valoración / estrella
   FaArrowRight,              // flecha derecha
+  FaBars,                    // menú hamburguesa
+  FaXmark,                   // cerrar / equis
 } from "react-icons/fa6";

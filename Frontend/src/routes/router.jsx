@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router";
 import Home from "@features/home/Home";
-import Events from "@features/events/Events";
+import Events from "../pages/events/Events";
 import Auth from "@features/auth/Auth";
-import Culture from "@features/culture/Culture";
-import Gastronomy from "@features/gastronomy/Gastronomy";
-import Favorite from "@features/Favorite/favorite";
-import Profile from "@features/profile/Profile";
+import Culture from "../pages/culture/Culture";
+import Gastronomy from "../pages/gastronomy/Gastronomy";
+import Favorite from "../pages/Favorite/favorite";
+import Profile from "../pages/profile/Profile";
 
 import MainLayout from "@shared/layout/Main";
 

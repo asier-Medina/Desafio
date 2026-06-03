@@ -1,12 +1,17 @@
+import Button from "@ui/Button";
+
 export default function SubmitButton({ children, loading, ...props }) {
   return (
-    <button
+    <Button
       type="submit"
+      variant="accent"
+      size="lg"
+      fullWidth
+      loading={loading}
       disabled={loading}
-      className="auth-card__submit"
       {...props}
     >
-      {loading ? 'Cargando...' : children}
-    </button>
-  )
+      {children}
+    </Button>
+  );
 }

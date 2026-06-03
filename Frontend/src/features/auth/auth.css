@@ -7,15 +7,6 @@
   background-color: var(--color-background);
 }
 
-.auth-card {
-  width: 100%;
-  max-width: 28rem;
-  background-color: var(--color-surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: var(--space-xl);
-}
-
 .auth-card__content {
   display: flex;
   flex-direction: column;
@@ -129,41 +120,6 @@
 
 .auth-card__toggle-btn:hover {
   color: var(--color-text);
-}
-
-.auth-card__submit {
-  width: 100%;
-  padding: 0.875rem 0;
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-base);
-  line-height: 1.5;
-  font-family: var(--font-body);
-  font-weight: 600;
-  color: var(--color-text-on-dark);
-  background-color: var(--color-accent);
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  min-height: var(--touch-target);
-}
-
-.auth-card__submit:hover {
-  background-color: var(--color-secondary);
-}
-
-.auth-card__submit--secondary {
-  background-color: var(--color-surface-soft);
-  color: var(--color-primary);
-}
-
-.auth-card__submit--secondary:hover {
-  background-color: var(--brand-cream);
-  color: var(--color-primary);
-}
-
-.auth-card__submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .auth-card__toggle {
