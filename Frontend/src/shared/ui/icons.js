@@ -19,4 +19,5 @@ export {
   FaRegClock,                // reloj / hora
   FaEuroSign,                // precio / euro
   FaLink,                    // enlace
+  FaArrowRightFromBracket,   // cerrar sesión
 } from "react-icons/fa6";
