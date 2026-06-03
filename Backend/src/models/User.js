@@ -8,7 +8,7 @@ const User = sequelize.define("User", {
   email:           { type: DataTypes.STRING(255), allowNull: false, unique: true },
   password_hash:   { type: DataTypes.STRING(256), allowNull: false },
   tlf:             { type: DataTypes.STRING(20) },
-  municipality_id: { type: DataTypes.INTEGER, allowNull: false },  // ← FK real
+  municipality_id: { type: DataTypes.INTEGER, allowNull: false },  
   sexo:            { type: DataTypes.STRING(10), allowNull: false },
   age:             { type: DataTypes.INTEGER, allowNull: false },
   role:            { type: DataTypes.STRING(10), allowNull: false, defaultValue: "user" },
@@ -19,5 +19,11 @@ const User = sequelize.define("User", {
   schema:     "user_data",
   timestamps: false,
 });
+
+//-Asociaciones luego iran al index
+import Preference from "./Preference.js";
+import Interest from "./Interest.js";
+User.hasOne(Preference, { foreignKey: "user_id", as: "preference" });
+User.belongsToMany(Interest, { through: "UserInterests", foreignKey: "user_id", otherKey: "id_interest", as: "interests", timestamps: false,});
 
 export default User;

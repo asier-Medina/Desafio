@@ -1,3 +1,4 @@
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -5,6 +6,7 @@ import dotenv from "dotenv";
 import sequelize from "./config/postgres.js";
 import authRouter from "./routes/auth.routes.js";
 import eventsRouter from "./routes/events.js";
+import userRouter from "./routes/user.routes.js";
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 
 dotenv.config();
@@ -28,8 +30,9 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", mensaje: "Backend en marcha 🚀" });
 });
 
-app.use("/api/auth", authRouter);
-app.use("/api", eventsRouter);
+app.use("/api/auth",  authRouter);
+app.use("/api/users", userRouter);
+app.use("/api",       eventsRouter);
 app.use(notFound);
 app.use(errorHandler);
 
@@ -37,9 +40,6 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     console.log("✅ Postgres conectado");
-    // sequelize.sync() eliminado — las tablas las gestiona init.sql
-    // Si lo necesitas en desarrollo para un modelo nuevo, usa sync({ alter: true })
-    // SOLO en local y NUNCA en producción
     app.listen(PORT, () => {
       console.log(`\n✅ Backend escuchando en http://localhost:${PORT}`);
       console.log(`   Prueba: http://localhost:${PORT}/api/health\n`);
