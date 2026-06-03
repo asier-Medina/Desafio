@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router";
+import { useFavorites } from "@shared/context/FavoritesContext";
 import Detail from "@components/Detail/Detail";
 
 const mockEvents = [
@@ -47,7 +48,16 @@ const mockEvents = [
 export default function EventDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
   const data = mockEvents.find((e) => e.id === Number(id));
+
+  function handleToggleFavorite(item) {
+    if (isFavorite(item.id, "event")) {
+      removeFavorite(item.id, "event");
+    } else {
+      addFavorite({ ...item, _variant: "event" });
+    }
+  }
 
   if (!data) {
     return (
@@ -58,5 +68,13 @@ export default function EventDetail() {
     );
   }
 
-  return <Detail variant="event" data={data} onBack={() => navigate("/events")} />;
+  return (
+    <Detail
+      variant="event"
+      data={data}
+      onBack={() => navigate("/events")}
+      isFavorite={isFavorite(data.id, "event")}
+      onToggleFavorite={handleToggleFavorite}
+    />
+  );
 }

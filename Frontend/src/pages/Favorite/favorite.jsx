@@ -1,11 +1,18 @@
+import { useNavigate } from "react-router";
 import { Card } from "@components/Cards";
 import { useFavorites } from "@shared/context/FavoritesContext";
 
 export default function Favorite() {
+  const navigate = useNavigate();
   const { favorites, removeFavorite } = useFavorites();
 
   function handleToggleFavorite(data) {
     removeFavorite(data.id, data._variant);
+  }
+
+  function handleAction(data) {
+    const base = data._variant === "event" ? "events" : data._variant === "gastronomy" ? "gastronomy" : "culture";
+    navigate(`/${base}/${data.id}`);
   }
 
   return (
@@ -23,7 +30,7 @@ export default function Favorite() {
               data={item}
               isFavorite={true}
               onToggleFavorite={handleToggleFavorite}
-              onAction={(d) => console.log(d.nombre || d.nombre_es)}
+              onAction={handleAction}
             />
           ))}
         </section>

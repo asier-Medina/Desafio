@@ -1,10 +1,10 @@
 import BackButton from "@ui/BackButton";
-import { FaLocationDot, FaStar, FaRegClock, FaEuroSign, FaLink } from "../../ui/icons";
+import { FaLocationDot, FaStar, FaRegClock, FaEuroSign, FaLink, FaRegHeart, FaHeart } from "../../ui/icons";
 import { VARIANTS, LABELS } from "../Cards/cardVariants";
 import { getImage, formatDate, renderStars } from "../Cards/cardHelpers";
 import "./Detail.css";
 
-export default function Detail({ variant = "event", data = {}, lang = "es", onBack }) {
+export default function Detail({ variant = "event", data = {}, lang = "es", onBack, isFavorite, onToggleFavorite }) {
   const t = LABELS[lang] ?? LABELS.es;
   const cfg = VARIANTS[variant] || VARIANTS.event;
   const imageUrl = getImage(data, variant);
@@ -17,6 +17,15 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
     <article className="detail">
       <div className="detail__hero">
         <BackButton onClick={onBack} className="detail__hero-back" />
+        {onToggleFavorite && (
+          <button
+            className="detail__favorite-btn"
+            onClick={(e) => { e.stopPropagation(); onToggleFavorite(data); }}
+            aria-label={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
+          >
+            {isFavorite ? <FaHeart /> : <FaRegHeart />}
+          </button>
+        )}
         {imageUrl ? (
           <img src={imageUrl} alt="" className="detail__hero-img" />
         ) : (

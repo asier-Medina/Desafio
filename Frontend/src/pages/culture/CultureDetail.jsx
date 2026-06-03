@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router";
+import { useFavorites } from "@shared/context/FavoritesContext";
 import Detail from "@components/Detail/Detail";
 
 const mockCulture = [
@@ -37,7 +38,16 @@ const mockCulture = [
 export default function CultureDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
   const data = mockCulture.find((c) => c.id === Number(id));
+
+  function handleToggleFavorite(item) {
+    if (isFavorite(item.id, "culture")) {
+      removeFavorite(item.id, "culture");
+    } else {
+      addFavorite({ ...item, _variant: "culture" });
+    }
+  }
 
   if (!data) {
     return (
@@ -48,5 +58,13 @@ export default function CultureDetail() {
     );
   }
 
-  return <Detail variant="culture" data={data} onBack={() => navigate("/culture")} />;
+  return (
+    <Detail
+      variant="culture"
+      data={data}
+      onBack={() => navigate("/culture")}
+      isFavorite={isFavorite(data.id, "culture")}
+      onToggleFavorite={handleToggleFavorite}
+    />
+  );
 }
