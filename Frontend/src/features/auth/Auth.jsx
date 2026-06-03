@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Navigate } from 'react-router'
-import { AuthProvider, useAuth } from './context/AuthContext'
+import { useAuth } from './context/AuthContext'
 import LoginSection from './sections/LoginSection'
 import RegisterSection from './sections/RegisterSection'
 import { Card } from '@shared/components/Cards'
@@ -43,9 +43,5 @@ function AuthContent() {
 }
 
 export default function Auth() {
-  return (
-    <AuthProvider>
-      <AuthContent />
-    </AuthProvider>
-  )
+  return <AuthContent />
 }

@@ -285,7 +285,7 @@ export default function Header({
                   </div>
                   <ul className="header__menu-list">
                     <li>
-                      <MenuItem onSelect={() => handleMenuAction(() => onNavigate("/perfil"))}>
+                      <MenuItem onSelect={() => handleMenuAction(() => onNavigate("/profile"))}>
                         {t.profile}
                       </MenuItem>
                     </li>
