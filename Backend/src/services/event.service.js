@@ -8,8 +8,9 @@ const ML_TIMEOUT = parseInt(process.env.ML_TIMEOUT_MS) || 5000;
 async function fromML(path) {
   try {
     const { data } = await axios.get(`${ML_BASE}${path}`, { timeout: ML_TIMEOUT });
-    if (Array.isArray(data) && data.length > 0) return data;
-    if (data?.results?.length > 0) return data.results;
+    const payload = data?.data ?? data;
+    if (Array.isArray(payload) && payload.length > 0) return payload;
+    if (payload?.results?.length > 0) return payload.results;
     return null;
   } catch {
     return null;
@@ -81,7 +82,7 @@ export async function getFinDeSemana() {
 }
 
 export async function getCercaDeTi(municipalityId) {
-  const ml = await fromML("/eventos/cerca-de-ti");
+  const ml = await fromML(`/eventos/cerca-de-ti?municipality_id=${municipalityId}`);
   if (ml) return ml;
 
   return Event.findAll({
