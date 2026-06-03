@@ -1,4 +1,4 @@
-import * as eventService from "../services/events.service.js";
+import * as eventService from "../services/event.service.js";
 
 export const estaSemana   = async (req, res) => {
   try { res.json(await eventService.getEstaSemana()); }

@@ -4,11 +4,11 @@ import * as ctrl from "../controllers/culture.controller.js";
 
 const router = Router();
 
-router.get("/cultura/museos",        ctrl.museos);
-router.get("/cultura/patrimonio",    ctrl.patrimonio);
-router.get("/cultura/visita-guiada", ctrl.visitaGuiada);
-router.get("/cultura/cerca-de-ti",   protect, ctrl.cercaDeTi);
-router.get("/cultura/:id",           ctrl.porId);
-router.get("/cultura",               ctrl.todos);
+router.get("/museos",        ctrl.museos);
+router.get("/patrimonio",    ctrl.patrimonio);
+router.get("/visita-guiada", ctrl.visitaGuiada);
+router.get("/cerca-de-ti",   ctrl.cercaDeTi);
+router.get("/:id", protect,  ctrl.porId);
+router.get("/",              ctrl.todos);
 
 export default router;
