@@ -1,0 +1,159 @@
+/* ==========================================================================
+   Filtros de categoría — estilos propios del componente (BEM)
+   --------------------------------------------------------------------------
+   Bebe de los estilos generales (index.css): usa las variables globales del
+   proyecto en vez de redefinir su propia paleta. Cada var() lleva un valor de
+   reserva con contraste AA por si el token aún no existe.
+
+   Variables que se esperan de index.css (ajusta los nombres a los vuestros):
+     --color-texto, --color-fondo, --color-borde, --color-foco,
+     --color-primario, --color-primario-texto,
+     --fuente-base, --fuente-titulo, --radio, --espaciado
+
+   NOTA: el estilado de los botones (.filtros-categoria__opcion) es temporal.
+   En cuanto exista el componente de botón compartido, estas reglas se
+   sustituyen por las clases de botón globales y aquí solo quedará el layout.
+
+   Accesibilidad (público 45-65 con presbicia, WCAG 2.1 AA):
+   tipografía grande, objetivos táctiles >= 48 px, estado activo indicado por
+   algo MÁS que color (check + borde + peso), foco visible, respeta
+   prefers-reduced-motion y modo de alto contraste.
+   ========================================================================== */
+
+.filtros-categoria {
+  color: var(--color-texto, #1b1f2a);
+}
+
+.filtros-categoria__titulo {
+  font-size: var(--fuente-titulo, 1.375rem);
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 var(--espaciado, 0.75rem);
+}
+
+.filtros-categoria__grupo {
+  margin-bottom: var(--espaciado, 0.75rem);
+}
+
+.filtros-categoria__etiqueta-grupo {
+  display: block;
+  font-size: var(--fuente-base, 1.125rem);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.filtros-categoria__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaciado, 0.75rem);
+}
+
+/* --- Botón de filtro (temporal: futuro componente de botón compartido) ----- */
+.filtros-categoria__opcion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3rem; /* 48 px de objetivo táctil */
+  padding: 0.625rem 1.125rem;
+  font-family: inherit;
+  font-size: var(--fuente-base, 1.125rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-texto, #1b1f2a);
+  background-color: var(--color-fondo, #ffffff);
+  border: 2px solid var(--color-borde, #4b5563);
+  border-radius: var(--radio, 0.625rem);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.filtros-categoria__opcion:hover {
+  border-color: var(--color-primario, #14478f);
+}
+
+.filtros-categoria__opcion:focus-visible {
+  outline: 3px solid var(--color-foco, #14478f);
+  outline-offset: 3px;
+}
+
+.filtros-categoria__opcion--activa {
+  color: var(--color-primario-texto, #ffffff);
+  background-color: var(--color-primario, #14478f);
+  border-color: var(--color-primario, #14478f);
+  font-weight: 700;
+}
+
+/* Indicador de check (pista no cromática del estado activo). */
+.filtros-categoria__check {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+  border: 2px solid currentColor;
+  border-radius: 0.3125rem;
+  position: relative;
+}
+
+.filtros-categoria__opcion--activa .filtros-categoria__check::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0.375rem;
+  height: 0.6875rem;
+  border: solid currentColor;
+  border-width: 0 0.1875rem 0.1875rem 0;
+  transform: translateY(-0.0625rem) rotate(45deg);
+}
+
+.filtros-categoria__texto {
+  white-space: nowrap;
+}
+
+/* --- Filtro 2: selector "Ordenar por" --- */
+.filtros-categoria__select {
+  min-height: 3rem;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: var(--fuente-base, 1.125rem);
+  font-weight: 600;
+  color: var(--color-texto, #1b1f2a);
+  background-color: var(--color-fondo, #ffffff);
+  border: 2px solid var(--color-borde, #4b5563);
+  border-radius: var(--radio, 0.625rem);
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.filtros-categoria__select:focus-visible {
+  outline: 3px solid var(--color-foco, #14478f);
+  outline-offset: 3px;
+}
+
+.filtros-categoria__resultado {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-texto, #1b1f2a);
+  margin: 0 0 var(--espaciado, 0.75rem);
+}
+
+/* Modo alto contraste de Windows. */
+@media (forced-colors: active) {
+  .filtros-categoria__opcion,
+  .filtros-categoria__select {
+    border-color: ButtonText;
+  }
+  .filtros-categoria__opcion--activa {
+    border-color: Highlight;
+  }
+  .filtros-categoria__opcion:focus-visible,
+  .filtros-categoria__select:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filtros-categoria__opcion {
+    transition: none;
+  }
+}
