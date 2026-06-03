@@ -10,6 +10,7 @@ import {
   updatePreferencesHandler,
   getAllInterestsHandler,
 } from '../controllers/user.controller.js'
+import { getMyReviewsHandler } from '../controllers/review.controller.js'
 
 const router = Router()
 
@@ -28,5 +29,7 @@ router.put('/me/preferences', protect, updatePreferencesHandler)
 
 // ── Catálogo de intereses disponibles (sin auth) ─────────────
 router.get('/interests/catalog', getAllInterestsHandler)
+
+router.get('/me/reviews', protect, getMyReviewsHandler)
 
 export default router

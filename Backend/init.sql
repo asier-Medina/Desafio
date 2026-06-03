@@ -387,3 +387,10 @@ FROM (VALUES
     ('Etnografía')
 ) AS t(nombre)
 ON CONFLICT DO NOTHING;
+
+-- =============================================================
+-- Evento de prueba para testing
+-- =============================================================
+INSERT INTO market_data.events (id_kulturklik, municipality_id, type, start_date, end_date)
+VALUES ('test_001', 1, 'Concierto', NOW(), NOW() + INTERVAL '2 hours')
+ON CONFLICT DO NOTHING;
