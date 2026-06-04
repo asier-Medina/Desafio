@@ -2,7 +2,7 @@ import { useId, useMemo, useState } from "react";
 import Button from "@shared/ui/Button";
 import "./CategoryFilters.css";
 
-export default function CategoryFilters({ title, items, filter1, filter2, onChange, children }) {
+export default function CategoryFilters({ title, items, filter1, filter2, baseFilter, onChange, onReset, children }) {
   const baseId = useId();
 
   // Validación defensiva: descartamos opciones mal formadas (OWASP, fallar seguro).
@@ -52,6 +52,8 @@ export default function CategoryFilters({ title, items, filter1, filter2, onChan
     return list;
   }, [items, options1, options2, refinement, sort]);
 
+  const hasActiveFilter = refinement !== null || sort !== null || Boolean(baseFilter?.label);
+
   function selectRefinement(id) {
     setRefinement(id);
     if (typeof onChange === "function") onChange({ refinement: id, sort });
@@ -62,17 +64,41 @@ export default function CategoryFilters({ title, items, filter1, filter2, onChan
     if (typeof onChange === "function") onChange({ refinement, sort: id });
   }
 
+  function resetFilters() {
+    setRefinement(null);
+    setSort(null);
+    if (typeof onChange === "function") onChange({ refinement: null, sort: null });
+    if (typeof onReset === "function") onReset();
+  }
+
   const titleId = `${baseId}-title`;
   const group1Id = `${baseId}-f1`;
   const sortId = `${baseId}-f2`;
   const total = filteredItems.length;
   const allLabel = filter1?.allLabel ?? "Todos";
+  const baseLabel = baseFilter?.label ?? null;
+  const resultsText = baseLabel
+    ? `${total === 1 ? "1 resultado" : `${total} resultados`} ${baseLabel}`
+    : total === 1
+      ? "1 resultado"
+      : `${total} resultados`;
 
   return (
     <section className="category-filters" aria-labelledby={titleId}>
-      <h2 className="category-filters__title" id={titleId}>
-        {title}
-      </h2>
+      <div className="category-filters__header">
+        <h2 className="category-filters__title" id={titleId}>
+          {title}
+        </h2>
+        {hasActiveFilter && (
+          <button
+            type="button"
+            className="category-filters__reset"
+            onClick={resetFilters}
+          >
+            Restablecer filtros
+          </button>
+        )}
+      </div>
 
       {/* ----- Filtro 1: refinamiento (selección única) ----- */}
       <div className="category-filters__group">
@@ -130,7 +156,7 @@ export default function CategoryFilters({ title, items, filter1, filter2, onChan
 
       {/* Región viva: anuncia a lectores de pantalla cuántos resultados hay. */}
       <p className="category-filters__result" role="status" aria-live="polite">
-        {total === 1 ? "1 resultado" : `${total} resultados`}
+        {resultsText}
       </p>
 
       {children(filteredItems)}
