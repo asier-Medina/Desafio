@@ -8,4 +8,4 @@ export const login    = impl.login
 export const register = impl.register
 export const logout   = impl.logout
 export const refresh  = impl.refresh
-export const getMe    = api.getMe
+export const getMe = impl.getMe

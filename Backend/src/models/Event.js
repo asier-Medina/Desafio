@@ -3,7 +3,7 @@ import sequelize from "../config/postgres.js";
 
 const Event = sequelize.define("Event", {
   id:                 { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  id_kulturklik:      { type: DataTypes.STRING(50), allowNull: false, unique: true },
+  external_id:        { type: DataTypes.STRING(100), unique: true },
   municipality_id:    { type: DataTypes.INTEGER, allowNull: false },
   type:               { type: DataTypes.STRING(50) },
   subtipo:            { type: DataTypes.STRING(100) },

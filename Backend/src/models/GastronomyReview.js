@@ -8,10 +8,6 @@ const GastronomyReview = sequelize.define("GastronomyReview", {
   puntuacion: { type: DataTypes.INTEGER, allowNull: false },
   texto:      { type: DataTypes.TEXT },
   created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-}, { 
-    tableName: "gastronomy_reviews", 
-    schema: "user_data", 
-    timestamps: false 
-});
+}, { tableName: "gastronomy_reviews", schema: "user_data", timestamps: false });
 
 export default GastronomyReview;

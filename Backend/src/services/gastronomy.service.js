@@ -2,16 +2,19 @@ import axios from "axios";
 import { Op } from "sequelize";
 import { Gastronomy, Municipality } from "../models/index.js";
 
-const ML_BASE = process.env.ML_API_URL || "http://localhost:5442/api";
+const ML_BASE = process.env.ML_API_URL || "http://127.0.0.1:5442"
 const ML_TIMEOUT = parseInt(process.env.ML_TIMEOUT_MS) || 5000;
 
 async function fromML(path) {
+  const url = `${ML_BASE}${path}`;
   try {
-    const { data } = await axios.get(`${ML_BASE}${path}`, { timeout: ML_TIMEOUT });
+    const { data } = await axios.get(url, { timeout: ML_TIMEOUT });
     if (Array.isArray(data) && data.length > 0) return data;
     if (data?.results?.length > 0) return data.results;
+    console.warn(`[ML] ${url} → respuesta vacía, usando DB`);
     return null;
-  } catch {
+  } catch (err) {
+    console.warn(`[ML] ${url} → error (${err.code ?? err.message}), usando DB`);
     return null;
   }
 }
@@ -45,8 +48,9 @@ export async function getMichelinRepsol() {
   const ml = await fromML("/gastronomia/michelin-repsol");
   if (ml) return ml;
 
+  // michelin/repsol ahora están en gastronomy_qualifications; sin ML devolvemos todos activos ordenados
   return Gastronomy.findAll({
-    where: { ...BASE_WHERE, [Op.or]: [{ michelin: true }, { repsol: true }] },
+    where: BASE_WHERE,
     include,
     order: [["valoracion", "DESC"]],
   });
@@ -64,7 +68,7 @@ export async function getEntornoEspecial() {
 }
 
 export async function getCercaDeTi(municipalityId) {
-  const ml = await fromML("/gastronomia/cerca-de-ti");
+  const ml = await fromML(`/gastronomia/cerca-de-ti?municipality_id=${municipalityId}`);
   if (ml) return ml;
 
   return Gastronomy.findAll({
