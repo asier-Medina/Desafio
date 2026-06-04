@@ -30,7 +30,7 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", mensaje: "Backend en marcha 🚀" });
 });
 
-app.use("/api",       apiRouter);
+app.use("/api", apiRouter);
 app.use(notFound);
 app.use(errorHandler);
 

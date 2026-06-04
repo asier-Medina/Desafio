@@ -35,8 +35,8 @@ services:
     networks:
       - Desafio_net
 
-  desafio:
-    build: ../desafio
+  data:
+    build: ../Data
     container_name: sustraiapp_desafio
     restart: always
     ports:
@@ -77,7 +77,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      desafio:
+      data:
         condition: service_started
     networks:
       - Desafio_net
