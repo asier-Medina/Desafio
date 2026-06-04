@@ -57,7 +57,7 @@ export function validateSexo(value) {
 }
 
 export function validateEmail(value) {
-  const v = sanitize(value.toLowerCase())
+  const v = sanitize(value).toLowerCase()
   if (!v) return 'El correo es obligatorio'
   if (v.length > 254) return 'Correo demasiado largo'
   if (!EMAIL_PATTERN.test(v)) return 'Formato de correo inválido'

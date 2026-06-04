@@ -47,7 +47,6 @@ export default function RegisterForm({ onSuccess }) {
 async function handleSubmit(e) {
   e.preventDefault()
   const errors = validate()           
-  console.log('ERRORES:', JSON.stringify(errors))  
   setFieldErrors(errors)
   if (Object.keys(errors).length > 0) return
 
