@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Card } from "@components/Cards";
 import { useFavorites } from "@shared/context/FavoritesContext";
+import { useLanguage } from "@features/language/LanguageContext";
 
 const mockRestaurants = [
   {
@@ -40,7 +42,13 @@ const mockRestaurants = [
 
 export default function Gastronomy() {
   const navigate = useNavigate();
+  const { translate } = useLanguage();
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const [restaurants, setRestaurants] = useState(mockRestaurants);
+
+  useEffect(() => {
+    translate(mockRestaurants, ["nombre", "direccion", "tipo_comida"]).then(setRestaurants);
+  }, [translate]);
 
   function handleToggleFavorite(data) {
     if (isFavorite(data.id, "gastronomy")) {
@@ -55,7 +63,7 @@ export default function Gastronomy() {
       <h1 className="text-2xl font-semibold">Gastronomía</h1>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {mockRestaurants.map((rest) => (
+        {restaurants.map((rest) => (
           <Card
             key={rest.id}
             variant="gastronomy"

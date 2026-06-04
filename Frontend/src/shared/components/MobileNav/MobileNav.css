@@ -35,6 +35,7 @@
   z-index: 999;
 
   animation: mobile-nav-in 0.25s ease;
+  min-width: 380px;
 }
 
 .mobile-nav::before {

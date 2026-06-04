@@ -43,6 +43,25 @@ const LABELS = {
     langSelector: "Hizkuntza hautatu",
     lang: "Hizkuntza",
   },
+  en: {
+    appBar: "Main header",
+    home: "Bilbao Insider, go to home",
+    login: "Log in",
+    register: "Sign up",
+    filters: "Filters",
+    openFilters: "Open filters",
+    userMenu: "Open user menu",
+    profile: "My profile",
+    favorites: "My favorites",
+    settings: "Settings",
+    adminPanel: "Admin panel",
+    logout: "Log out",
+    roleAdmin: "Administrator",
+    roleUser: "User",
+    avatarAlt: (name) => `${name}'s avatar`,
+    langSelector: "Select language",
+    lang: "Language",
+  },
 };
 
 const LANGUAGES = [

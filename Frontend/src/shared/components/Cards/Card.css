@@ -2,13 +2,14 @@
   display: flex;
   gap: 0;
   width: 100%;
-  max-width: 100%;
+  max-width: 1200px;
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   border: 1px solid color-mix(in srgb, var(--brand-navy) 15%, transparent);
   box-shadow: 0 2px 12px rgba(41, 54, 109, 0.08);
   overflow: hidden;
   transition: box-shadow 0.2s;
+  margin: auto;
 }
 
 .card + .card {

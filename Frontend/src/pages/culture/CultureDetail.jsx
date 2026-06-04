@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useFavorites } from "@shared/context/FavoritesContext";
+import { useLanguage } from "@features/language/LanguageContext";
 import Detail from "@components/Detail/Detail";
 
 const mockCulture = [
@@ -38,8 +40,15 @@ const mockCulture = [
 export default function CultureDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { translate } = useLanguage();
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
-  const data = mockCulture.find((c) => c.id === Number(id));
+  const rawData = mockCulture.find((c) => c.id === Number(id));
+  const [data, setData] = useState(rawData);
+
+  useEffect(() => {
+    if (!rawData) return;
+    translate(rawData, ["nombre", "direccion", "descripcion", "tipo_lugar"]).then(setData);
+  }, [rawData, translate]);
 
   function handleToggleFavorite(item) {
     if (isFavorite(item.id, "culture")) {

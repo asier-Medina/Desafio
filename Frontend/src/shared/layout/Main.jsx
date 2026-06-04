@@ -3,11 +3,13 @@ import { useAuth } from "@features/auth/context/AuthContext";
 import Header from "@shared/components/Header/Header.jsx";
 import MobileNav from "@shared/components/MobileNav/MobileNav";
 import { FavoritesProvider } from "@shared/context/FavoritesContext";
+import { LanguageProvider, useLanguage } from "@features/language/LanguageContext";
 
-export default function MainLayout() {
+function LayoutInner() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { user, logout } = useAuth();
+  const { language, setLanguage } = useLanguage();
 
   async function handleLogout() {
     await logout();
@@ -22,11 +24,26 @@ export default function MainLayout() {
         onRegister={() => navigate("/login")}
         onLogout={handleLogout}
         onNavigate={navigate}
+        lang={language}
+        onLangChange={setLanguage}
       />
       <main>
         <Outlet />
       </main>
-      <MobileNav onNavigate={navigate} currentPath={pathname} hidden={pathname === "/login"} />
+      <MobileNav
+        onNavigate={navigate}
+        currentPath={pathname}
+        lang={language}
+        hidden={pathname === "/login"}
+      />
     </FavoritesProvider>
+  );
+}
+
+export default function MainLayout() {
+  return (
+    <LanguageProvider>
+      <LayoutInner />
+    </LanguageProvider>
   );
 }

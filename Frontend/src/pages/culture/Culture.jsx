@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Card } from "@components/Cards";
 import { useFavorites } from "@shared/context/FavoritesContext";
+import { useLanguage } from "@features/language/LanguageContext";
 
 const mockPlaces = [
   {
@@ -34,7 +36,13 @@ const mockPlaces = [
 
 export default function Culture() {
   const navigate = useNavigate();
+  const { translate } = useLanguage();
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const [places, setPlaces] = useState(mockPlaces);
+
+  useEffect(() => {
+    translate(mockPlaces, ["nombre", "direccion", "tipo_lugar"]).then(setPlaces);
+  }, [translate]);
 
   function handleToggleFavorite(data) {
     if (isFavorite(data.id, "culture")) {
@@ -49,7 +57,7 @@ export default function Culture() {
       <h1 className="text-2xl font-semibold">Cultura</h1>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {mockPlaces.map((place) => (
+        {places.map((place) => (
           <Card
             key={place.id}
             variant="culture"

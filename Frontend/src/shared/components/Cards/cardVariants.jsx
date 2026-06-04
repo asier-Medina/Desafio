@@ -44,16 +44,35 @@ export const VARIANTS = {
   },
 
   culture: {
-    badge: (d) => {
+    badge: (d, lang) => {
       const map = {
-        museo: "Museo",
-        teatro: "Teatro",
-        galeria: "Galería",
-        biblioteca: "Biblioteca",
-        centro_cultural: "Centro Cultural",
-        monumento: "Monumento",
+        es: {
+          museo: "Museo",
+          teatro: "Teatro",
+          galeria: "Galería",
+          biblioteca: "Biblioteca",
+          centro_cultural: "Centro Cultural",
+          monumento: "Monumento",
+        },
+        eu: {
+          museo: "Museoa",
+          teatro: "Antzokia",
+          galeria: "Galeria",
+          biblioteca: "Liburutegia",
+          centro_cultural: "Kultur Etxea",
+          monumento: "Monumentua",
+        },
+        en: {
+          museo: "Museum",
+          teatro: "Theater",
+          galeria: "Gallery",
+          biblioteca: "Library",
+          centro_cultural: "Cultural Center",
+          monumento: "Monument",
+        },
       };
-      return map[d.tipo_lugar] || d.tipo_lugar;
+      const m = map[lang] || map.es;
+      return m[d.tipo_lugar] || d.tipo_lugar;
     },
     title: (d) => d.nombre,
     badgeIcon: null,
@@ -72,17 +91,38 @@ export const VARIANTS = {
   },
 
   gastronomy: {
-    badge: (d) => {
+    badge: (d, lang) => {
       const map = {
-        asador: "Asador",
-        sidreria: "Sidrería",
-        restaurante: "Restaurante",
-        bar: "Bar",
-        cafeteria: "Cafetería",
-        taberna: "Taberna",
-        marisqueria: "Marisquería",
+        es: {
+          asador: "Asador",
+          sidreria: "Sidrería",
+          restaurante: "Restaurante",
+          bar: "Bar",
+          cafeteria: "Cafetería",
+          taberna: "Taberna",
+          marisqueria: "Marisquería",
+        },
+        eu: {
+          asador: "Asadorea",
+          sidreria: "Sagardotegia",
+          restaurante: "Restorantea",
+          bar: "Taberna",
+          cafeteria: "Kafetegia",
+          taberna: "Taberna",
+          marisqueria: "Itsaskijatexea",
+        },
+        en: {
+          asador: "Steakhouse",
+          sidreria: "Cider House",
+          restaurante: "Restaurant",
+          bar: "Bar",
+          cafeteria: "Cafeteria",
+          taberna: "Tavern",
+          marisqueria: "Seafood Restaurant",
+        },
       };
-      return map[d.tipo_comida] || d.tipo_comida;
+      const m = map[lang] || map.es;
+      return m[d.tipo_comida] || d.tipo_comida;
     },
     title: (d) => d.nombre,
     badgeIcon: FaUtensils,

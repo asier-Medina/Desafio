@@ -18,7 +18,7 @@ export default function Card({
   const cfg = VARIANTS[variant] || VARIANTS.event;
   const imageUrl = getImage(data, variant);
   const title = cfg.title(data);
-  const badgeText = cfg.badge(data);
+  const badgeText = cfg.badge(data, lang);
   const BadgeIcon = cfg.badgeIcon;
   const rating = cfg.rating?.(data);
   const reviews = cfg.reviews?.(data);

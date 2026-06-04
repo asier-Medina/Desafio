@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useFavorites } from "@shared/context/FavoritesContext";
+import { useLanguage } from "@features/language/LanguageContext";
 import Detail from "@components/Detail/Detail";
 
 const mockGastronomy = [
@@ -44,8 +46,15 @@ const mockGastronomy = [
 export default function GastronomyDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { translate } = useLanguage();
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
-  const data = mockGastronomy.find((g) => g.id === Number(id));
+  const rawData = mockGastronomy.find((g) => g.id === Number(id));
+  const [data, setData] = useState(rawData);
+
+  useEffect(() => {
+    if (!rawData) return;
+    translate(rawData, ["nombre", "direccion", "descripcion", "tipo_comida"]).then(setData);
+  }, [rawData, translate]);
 
   function handleToggleFavorite(item) {
     if (isFavorite(item.id, "gastronomy")) {

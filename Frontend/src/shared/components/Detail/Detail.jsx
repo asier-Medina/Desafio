@@ -8,7 +8,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
   const t = LABELS[lang] ?? LABELS.es;
   const cfg = VARIANTS[variant] || VARIANTS.event;
   const imageUrl = getImage(data, variant);
-  const badgeText = cfg.badge(data);
+  const badgeText = cfg.badge(data, lang);
   const title = cfg.title(data);
   const rating = cfg.rating?.(data);
   const reviews = cfg.reviews?.(data);

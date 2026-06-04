@@ -13,6 +13,12 @@ const NAV_LINKS = {
     { path: "/culture", label: "Kultura", icon: FaLandmark },
     { path: "/favoritos", label: "Gogokoak", icon: FaRegHeart },
   ],
+  en: [
+    { path: "/events", label: "Events", icon: FaRegCalendar },
+    { path: "/gastronomy", label: "Gastronomy", icon: FaUtensils },
+    { path: "/culture", label: "Culture", icon: FaLandmark },
+    { path: "/favoritos", label: "Favorites", icon: FaRegHeart },
+  ],
 };
 
 export default function HeaderNav({ onNavigate = () => {}, lang = "es" }) {
