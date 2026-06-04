@@ -10,3 +10,4 @@ COPY . .
 EXPOSE 5442
 
 CMD ["python", "app.py"]
+

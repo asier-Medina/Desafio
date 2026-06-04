@@ -1,7 +1,5 @@
 flask
+flask-sqlalchemy
 flask-cors
 psycopg2-binary
-sqlalchemy
-pandas
-scikit-learn
 python-dotenv

@@ -3,7 +3,7 @@ import sequelize from "../config/postgres.js";
 
 const Gastronomy = sequelize.define("Gastronomy", {
   id:                     { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  google_place_id:        { type: DataTypes.STRING(100), allowNull: false, unique: true },
+  external_id:            { type: DataTypes.STRING(100), unique: true },
   nombre:                 { type: DataTypes.STRING(255), allowNull: false },
   descripcion:            { type: DataTypes.TEXT },
   municipality_id:        { type: DataTypes.INTEGER, allowNull: false },
@@ -22,8 +22,6 @@ const Gastronomy = sequelize.define("Gastronomy", {
   num_resenas:            { type: DataTypes.INTEGER },
   nivel_precio:           { type: DataTypes.STRING(50) },
   national_phone_number:  { type: DataTypes.STRING(20) },
-  michelin:               { type: DataTypes.BOOLEAN, defaultValue: false },
-  repsol:                 { type: DataTypes.BOOLEAN, defaultValue: false },
   is_sponsored:           { type: DataTypes.BOOLEAN, defaultValue: false },
   active:                 { type: DataTypes.BOOLEAN, defaultValue: true },
   created_at:             { type: DataTypes.DATE, defaultValue: DataTypes.NOW },

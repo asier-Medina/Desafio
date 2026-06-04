@@ -9,13 +9,13 @@ import reviewRouter from './review.routes.js';
 
 const router = Router()
 
-router.get("/auth",  authRouter);
-router.get("/users", userRouter);
-router.get("/gastronomy",  gastronomyRouter);
-router.get("/culture", cultureRouter);
-router.get("/events", eventsRouter);
-router.get('/favorites', favoriteRouter)
-router.get('/reviews', reviewRouter)
+router.use("/auth",  authRouter);
+router.use("/users", userRouter);
+router.use("/gastronomy",  gastronomyRouter);
+router.use("/culture", cultureRouter);
+router.use("/events", eventsRouter);
+router.use('/favorites', favoriteRouter)
+router.use('/reviews', reviewRouter)
 
 export default router
 
