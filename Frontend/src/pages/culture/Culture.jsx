@@ -1,40 +1,21 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Card } from "@components/Cards";
 import { useFavorites } from "@shared/context/FavoritesContext";
-
-const mockPlaces = [
-  {
-    id: 1,
-    nombre: "Museo Guggenheim Bilbao",
-    tipo_lugar: "museo",
-    imagen_url: "https://picsum.photos/seed/guggenheim/600/400",
-    direccion: "Abandoibarra Etorbidea, 2, 48009 Bilbao",
-    valoracion: 4.8,
-    numero_valoraciones: 45230,
-  },
-  {
-    id: 2,
-    nombre: "Teatro Arriaga",
-    tipo_lugar: "teatro",
-    imagen_url: "https://picsum.photos/seed/arriaga/600/400",
-    direccion: "Plaza del Arriaga, 1, 48005 Bilbao",
-    valoracion: 4.6,
-    numero_valoraciones: 12890,
-  },
-  {
-    id: 3,
-    nombre: "Catedral de Santiago",
-    tipo_lugar: "monumento",
-    imagen_url: "https://picsum.photos/seed/santiago/600/400",
-    direccion: "Plaza de Santiago, 1, 48005 Bilbao",
-    valoracion: 4.5,
-    numero_valoraciones: 8750,
-  },
-];
+import * as cultureApi from "@services/culture.api";
 
 export default function Culture() {
   const navigate = useNavigate();
-  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const { addFavorite, removeFavorite, isFavorite, user } = useFavorites();
+  const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    cultureApi.list()
+      .then(setPlaces)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   function handleToggleFavorite(data) {
     if (isFavorite(data.id, "culture")) {
@@ -44,18 +25,20 @@ export default function Culture() {
     }
   }
 
+  if (loading) return <div className="p-8">Cargando cultura...</div>;
+
   return (
     <div className="p-8 flex flex-col gap-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-semibold">Cultura</h1>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {mockPlaces.map((place) => (
+        {places.map((place) => (
           <Card
             key={place.id}
             variant="culture"
             data={place}
             isFavorite={isFavorite(place.id, "culture")}
-            onToggleFavorite={handleToggleFavorite}
+            onToggleFavorite={user ? handleToggleFavorite : undefined}
             onAction={(d) => navigate(`/culture/${d.id}`)}
           />
         ))}

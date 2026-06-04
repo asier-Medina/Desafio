@@ -50,6 +50,7 @@ export function FavoritesProvider({ children }) {
   }, [user]);
 
   const addFavorite = useCallback(async (item) => {
+    if (!user) return;
     const entidad_tipo = VARIANT_TO_TIPO[item._variant];
     if (!entidad_tipo) return;
     // Optimistic update
@@ -65,7 +66,7 @@ export function FavoritesProvider({ children }) {
       // Rollback
       setFavorites(prev => prev.filter(f => !(f.id === item.id && f._variant === item._variant)));
     }
-  }, []);
+  }, [user]);
 
   const removeFavorite = useCallback(async (id, variant) => {
     const entidad_tipo = VARIANT_TO_TIPO[variant];
@@ -87,7 +88,7 @@ export function FavoritesProvider({ children }) {
   }, [favorites]);
 
   return (
-    <FavoritesContext.Provider value={{ favorites, addFavorite, removeFavorite, isFavorite }}>
+    <FavoritesContext.Provider value={{ favorites, addFavorite, removeFavorite, isFavorite, user }}>
       {children}
     </FavoritesContext.Provider>
   );
