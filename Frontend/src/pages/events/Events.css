@@ -4,8 +4,25 @@
 }
  
 .events__title {
-  /* Si añades --font-size-h1 a index.css, el <h1> tomará ese tamaño.
-     Mientras tanto, lo fijamos aquí para que no quede sin tamaño. */
   font-size: var(--font-size-h1, 2.5rem);
   margin-bottom: var(--space-lg);
+}
+
+.events__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--space-md, 1rem);
+}
+
+.events__item {
+  display: flex;
+}
+
+.events__empty {
+  color: var(--color-text-soft, #6b7280);
+  font-size: var(--font-size-base, 1rem);
+  margin: var(--space-lg, 1.5rem) 0;
 }

@@ -75,8 +75,9 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
   const group1Id = `${baseId}-f1`;
   const sortId = `${baseId}-f2`;
   const total = filteredItems.length;
-  const allLabel = filter1?.allLabel ?? "Todos";
+  const allLabel = filter1?.allLabel ?? "Todas";
   const baseLabel = baseFilter?.label ?? null;
+  const displayTitle = baseLabel ? `${title} ${baseLabel}` : title;
   const resultsText = baseLabel
     ? `${total === 1 ? "1 resultado" : `${total} resultados`} ${baseLabel}`
     : total === 1
@@ -87,7 +88,7 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
     <section className="category-filters" aria-labelledby={titleId}>
       <div className="category-filters__header">
         <h2 className="category-filters__title" id={titleId}>
-          {title}
+          {displayTitle}
         </h2>
         {hasActiveFilter && (
           <button
@@ -100,59 +101,49 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
         )}
       </div>
 
-      {/* ----- Filtro 1: refinamiento (selección única) ----- */}
-      <div className="category-filters__group">
-        <p className="category-filters__group-label" id={group1Id}>
-          {filter1?.label ?? "Filtrar por"}
-        </p>
-        <div className="category-filters__options" role="group" aria-labelledby={group1Id}>
-          <Button
-            type="button"
-            className={chipClass(refinement === null)}
-            aria-pressed={refinement === null}
-            onClick={() => selectRefinement(null)}
-          >
-            {allLabel}
-          </Button>
-
-          {options1.map((op) => {
-            const active = op.id === refinement;
-            return (
-              <Button
-                key={op.id}
-                type="button"
-                className={chipClass(active)}
-                aria-pressed={active}
-                onClick={() => selectRefinement(op.id)}
-              >
-                {op.label}
-              </Button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ----- Filtro 2: ordenar por (no recorta) ----- */}
-      {filter2 && options2.length > 0 && (
-        <div className="category-filters__group category-filters__group--sort">
-          <label className="category-filters__group-label" htmlFor={sortId}>
-            {filter2.label ?? "Ordenar por"}
+      <div className="category-filters__groups">
+        {/* ----- Filtro 1: categoría (select única) ----- */}
+        <div className="category-filters__group">
+          <label className="category-filters__group-label" htmlFor={group1Id}>
+            {filter1?.label ?? "Categorías"}
           </label>
           <select
-            id={sortId}
+            id={group1Id}
             className="category-filters__select"
-            value={sort ?? ""}
-            onChange={(e) => selectSort(e.target.value === "" ? null : e.target.value)}
+            value={refinement ?? ""}
+            onChange={(e) => selectRefinement(e.target.value === "" ? null : e.target.value)}
           >
-            <option value="">{filter2.defaultLabel ?? "Ordenar por"}</option>
-            {options2.map((op) => (
+            <option value="">{allLabel}</option>
+            {options1.map((op) => (
               <option key={op.id} value={op.id}>
                 {op.label}
               </option>
             ))}
           </select>
         </div>
-      )}
+
+        {/* ----- Filtro 2: ordenar por (no recorta) ----- */}
+        {filter2 && options2.length > 0 && (
+          <div className="category-filters__group">
+            <label className="category-filters__group-label" htmlFor={sortId}>
+              {filter2.label ?? "Ordenar por"}
+            </label>
+            <select
+              id={sortId}
+              className="category-filters__select"
+              value={sort ?? ""}
+              onChange={(e) => selectSort(e.target.value === "" ? null : e.target.value)}
+            >
+              <option value="">{filter2.defaultLabel ?? "Ordenar por"}</option>
+              {options2.map((op) => (
+                <option key={op.id} value={op.id}>
+                  {op.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
 
       {/* Región viva: anuncia a lectores de pantalla cuántos resultados hay. */}
       <p className="category-filters__result" role="status" aria-live="polite">

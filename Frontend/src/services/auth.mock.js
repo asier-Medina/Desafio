@@ -1,10 +1,28 @@
 const DB_KEY = 'sustrai_mock_db'
 const SESSION_KEY = 'sustrai_mock_session'
 
+const SEED_USER = {
+  id: 0,
+  name: 'Test',
+  lastName: 'User',
+  email: 'test@sustraiapp.com',
+  role: 'user',
+  municipality_id: 1,
+  createdAt: '2026-01-01T00:00:00.000Z',
+  updatedAt: '2026-01-01T00:00:00.000Z',
+}
+
 function getDB() {
   try {
     const raw = localStorage.getItem(DB_KEY)
-    return raw ? JSON.parse(raw) : { users: [], nextId: 1 }
+    const db = raw ? JSON.parse(raw) : { users: [], nextId: 1 }
+
+    // Usuario de prueba siempre disponible
+    if (!db.users.find(u => u.email === SEED_USER.email)) {
+      db.users.push({ ...SEED_USER, passwordHash: hashPassword('Bilbao2026') })
+    }
+
+    return db
   } catch {
     return { users: [], nextId: 1 }
   }
