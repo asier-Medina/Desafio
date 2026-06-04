@@ -1,0 +1,132 @@
+.profile {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.profile__header {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--brand-navy) 10%, transparent);
+  overflow: hidden;
+}
+
+.profile__header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.profile__name {
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.profile__header-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.profile__card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--brand-navy) 10%, transparent);
+  padding: var(--space-lg);
+}
+
+.profile__card-title {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 var(--space-md);
+}
+
+.profile__info-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: 0;
+}
+
+.profile__info-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  font-size: 0.875rem;
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-navy) 6%, transparent);
+}
+
+.profile__info-row:last-child {
+  border-bottom: none;
+}
+
+.profile__info-row dt {
+  font-weight: 600;
+  color: var(--color-text-soft);
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.profile__info-row dd {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.profile__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.profile__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.profile__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.profile__section-title {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile__section-icon {
+  font-size: 0.85rem;
+  color: #e53e3e;
+}
+
+.profile__empty {
+  font-size: 0.875rem;
+  color: var(--color-text-soft);
+  text-align: center;
+  padding: var(--space-xl);
+  background: color-mix(in srgb, var(--brand-navy) 4%, transparent);
+  border-radius: var(--radius-md);
+}
+
+.profile__favorites {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
