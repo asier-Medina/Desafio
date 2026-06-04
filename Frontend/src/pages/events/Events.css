@@ -1,0 +1,11 @@
+.events {
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-xl);
+}
+ 
+.events__title {
+  /* Si añades --font-size-h1 a index.css, el <h1> tomará ese tamaño.
+     Mientras tanto, lo fijamos aquí para que no quede sin tamaño. */
+  font-size: var(--font-size-h1, 2.5rem);
+  margin-bottom: var(--space-lg);
+}
