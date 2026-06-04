@@ -8,10 +8,6 @@ const EventReview = sequelize.define("EventReview", {
   puntuacion: { type: DataTypes.INTEGER, allowNull: false },
   texto:      { type: DataTypes.TEXT },
   created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-}, { 
-    tableName: "event_reviews", 
-    schema: "user_data", 
-    timestamps: false 
-});
+}, { tableName: "event_reviews", schema: "user_data", timestamps: false });
 
 export default EventReview;

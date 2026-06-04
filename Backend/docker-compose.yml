@@ -11,14 +11,15 @@ services:
       - "5440:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql   # ← crea las tablas al arrancar
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
     networks:
       - Desafio_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 15
+      start_period: 40s
 
   pgadmin:
     image: dpage/pgadmin4
@@ -29,6 +30,26 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "5051:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - Desafio_net
+
+  data:
+    build: ../Data
+    container_name: sustraiapp_desafio
+    restart: always
+    ports:
+      - "5442:5442"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      PORT: 5442
+      FLASK_APP: app.py
     depends_on:
       db:
         condition: service_healthy
@@ -53,9 +74,12 @@ services:
       JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN}
       FRONTEND_URL: ${FRONTEND_URL}
       PORT: ${PORT}
+      ML_API_URL: http://data:5442/api
     depends_on:
       db:
-        condition: service_healthy   # ← espera a que Postgres esté listo
+        condition: service_healthy
+      data:
+        condition: service_started
     networks:
       - Desafio_net
 
