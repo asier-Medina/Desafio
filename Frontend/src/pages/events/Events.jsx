@@ -24,8 +24,8 @@ export default function Events() {
     { id: "en-euskera", title: "En euskera", to: "/events?filter=en-euskera", items: EVENTOS_DEMO },
   ];
 
+  /*
   return (
-    /*
     <div className="events container">
       <h1 className="events__title">Eventos</h1>
 
@@ -46,7 +46,8 @@ export default function Events() {
         />
       ))}
     </div>
-  );*/
+  );
+  */
 
   return (
   <div className="events container">

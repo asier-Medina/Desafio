@@ -16,7 +16,7 @@ export default function Button({
   const classes = [
     "btn",
     `btn--${variant}`,
-    btn--${size},
+    `btn--${size}`,
     fullWidth ? "btn--full" : "",
     loading ? "btn--loading" : "",
     className,

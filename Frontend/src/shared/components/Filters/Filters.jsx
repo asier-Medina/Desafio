@@ -33,7 +33,7 @@ import './FiltrosCategoria.css';
  * @param {(estado: { refinamiento: string|null, orden: string|null }) => void} [props.onCambio]
  * @param {(elementosFiltrados: any[]) => React.ReactNode} props.children
  */
-export function FiltrosCategoria({ titulo, elementos, filtro1, filtro2, onCambio, children }) {
+export function FiltrosCategoria({ titulo, elementos, filtro1, filtro2, filtroBase, onCambio, onReset, children }) {
   const idBase = useId();
 
   // OWASP — validación de entradas / fallar seguro: descartamos opciones mal formadas.
@@ -89,6 +89,8 @@ export function FiltrosCategoria({ titulo, elementos, filtro1, filtro2, onCambio
     return lista;
   }, [elementos, opciones1, opciones2, refinamiento, orden]);
 
+  const hayFiltroActivo = refinamiento !== null || orden !== null || Boolean(filtroBase?.etiqueta);
+
   function cambiarRefinamiento(id) {
     setRefinamiento(id);
     if (typeof onCambio === 'function') onCambio({ refinamiento: id, orden });
@@ -99,17 +101,43 @@ export function FiltrosCategoria({ titulo, elementos, filtro1, filtro2, onCambio
     if (typeof onCambio === 'function') onCambio({ refinamiento, orden: id });
   }
 
+  function resetearFiltros() {
+    setRefinamiento(null);
+    setOrden(null);
+    if (typeof onCambio === 'function') onCambio({ refinamiento: null, orden: null });
+    if (typeof onReset === 'function') onReset();
+  }
+
   const idTitulo = `${idBase}-titulo`;
   const idGrupo1 = `${idBase}-f1`;
   const idOrden = `${idBase}-f2`;
   const total = elementosFiltrados.length;
   const etiquetaTodos = filtro1?.etiquetaTodos ?? 'Todos';
 
+  const etiquetaBase = filtroBase?.etiqueta ?? null;
+  const textoResultados =
+    etiquetaBase
+      ? `${total === 1 ? '1 resultado' : `${total} resultados`} ${etiquetaBase}`
+      : total === 1
+        ? '1 resultado'
+        : `${total} resultados`;
+
   return (
     <section className="filtros-categoria" aria-labelledby={idTitulo}>
-      <h2 className="filtros-categoria__titulo" id={idTitulo}>
-        {titulo}
-      </h2>
+      <div className="filtros-categoria__cabecera">
+        <h2 className="filtros-categoria__titulo" id={idTitulo}>
+          {titulo}
+        </h2>
+        {hayFiltroActivo && (
+          <button
+            type="button"
+            className="filtros-categoria__restablecer"
+            onClick={resetearFiltros}
+          >
+            Restablecer filtros
+          </button>
+        )}
+      </div>
 
       {/* ----- Filtro 1: refinamiento (selección única) ----- */}
       <div className="filtros-categoria__grupo">
@@ -169,7 +197,7 @@ export function FiltrosCategoria({ titulo, elementos, filtro1, filtro2, onCambio
 
       {/* Región viva: anuncia a lectores de pantalla cuántos resultados hay. */}
       <p className="filtros-categoria__resultado" role="status" aria-live="polite">
-        {total === 1 ? '1 resultado' : `${total} resultados`}
+        {textoResultados}
       </p>
 
       {children(elementosFiltrados)}
