@@ -11,15 +11,15 @@ services:
       - "5440:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql   # ← crea las tablas al arrancar
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
     networks:
       - Desafio_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 10s
-      timeout: 10s
-      retries: 20
-      start_period: 50s
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
 
   pgadmin:
     image: dpage/pgadmin4
@@ -74,7 +74,7 @@ services:
       JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN}
       FRONTEND_URL: ${FRONTEND_URL}
       PORT: ${PORT}
-      ML_API_URL: http://desafio:5442/api
+      ML_API_URL: http://data:5442/api
     depends_on:
       db:
         condition: service_healthy
