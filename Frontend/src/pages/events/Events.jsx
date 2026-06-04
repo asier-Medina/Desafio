@@ -1,48 +1,136 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Card } from "@components/Cards";
-import { useFavorites } from "@shared/context/FavoritesContext";
-import * as eventsApi from "@services/events.api";
+import Card from "@shared/components/Cards/Card";
+import CategorySection from "@shared/components/Section/CategorySection";
+import "./Events.css";
 
+/**
+ * Pantalla de aterrizaje de Eventos.
+ *
+ * NO incluye header ni footer: los aporta MainLayout (shared/layout/Main) a
+ * través del <Outlet />. Aquí solo va el contenido del <main>.
+ *
+ * La base de cada sección (Esta semana, Fin de semana…) la dará el backend
+ * (events.api.js). De momento usa EVENTOS_DEMO para previsualizar.
+ */
 export default function Events() {
   const navigate = useNavigate();
-  const { addFavorite, removeFavorite, isFavorite, user } = useFavorites();
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    eventsApi.list()
-      .then(setEvents)
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
-
-  function handleToggleFavorite(data) {
-    if (isFavorite(data.id, "event")) {
-      removeFavorite(data.id, "event");
-    } else {
-      addFavorite({ ...data, _variant: "event" });
-    }
-  }
-
-  if (loading) return <div className="p-8">Cargando eventos...</div>;
+  // Cada sección llega ya prefiltrada por el backend. Demo: mismos datos.
+  const secciones = [
+    { id: "todos", title: "Todos los eventos", to: "/events?filter=todos", items: EVENTOS_DEMO },
+    { id: "esta-semana", title: "Esta semana", to: "/events?filter=esta-semana", items: EVENTOS_DEMO },
+    { id: "fin-de-semana", title: "Fin de semana", to: "/events?filter=fin-de-semana", items: EVENTOS_DEMO },
+    { id: "cerca-de-ti", title: "Cerca de ti", to: "/events?filter=cerca-de-ti", items: EVENTOS_DEMO },
+    { id: "en-euskera", title: "En euskera", to: "/events?filter=en-euskera", items: EVENTOS_DEMO },
+  ];
 
   return (
-    <div className="p-8 flex flex-col gap-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold">Eventos</h1>
+    /*
+    <div className="events container">
+      <h1 className="events__title">Eventos</h1>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {events.map((event) => (
-          <Card
-            key={event.id}
-            variant="event"
-            data={event}
-            isFavorite={isFavorite(event.id, "event")}
-            onToggleFavorite={user ? handleToggleFavorite : undefined}
-            onAction={(d) => navigate(`/events/${d.id}`)}
-          />
-        ))}
-      </section>
+      {secciones.map((s) => (
+        <CategorySection
+          key={s.id}
+          title={s.title}
+          seeAllTo={s.to}
+          items={s.items}
+          renderCard={(data) => (
+            <Card
+              variant="event"
+              data={data}
+              lang="es"
+              onAction={(d) => navigate(`/events/${d.id}`)}
+            />
+          )}
+        />
+      ))}
     </div>
-  );
+  );*/
+
+  return (
+  <div className="events container">
+    <h1 className="events__title">Eventos</h1>
+    <Card variant="event" data={EVENTOS_DEMO[0]} lang="es" onAction={() => {}} />
+  </div>
+);
 }
+
+/* --------------------------------------------------------------------------
+   Datos demo (solo para previsualizar; sustituir por events.api.js).
+   Campos según lo que usa el variant "event" de tu Card/cardVariants.
+   -------------------------------------------------------------------------- */
+const EVENTOS_DEMO = [
+  {
+    id: 1,
+    nombre: "Concierto de Kalakan",
+    type: "Concierto",
+    start_date: "2026-06-05T20:00:00Z",
+    end_date: "2026-06-05T22:30:00Z",
+    establishment: "Teatro Arriaga",
+    place: "Bilbao",
+    language: "EU",
+    municipality_id: 1,
+    active: true,
+  },
+  {
+    id: 2,
+    nombre: "Feria del libro",
+    type: "Feria",
+    start_date: "2026-06-06T10:00:00Z",
+    end_date: "2026-06-06T20:00:00Z",
+    establishment: "Plaza Nueva",
+    place: "Bilbao",
+    language: "ES",
+    municipality_id: 1,
+    active: true,
+  },
+  {
+    id: 3,
+    nombre: "Bertso saioa",
+    type: "Bertsolarismo",
+    start_date: "2026-06-06T18:00:00Z",
+    end_date: "2026-06-06T20:00:00Z",
+    establishment: "Kafe Antzokia",
+    place: "Bilbao",
+    language: "EU",
+    municipality_id: 1,
+    active: true,
+  },
+  {
+    id: 4,
+    nombre: "Exposición de fotografía contemporánea",
+    type: "Exposición",
+    start_date: "2026-06-07T11:00:00Z",
+    end_date: "2026-07-15T20:00:00Z",
+    establishment: "Azkuna Zentroa",
+    place: "Bilbao",
+    language: "ES",
+    municipality_id: 1,
+    active: true,
+  },
+  {
+    id: 5,
+    nombre: "Danza contemporánea: Aterpe",
+    type: "Danza",
+    start_date: "2026-06-07T19:30:00Z",
+    end_date: "2026-06-07T21:00:00Z",
+    establishment: "Euskalduna",
+    place: "Bilbao",
+    language: "ES",
+    municipality_id: 1,
+    active: true,
+  },
+  {
+    id: 6,
+    nombre: "Teatro: La casa de Bernarda Alba",
+    type: "Teatro",
+    start_date: "2026-06-08T20:00:00Z",
+    end_date: "2026-06-08T22:00:00Z",
+    establishment: "Teatro Campos",
+    place: "Bilbao",
+    language: "ES",
+    municipality_id: 1,
+    active: true,
+  },
+];
