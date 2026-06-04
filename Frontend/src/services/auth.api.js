@@ -16,8 +16,8 @@ export function login({ email, password }) {
   return request('POST', '/login', { email, password })
 }
 
-export function register({ name, lastName, email, password, tlf, municipality_id, sexo, age }) {
-  return request('POST', '/register', { name, lastName, email, password, tlf, municipality_id, sexo, age })
+export function register({ nombre, apellido, email, password, tlf, municipality_id, sexo, age }) {
+  return request('POST', '/register', { nombre, apellido, email, password, tlf, municipality_id, sexo, age })
 }
 
 export function logout() {
@@ -26,4 +26,14 @@ export function logout() {
 
 export function refresh() {
   return request('POST', '/refresh')
+}
+
+export function getMe() {
+  return fetch(`${BASE_URL}/api/auth/me`, {
+    credentials: 'include',
+  }).then(async (res) => {
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error ?? 'No autenticado')
+    return data
+  })
 }

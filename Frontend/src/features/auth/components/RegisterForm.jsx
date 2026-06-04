@@ -44,11 +44,12 @@ export default function RegisterForm({ onSuccess }) {
     setForm((prev) => ({ ...prev, [field]: field === 'email' ? cleaned.toLowerCase() : cleaned }))
   }, [])
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    const errors = validate()
-    setFieldErrors(errors)
-    if (Object.keys(errors).length > 0) return
+async function handleSubmit(e) {
+  e.preventDefault()
+  const errors = validate()           
+  console.log('ERRORES:', JSON.stringify(errors))  
+  setFieldErrors(errors)
+  if (Object.keys(errors).length > 0) return
 
     clearError()
     try {

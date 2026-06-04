@@ -3,6 +3,16 @@ import * as authService from '@services/auth.service'
 
 const AuthContext = createContext(null)
 
+// Normaliza el user del backend (nombre/apellido) al formato del front (name/lastName)
+function normalizeUser(raw) {
+  if (!raw) return null
+  return {
+    ...raw,
+    name:     raw.name     ?? raw.nombre   ?? '',
+    lastName: raw.lastName ?? raw.apellido ?? '',
+  }
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -10,20 +20,17 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     let cancelled = false
-
     async function init() {
       try {
-        const data = await authService.refresh()
-        if (!cancelled) setUser(data.user)
+        const me = await authService.getMe()
+        if (!cancelled) setUser(normalizeUser(me))
       } catch {
         if (!cancelled) setUser(null)
       } finally {
         if (!cancelled) setLoading(false)
       }
     }
-
     init()
-
     return () => { cancelled = true }
   }, [])
 
@@ -32,8 +39,9 @@ export function AuthProvider({ children }) {
     setError(null)
     try {
       const data = await authService.login({ email, password })
-      setUser(data.user)
-      return data.user
+      const normalized = normalizeUser(data.user)
+      setUser(normalized)
+      return normalized
     } catch (err) {
       setError('Credenciales inválidas')
       throw err
@@ -46,9 +54,14 @@ export function AuthProvider({ children }) {
     setLoading(true)
     setError(null)
     try {
-      const data = await authService.register({ name, lastName, email, password, tlf, municipality_id, sexo, age })
-      setUser(data.user)
-      return data.user
+      const data = await authService.register({
+        nombre:   name,
+        apellido: lastName,
+        email, password, tlf, municipality_id, sexo, age,
+      })
+      const normalized = normalizeUser(data.user)
+      setUser(normalized)
+      return normalized
     } catch (err) {
       setError('No se pudo completar el registro')
       throw err
@@ -61,7 +74,7 @@ export function AuthProvider({ children }) {
     try {
       await authService.logout()
     } catch {
-      // Silencioso: siempre cerramos sesión local
+      // Silencioso
     } finally {
       setUser(null)
     }
