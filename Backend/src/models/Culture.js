@@ -3,9 +3,8 @@ import sequelize from "../config/postgres.js";
 
 const Culture = sequelize.define("Culture", {
   id:                   { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  google_place_id:      { type: DataTypes.STRING(100), unique: true },
-  kulturklik_id:        { type: DataTypes.STRING(50), unique: true },
-  fuente:               { type: DataTypes.STRING(50), allowNull: false, defaultValue: "Open Data" },
+  external_id:          { type: DataTypes.STRING(100), unique: true },
+  fuente:               { type: DataTypes.STRING(50), allowNull: false, defaultValue: "Manual" },
   nombre:               { type: DataTypes.STRING(255), allowNull: false },
   tipo_lugar:           { type: DataTypes.STRING(100), allowNull: false },
   tipo_cultura:         { type: DataTypes.STRING(100) },
