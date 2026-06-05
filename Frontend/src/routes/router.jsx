@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import Home from "@features/home/Home";
-import Events from "../pages/events/Events";
+import Events from "@features/events/Events";
 import EventDetail from "../pages/events/EventDetail";
 import Auth from "@features/auth/Auth";
 import Culture from "../pages/culture/Culture";
