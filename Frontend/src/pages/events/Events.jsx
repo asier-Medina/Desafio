@@ -75,17 +75,20 @@ export default function Events() {
       <div className="events container">
         <h1 className="events__title">Eventos</h1>
         <div className="events__grid">
-          {items.map((event) => (
-            <div className="events__item" key={event.id}>
-              <Card
-                variant="event"
-                data={event}
-                lang="es"
-                onAction={(d) => navigate(`/events/${d.id}`)}
-              />
-            </div>
-          ))}
-          {items.length === 0 && <p className="events__empty">No hay eventos.</p>}
+          {items.length === 0 ? (
+            <p className="events__empty">No hay eventos.</p>
+          ) : (
+            items.map((event) => (
+              <div className="events__item" key={event.id}>
+                <Card
+                  variant="event"
+                  data={event}
+                  lang="es"
+                  onAction={(d) => navigate(`/events/${d.id}`)}
+                />
+              </div>
+            ))
+          )}
         </div>
       </div>
     );
