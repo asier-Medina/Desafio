@@ -2,19 +2,18 @@ import { useState, useCallback } from 'react'
 import { useAuth } from '../context/AuthContext'
 import InputField from './InputField'
 import SelectField from './SelectField'
+import MunicipalityAutocomplete from './MunicipalityAutocomplete'
 import PasswordInput from './PasswordInput'
 import SubmitButton from './SubmitButton'
-import { getAll } from '@services/municipalities'
 import { sanitize, sanitizePassword, validateName, validateEmail, validatePassword, validateAge, validateSexo } from '../utils/validation'
 
 export default function RegisterForm({ onSuccess }) {
   const { register, loading, error, clearError } = useAuth()
   const [form, setForm] = useState({
     name: '', email: '', password: '', confirmPassword: '',
-    municipality_id: '', sexo: '', age: '',
+    municipality_id: null, sexo: '', age: '',
   })
   const [fieldErrors, setFieldErrors] = useState({})
-  const municipalities = getAll()
 
   function validate() {
     const errors = {}
@@ -38,6 +37,11 @@ export default function RegisterForm({ onSuccess }) {
       ? sanitize(e.target.value)
       : e.target.value
     setForm((prev) => ({ ...prev, [field]: field === 'email' ? cleaned.toLowerCase() : cleaned }))
+  }, [])
+
+  const handleMunicipality = useCallback((value) => {
+    setForm(prev => ({ ...prev, municipality_id: value }))
+    setFieldErrors(prev => ({ ...prev, municipality_id: undefined }))
   }, [])
 
 async function handleSubmit(e) {
@@ -94,12 +98,10 @@ async function handleSubmit(e) {
         maxLength={254}
       />
 
-      <SelectField
-        label="Municipio"
+      <MunicipalityAutocomplete
         id="register-municipality"
-        options={municipalities}
         value={form.municipality_id}
-        onChange={handleChange('municipality_id')}
+        onChange={handleMunicipality}
         error={fieldErrors.municipality_id}
       />
 
@@ -124,8 +126,8 @@ async function handleSubmit(e) {
         value={form.age}
         onChange={handleChange('age')}
         error={fieldErrors.age}
-        min={1}
-        max={119}
+        min={18}
+        max={99}
       />
 
       <PasswordInput

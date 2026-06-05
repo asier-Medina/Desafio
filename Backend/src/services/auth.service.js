@@ -28,10 +28,16 @@ export const register = async ({ nombre, apellido, email, password, tlf, municip
     nombre, apellido, email: normalizedEmail,
     password_hash, tlf, municipality_id, sexo, age, role,
   })
+  const accessToken  = generateAccessToken(user)
+  const refreshToken = generateRefreshToken(user)
   return {
-    id: user.id_user, nombre: user.nombre, apellido: user.apellido,
-    email: user.email, role: user.role, municipality_id: user.municipality_id,
-    tlf: user.tlf, sexo: user.sexo, age: user.age, createdAt: user.created_at,
+    accessToken,
+    refreshToken,
+    user: {
+      id: user.id_user, nombre: user.nombre, apellido: user.apellido,
+      email: user.email, role: user.role, municipality_id: user.municipality_id,
+      tlf: user.tlf, sexo: user.sexo, age: user.age, createdAt: user.created_at,
+    },
   }
 }
 

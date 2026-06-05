@@ -7,7 +7,7 @@ import Culture from "@features/culture/Culture";
 import CultureDetail from "@features/culture/CultureDetail";
 import Gastronomy from "@features/gastronomy/Gastronomy";
 import GastronomyDetail from "@features/gastronomy/GastronomyDetail";
-import Favorite from "@features/Favorite/favorite";
+import Favorite from "@features/favorite/Favorite";
 import Profile from "@features/profile/Profile";
 
 import MainLayout from "@shared/layout/Main";
