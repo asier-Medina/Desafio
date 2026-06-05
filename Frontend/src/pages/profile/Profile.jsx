@@ -12,7 +12,6 @@ import "./Profile.css";
 
 const fallbackUser = {
   name: "Invitado",
-  lastName: "",
   email: "invitado@sustrai.eus",
   createdAt: new Date().toISOString(),
 };
@@ -25,8 +24,6 @@ export default function Profile() {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
     name: profile.name || "",
-    lastName: profile.lastName || "",
-    tlf: profile.tlf || "",
     municipality_id: profile.municipality_id || "",
     sexo: profile.sexo || "",
     age: profile.age || "",
@@ -34,7 +31,7 @@ export default function Profile() {
 
   const municipalities = getMunicipalities();
 
-  const fullName = [profile.name, profile.lastName].filter(Boolean).join(" ") || "Invitado";
+  const fullName = profile.name || "Invitado";
 
   async function handleLogout() {
     await logout();
@@ -45,8 +42,6 @@ export default function Profile() {
     if (editing) {
       setForm({
         name: profile.name || "",
-        lastName: profile.lastName || "",
-        tlf: profile.tlf || "",
         municipality_id: profile.municipality_id || "",
         sexo: profile.sexo || "",
         age: profile.age || "",
@@ -83,8 +78,6 @@ export default function Profile() {
         {editing ? (
           <div className="profile__form">
             <InputField label="Nombre" id="edit-name" type="text" value={form.name} onChange={handleChange("name")} maxLength={100} />
-            <InputField label="Apellido" id="edit-lastname" type="text" value={form.lastName} onChange={handleChange("lastName")} maxLength={100} />
-            <InputField label="Teléfono" id="edit-tlf" type="tel" value={form.tlf} onChange={handleChange("tlf")} maxLength={20} />
             <SelectField label="Municipio" id="edit-municipality" options={municipalities} value={form.municipality_id} onChange={handleChange("municipality_id")} />
             <SelectField label="Sexo" id="edit-sexo" options={[
               { value: "hombre", label: "Hombre" },

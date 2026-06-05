@@ -9,8 +9,8 @@ router.post('/login',    loginHandler)
 router.post('/refresh',  refreshHandler)
 router.post('/logout', logoutHandler)
 router.get('/me',        protect, (req, res) => {
-  const { id_user, nombre, email, role, municipality_id } = req.user
-  res.json({ id: id_user, nombre, email, role, municipality_id })
+  const { id_user, nombre, apellido, email, role, municipality_id, tlf, sexo, age, created_at } = req.user
+  res.json({ id: id_user, nombre, apellido, email, role, municipality_id, tlf, sexo, age, createdAt: created_at })
 })
 
 export default router

@@ -5,13 +5,13 @@ import SelectField from './SelectField'
 import PasswordInput from './PasswordInput'
 import SubmitButton from './SubmitButton'
 import { getAll } from '@services/municipalities'
-import { sanitize, sanitizePassword, validateName, validateEmail, validatePassword, validatePhone, validateAge, validateSexo } from '../utils/validation'
+import { sanitize, sanitizePassword, validateName, validateEmail, validatePassword, validateAge, validateSexo } from '../utils/validation'
 
 export default function RegisterForm({ onSuccess }) {
   const { register, loading, error, clearError } = useAuth()
   const [form, setForm] = useState({
-    name: '', lastName: '', email: '', password: '', confirmPassword: '',
-    tlf: '', municipality_id: '', sexo: '', age: '',
+    name: '', email: '', password: '', confirmPassword: '',
+    municipality_id: '', sexo: '', age: '',
   })
   const [fieldErrors, setFieldErrors] = useState({})
   const municipalities = getAll()
@@ -20,15 +20,11 @@ export default function RegisterForm({ onSuccess }) {
     const errors = {}
     const nameErr = validateName(form.name)
     if (nameErr) errors.name = nameErr
-    const lastNameErr = validateName(form.lastName)
-    if (lastNameErr) errors.lastName = lastNameErr
     const emailErr = validateEmail(form.email)
     if (emailErr) errors.email = emailErr
     const passErr = validatePassword(form.password)
     if (passErr) errors.password = passErr
     if (form.password !== form.confirmPassword) errors.confirmPassword = 'Las contraseñas no coinciden'
-    const tlfErr = validatePhone(form.tlf)
-    if (tlfErr) errors.tlf = tlfErr
     const ageErr = validateAge(form.age)
     if (ageErr) errors.age = ageErr
     const sexoErr = validateSexo(form.sexo)
@@ -38,7 +34,7 @@ export default function RegisterForm({ onSuccess }) {
   }
 
   const handleChange = useCallback((field) => (e) => {
-    const cleaned = ['name', 'lastName', 'email'].includes(field)
+    const cleaned = ['name', 'email'].includes(field)
       ? sanitize(e.target.value)
       : e.target.value
     setForm((prev) => ({ ...prev, [field]: field === 'email' ? cleaned.toLowerCase() : cleaned }))
@@ -54,10 +50,8 @@ async function handleSubmit(e) {
     try {
       await register({
         name: sanitize(form.name),
-        lastName: sanitize(form.lastName),
         email: sanitize(form.email).toLowerCase(),
         password: sanitizePassword(form.password),
-        tlf: sanitize(form.tlf),
         municipality_id: Number(form.municipality_id),
         sexo: form.sexo,
         age: Number(form.age),
@@ -89,18 +83,6 @@ async function handleSubmit(e) {
       />
 
       <InputField
-        label="Apellido"
-        id="register-lastname"
-        type="text"
-        placeholder="Tu apellido"
-        value={form.lastName}
-        onChange={handleChange('lastName')}
-        error={fieldErrors.lastName}
-        autoComplete="family-name"
-        maxLength={100}
-      />
-
-      <InputField
         label="Correo electrónico"
         id="register-email"
         type="email"
@@ -110,18 +92,6 @@ async function handleSubmit(e) {
         error={fieldErrors.email}
         autoComplete="email"
         maxLength={254}
-      />
-
-      <InputField
-        label="Teléfono"
-        id="register-tlf"
-        type="tel"
-        placeholder="+34 600 000 000"
-        value={form.tlf}
-        onChange={handleChange('tlf')}
-        error={fieldErrors.tlf}
-        autoComplete="tel"
-        maxLength={20}
       />
 
       <SelectField
