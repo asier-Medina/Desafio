@@ -4,7 +4,7 @@ import { useAuth } from '@features/auth/context/AuthContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import CategoryFilters from '@shared/components/Filters/CategoryFilters';
 import Card from '@shared/components/Cards/Card';
-import '@/pages/events/Events.css';
+import './Events.css';
 
 // ---------------------------------------------------------------------------
 // Helpers de fecha

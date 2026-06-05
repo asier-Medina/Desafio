@@ -1,4 +1,4 @@
-import { FaRegHeart, FaHeart } from "../../ui/icons";
+import { FaRegHeart, FaHeart } from "@ui/icons";
 import { LABELS, VARIANTS } from "./cardVariants.jsx";
 import { getImage, renderStars } from "./cardHelpers.jsx";
 import "./Card.css";

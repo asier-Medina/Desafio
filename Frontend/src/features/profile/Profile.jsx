@@ -6,7 +6,7 @@ import Button from "@ui/Button";
 import { Card } from "@components/Cards";
 import InputField from "@features/auth/components/InputField";
 import SelectField from "@features/auth/components/SelectField";
-import { FaArrowRightFromBracket, FaRegHeart, FaPen, FaCheck } from "../../shared/ui/icons";
+import { FaArrowRightFromBracket, FaRegHeart, FaPen, FaCheck } from "@ui/icons";
 import { getNameById, getAll as getMunicipalities } from "@services/municipalities";
 import "./Profile.css";
 

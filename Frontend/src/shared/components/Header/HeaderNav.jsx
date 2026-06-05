@@ -1,4 +1,4 @@
-import { FaLandmark, FaRegCalendar, FaUtensils, FaRegHeart } from "../../ui/icons";
+import { FaLandmark, FaRegCalendar, FaUtensils, FaRegHeart } from "@ui/icons";
 
 const NAV_LINKS = {
   es: [
