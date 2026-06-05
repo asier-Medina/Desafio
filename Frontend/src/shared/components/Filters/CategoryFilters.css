@@ -1,7 +1,5 @@
 /* ==========================================================================
-   CategoryFilters — solo LAYOUT y estado activo. El aspecto del chip lo aporta
-   el componente <Button> compartido; aquí no se reestiliza el botón.
-   Usa los tokens reales de index.css. El foco y .sr-only ya son globales.
+   CategoryFilters — layout y estado. Usa los tokens de index.css.
    ========================================================================== */
 
 .category-filters__header {
@@ -45,8 +43,15 @@
   border-radius: var(--radius-sm);
 }
 
+.category-filters__groups {
+  display: flex;
+  gap: var(--space-md, 1rem);
+  margin-bottom: var(--space-md, 1rem);
+}
+
 .category-filters__group {
-  margin-bottom: var(--space-md);
+  flex: 1;
+  min-width: 0;
 }
 
 .category-filters__group-label {
@@ -58,27 +63,6 @@
   margin: 0 0 var(--space-xs);
 }
 
-.category-filters__options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-}
-
-/* Estado seleccionado del chip. Se marca con algo MÁS que el color (peso +
-   subrayado) para baja visión. Si vuestro Button incorpora una variante para
-   el estado activo, usadla en su lugar y borrad esta regla. */
-.category-filters__option.is-active,
-.category-filters__option[aria-pressed="true"] {
-  font-weight: 700;
-  text-decoration: underline;
-  text-decoration-thickness: 3px;
-  text-underline-offset: 0.2em;
-}
-
-/* ----- Filtro 2: selector "Ordenar por" ----- */
-.category-filters__group--sort {
-  max-width: 22rem;
-}
 
 .category-filters__select {
   width: 100%;
@@ -94,6 +78,12 @@
   cursor: pointer;
 }
 
+.category-filters__select:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+
 .category-filters__result {
   font-size: var(--font-size-sm);
   font-weight: 600;
@@ -104,5 +94,8 @@
 @media (forced-colors: active) {
   .category-filters__select {
     border-color: ButtonText;
+  }
+  .category-filters__select:focus-visible {
+    outline-color: Highlight;
   }
 }

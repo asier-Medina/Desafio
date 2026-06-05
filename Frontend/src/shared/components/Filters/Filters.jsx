@@ -1,5 +1,5 @@
 import { useId, useMemo, useState } from 'react';
-import './FiltrosCategoria.css';
+import './Filters.css';
 
 /**
  * Barra de filtros de la pantalla de listado de una categoría.
@@ -112,9 +112,10 @@ export function FiltrosCategoria({ titulo, elementos, filtro1, filtro2, filtroBa
   const idGrupo1 = `${idBase}-f1`;
   const idOrden = `${idBase}-f2`;
   const total = elementosFiltrados.length;
-  const etiquetaTodos = filtro1?.etiquetaTodos ?? 'Todos';
+  const etiquetaTodos = filtro1?.etiquetaTodos ?? 'Todas';
 
   const etiquetaBase = filtroBase?.etiqueta ?? null;
+  const tituloPagina = etiquetaBase ? `${titulo} ${etiquetaBase}` : titulo;
   const textoResultados =
     etiquetaBase
       ? `${total === 1 ? '1 resultado' : `${total} resultados`} ${etiquetaBase}`
@@ -126,7 +127,7 @@ export function FiltrosCategoria({ titulo, elementos, filtro1, filtro2, filtroBa
     <section className="filtros-categoria" aria-labelledby={idTitulo}>
       <div className="filtros-categoria__cabecera">
         <h2 className="filtros-categoria__titulo" id={idTitulo}>
-          {titulo}
+          {tituloPagina}
         </h2>
         {hayFiltroActivo && (
           <button
@@ -139,61 +140,49 @@ export function FiltrosCategoria({ titulo, elementos, filtro1, filtro2, filtroBa
         )}
       </div>
 
-      {/* ----- Filtro 1: refinamiento (selección única) ----- */}
-      <div className="filtros-categoria__grupo">
-        <p className="filtros-categoria__etiqueta-grupo" id={idGrupo1}>
-          {filtro1?.etiqueta ?? 'Filtrar por'}
-        </p>
-        <div className="filtros-categoria__lista" role="group" aria-labelledby={idGrupo1}>
-          <button
-            type="button"
-            className={claseOpcion(refinamiento === null)}
-            aria-pressed={refinamiento === null}
-            onClick={() => cambiarRefinamiento(null)}
-          >
-            <span className="filtros-categoria__check" aria-hidden="true" />
-            <span className="filtros-categoria__texto">{etiquetaTodos}</span>
-          </button>
-
-          {opciones1.map((op) => {
-            const activa = op.id === refinamiento;
-            return (
-              <button
-                key={op.id}
-                type="button"
-                className={claseOpcion(activa)}
-                aria-pressed={activa}
-                onClick={() => cambiarRefinamiento(op.id)}
-              >
-                <span className="filtros-categoria__check" aria-hidden="true" />
-                <span className="filtros-categoria__texto">{op.etiqueta}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ----- Filtro 2: ordenar por (no recorta) ----- */}
-      {filtro2 && opciones2.length > 0 && (
-        <div className="filtros-categoria__grupo filtros-categoria__grupo--orden">
-          <label className="filtros-categoria__etiqueta-grupo" htmlFor={idOrden}>
-            {filtro2.etiqueta ?? 'Ordenar por'}
+      <div className="filtros-categoria__grupos">
+        {/* ----- Filtro 1: categoría (select única) ----- */}
+        <div className="filtros-categoria__grupo">
+          <label className="filtros-categoria__etiqueta-grupo" htmlFor={idGrupo1}>
+            {filtro1?.etiqueta ?? 'Categorías'}
           </label>
           <select
-            id={idOrden}
+            id={idGrupo1}
             className="filtros-categoria__select"
-            value={orden ?? ''}
-            onChange={(e) => cambiarOrden(e.target.value === '' ? null : e.target.value)}
+            value={refinamiento ?? ''}
+            onChange={(e) => cambiarRefinamiento(e.target.value === '' ? null : e.target.value)}
           >
-            <option value="">{filtro2.etiquetaPorDefecto ?? 'Ordenar por'}</option>
-            {opciones2.map((op) => (
+            <option value="">{etiquetaTodos}</option>
+            {opciones1.map((op) => (
               <option key={op.id} value={op.id}>
                 {op.etiqueta}
               </option>
             ))}
           </select>
         </div>
-      )}
+
+        {/* ----- Filtro 2: ordenar por (no recorta) ----- */}
+        {filtro2 && opciones2.length > 0 && (
+          <div className="filtros-categoria__grupo">
+            <label className="filtros-categoria__etiqueta-grupo" htmlFor={idOrden}>
+              {filtro2.etiqueta ?? 'Ordenar por'}
+            </label>
+            <select
+              id={idOrden}
+              className="filtros-categoria__select"
+              value={orden ?? ''}
+              onChange={(e) => cambiarOrden(e.target.value === '' ? null : e.target.value)}
+            >
+              <option value="">{filtro2.etiquetaPorDefecto ?? 'Ordenar por'}</option>
+              {opciones2.map((op) => (
+                <option key={op.id} value={op.id}>
+                  {op.etiqueta}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
 
       {/* Región viva: anuncia a lectores de pantalla cuántos resultados hay. */}
       <p className="filtros-categoria__resultado" role="status" aria-live="polite">

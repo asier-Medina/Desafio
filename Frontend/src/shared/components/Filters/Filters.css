@@ -67,10 +67,16 @@
   border-radius: 0.25rem;
 }
 
-.filtros-categoria__grupo {
+.filtros-categoria__grupos {
+  display: flex;
+  gap: var(--espaciado, 0.75rem);
   margin-bottom: var(--espaciado, 0.75rem);
 }
 
+.filtros-categoria__grupo {
+  flex: 1;
+  min-width: 0;
+}
 .filtros-categoria__etiqueta-grupo {
   display: block;
   font-size: var(--fuente-base, 1.125rem);
@@ -78,75 +84,7 @@
   margin: 0 0 0.5rem;
 }
 
-.filtros-categoria__lista {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--espaciado, 0.75rem);
-}
 
-/* --- Botón de filtro (temporal: futuro componente de botón compartido) ----- */
-.filtros-categoria__opcion {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 3rem; /* 48 px de objetivo táctil */
-  padding: 0.625rem 1.125rem;
-  font-family: inherit;
-  font-size: var(--fuente-base, 1.125rem);
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--color-texto, #1b1f2a);
-  background-color: var(--color-fondo, #ffffff);
-  border: 2px solid var(--color-borde, #4b5563);
-  border-radius: var(--radio, 0.625rem);
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-}
-
-.filtros-categoria__opcion:hover {
-  border-color: var(--color-primario, #14478f);
-}
-
-.filtros-categoria__opcion:focus-visible {
-  outline: 3px solid var(--color-foco, #14478f);
-  outline-offset: 3px;
-}
-
-.filtros-categoria__opcion--activa {
-  color: var(--color-primario-texto, #ffffff);
-  background-color: var(--color-primario, #14478f);
-  border-color: var(--color-primario, #14478f);
-  font-weight: 700;
-}
-
-/* Indicador de check (pista no cromática del estado activo). */
-.filtros-categoria__check {
-  display: inline-block;
-  width: 1.25rem;
-  height: 1.25rem;
-  flex: 0 0 auto;
-  border: 2px solid currentColor;
-  border-radius: 0.3125rem;
-  position: relative;
-}
-
-.filtros-categoria__opcion--activa .filtros-categoria__check::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 0.375rem;
-  height: 0.6875rem;
-  border: solid currentColor;
-  border-width: 0 0.1875rem 0.1875rem 0;
-  transform: translateY(-0.0625rem) rotate(45deg);
-}
-
-.filtros-categoria__texto {
-  white-space: nowrap;
-}
-
-/* --- Filtro 2: selector "Ordenar por" --- */
 .filtros-categoria__select {
   min-height: 3rem;
   padding: 0.5rem 1rem;
@@ -175,21 +113,15 @@
 
 /* Modo alto contraste de Windows. */
 @media (forced-colors: active) {
-  .filtros-categoria__opcion,
   .filtros-categoria__select {
     border-color: ButtonText;
   }
-  .filtros-categoria__opcion--activa {
-    border-color: Highlight;
-  }
-  .filtros-categoria__opcion:focus-visible,
   .filtros-categoria__select:focus-visible {
     outline-color: Highlight;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .filtros-categoria__opcion {
-    transition: none;
-  }
+/* El select ocupa el ancho completo de su grupo */
+.filtros-categoria__select {
+  width: 100%;
 }
