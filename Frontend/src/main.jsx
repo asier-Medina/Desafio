@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
 import { AuthProvider } from "@features/auth/context/AuthContext";
 import router from "@routes/router";
-import { AuthProvider } from "@features/auth/context/AuthContext";
 import "./index.css";
 
 const rootElement = document.getElementById("root");
