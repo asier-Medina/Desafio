@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useId } from "react";
-import { FaRegUser, FaSliders, FaChevronDown } from "../../ui/icons";
+import { FaRegUser, FaSliders, FaChevronDown } from "@ui/icons";
 import HeaderNav from "./HeaderNav";
 import "./Header.css";
-import logoSvg from "../../../assets/images/logofinal.svg";
+import logoSvg from "@assets/images/logofinal.svg";
 
 const LABELS = {
   es: {
