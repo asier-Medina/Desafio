@@ -28,7 +28,17 @@ export const register = async ({ nombre, apellido, email, password, tlf, municip
     nombre, apellido, email: normalizedEmail,
     password_hash, tlf, municipality_id, sexo, age, role,
   })
-  return { id: user.id_user, nombre: user.nombre, email: user.email, role: user.role }
+  const accessToken  = generateAccessToken(user)
+  const refreshToken = generateRefreshToken(user)
+  return {
+    accessToken,
+    refreshToken,
+    user: {
+      id: user.id_user, nombre: user.nombre, apellido: user.apellido,
+      email: user.email, role: user.role, municipality_id: user.municipality_id,
+      tlf: user.tlf, sexo: user.sexo, age: user.age, createdAt: user.created_at,
+    },
+  }
 }
 
 // ── login ─────────────────────────────────────────────────────
@@ -45,7 +55,11 @@ export const login = async ({ email, password }) => {
   return {
     accessToken,
     refreshToken,
-    user: { id: user.id_user, nombre: user.nombre, email: user.email, role: user.role }
+    user: {
+      id: user.id_user, nombre: user.nombre, apellido: user.apellido,
+      email: user.email, role: user.role, municipality_id: user.municipality_id,
+      tlf: user.tlf, sexo: user.sexo, age: user.age, createdAt: user.created_at,
+    },
   }
 }
 

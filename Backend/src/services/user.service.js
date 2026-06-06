@@ -78,11 +78,12 @@ export const updatePreferences = async (id_user, data) => {
   if (Object.keys(update).length === 0)
     throw new Error('Sin campos válidos para actualizar')
 
-  const [prefs] = await Preferences.upsert(
-    { user_id: id_user, ...update, updated_at: new Date() },
-    { returning: true }
-  )
-  return prefs
+  const existing = await Preferences.findOne({ where: { user_id: id_user } })
+  if (existing) {
+    await existing.update({ ...update, updated_at: new Date() })
+    return existing
+  }
+  return Preferences.create({ user_id: id_user, ...update })
 }
 
 // ── getAllInterests ───────────────────────────────────────────
