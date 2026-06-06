@@ -17,12 +17,13 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@routes": path.resolve(__dirname, "./src/routes/"),
-      "@components": path.resolve(__dirname, "./src/shared/components/"),
-      "@hooks": path.resolve(__dirname, "./src/shared/hooks/"),
       "@features": path.resolve(__dirname, "./src/features/"),
-      "@ui": path.resolve(__dirname, "./src/shared/ui/"),
       "@shared": path.resolve(__dirname, "./src/shared/"),
+      "@components": path.resolve(__dirname, "./src/shared/components/"),
+      "@ui": path.resolve(__dirname, "./src/shared/ui/"),
+      "@hooks": path.resolve(__dirname, "./src/shared/hooks/"),
       "@services": path.resolve(__dirname, "./src/services/"),
+      "@assets": path.resolve(__dirname, "./src/assets/"),
     },
   },
 });

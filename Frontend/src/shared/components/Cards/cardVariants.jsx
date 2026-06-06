@@ -1,4 +1,4 @@
-import { FaLocationDot, FaRegCalendar, FaUtensils } from "../../ui/icons";
+import { FaLocationDot, FaRegCalendar, FaUtensils } from "@ui/icons";
 import michelinLogo from "./logos/michelin.png";
 import repsolLogo from "./logos/repsol.jpeg";
 import { formatDate } from "./cardHelpers.jsx";

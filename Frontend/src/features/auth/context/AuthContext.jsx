@@ -8,8 +8,9 @@ function normalizeUser(raw) {
   if (!raw) return null
   return {
     ...raw,
-    name:     raw.name     ?? raw.nombre   ?? '',
-    lastName: raw.lastName ?? raw.apellido ?? '',
+    name:      raw.name      ?? raw.nombre   ?? '',
+    lastName:  raw.lastName  ?? raw.apellido ?? '',
+    createdAt: raw.createdAt ?? raw.created_at ?? null,
   }
 }
 

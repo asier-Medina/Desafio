@@ -1,5 +1,5 @@
 import BackButton from "@ui/BackButton";
-import { FaLocationDot, FaStar, FaRegClock, FaEuroSign, FaLink, FaRegHeart, FaHeart } from "../../ui/icons";
+import { FaLocationDot, FaStar, FaRegClock, FaEuroSign, FaLink, FaRegHeart, FaHeart } from "@ui/icons";
 import { VARIANTS, LABELS } from "../Cards/cardVariants";
 import { getImage, formatDate, renderStars } from "../Cards/cardHelpers";
 import "./Detail.css";

@@ -12,36 +12,13 @@ async function request(method, path, body) {
   return data
 }
 
-export function list({ limit, offset } = {}) {
+export const list           = ()              => request('GET', '')
+export const getById        = (id)            => request('GET', `/${id}`)
+export const getEstaSemana  = ()              => request('GET', '/esta-semana')
+export const getFinDeSemana = ()              => request('GET', '/fin-de-semana')
+export const getEnEuskera   = ()              => request('GET', '/en-euskera')
+export const getCercaDeTi   = (municipalityId) => {
   const params = new URLSearchParams()
-  if (limit) params.set('limit', limit)
-  if (offset) params.set('offset', offset)
-  const qs = params.toString()
-  return request('GET', qs ? `?${qs}` : '')
-}
-
-export function getById(id) {
-  return request('GET', `/${id}`)
-}
-
-export function getFeatured({ limit, offset } = {}) {
-  const params = new URLSearchParams()
-  if (limit) params.set('limit', limit)
-  if (offset) params.set('offset', offset)
-  params.set('featured', 'true')
-  return request('GET', `?${params.toString()}`)
-}
-
-export function getCercaDeTi({ limit, offset } = {}) {
-  const params = new URLSearchParams()
-  if (limit) params.set('limit', limit)
-  if (offset) params.set('offset', offset)
-  return request('GET', `/cerca-de-ti?${params.toString()}`)
-}
-
-export function getMejorValorados({ limit, offset } = {}) {
-  const params = new URLSearchParams()
-  if (limit) params.set('limit', limit)
-  if (offset) params.set('offset', offset)
-  return request('GET', `/mejor-valorados?${params.toString()}`)
+  if (municipalityId) params.set('municipality_id', municipalityId)
+  return request('GET', `/cerca-de-ti?${params}`)
 }
