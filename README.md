@@ -1,46 +1,51 @@
-# 🌿 SustraiApp
+# SustraiApp
 
 > Aplicación web para la zona del País Vasco orientada a diferentes públicos para encontrar lugares, establecimientos y actividades de interés — impulsada por datos de **GEO-EUSKADI**.
 
 ---
 
-## 🚧 Estado del proyecto
+## Estado del proyecto
 
 | Módulo | Estado |
 |---|---|
-| Backend — Auth | ✅ Completado |
-| Backend — Usuario | ✅ Completado |
-| Backend — Favoritos | ✅ Completado |
-| Backend — Reviews | ✅ Completado |
-| Backend — Eventos | 🔧 En construcción |
-| Backend — Gastronomía | 🔧 En construcción |
-| Backend — Cultura | 🔧 En construcción |
-| Frontend | 🔧 En construcción |
+| Backend — Auth | Completado |
+| Backend — Usuario | Completado |
+| Backend — Favoritos | Completado |
+| Backend — Reviews | Completado |
+| Backend — Eventos | En construcción |
+| Backend — Gastronomía | En construcción |
+| Backend — Cultura | En construcción |
+| Frontend | En construcción |
 
 ---
 
-## 🛠️ Stack tecnológico
+## Stack tecnológico
 
 | Capa | Tecnología |
 |---|---|
 | Backend | Node.js · Express · Sequelize |
 | Base de datos | PostgreSQL 16 |
 | Autenticación | JWT (access + refresh token) |
-| Frontend | React · Vite |
+| Frontend | React · Vite · Tailwind CSS |
 | Infraestructura | Docker · Docker Compose |
 
 ---
 
-## 🚀 Arrancar el proyecto
+## Puesta en marcha
 
 ### Requisitos previos
 
-- [Docker](https://www.docker.com/) instalado
-- Archivo `.env` configurado (ver `.env.example`)
+- [Docker](https://www.docker.com/) y Docker Compose instalados
+- [Node.js](https://nodejs.org/) (v18 o superior) y npm instalados
+- Archivo `.env` configurado en `/Backend` (ver sección de variables de entorno)
 
-### Variables de entorno
+---
 
-Crea un archivo `.env` en `/Backend`:
+### 1. Backend (Docker)
+
+El backend y la base de datos se levantan con Docker Compose.
+
+**Configura las variables de entorno** — crea el archivo `Backend/.env`:
 
 ```env
 DB_USER=
@@ -56,14 +61,14 @@ PGADMIN_DEFAULT_EMAIL=
 PGADMIN_DEFAULT_PASSWORD=
 ```
 
-### Levantar los servicios
+**Arranca los servicios:**
 
 ```bash
 cd Backend
 docker compose up --build -d
 ```
 
-Servicios disponibles:
+Servicios disponibles tras el arranque:
 
 | Servicio | URL |
 |---|---|
@@ -73,7 +78,47 @@ Servicios disponibles:
 
 ---
 
-## 📡 Endpoints disponibles
+### 2. Frontend (Vite)
+
+El frontend se ejecuta directamente con npm en modo desarrollo.
+
+**Configura las variables de entorno** — crea el archivo `Frontend/.env`:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000
+```
+
+**Instala dependencias y arranca el servidor de desarrollo:**
+
+```bash
+cd Frontend
+npm install
+npm run dev
+```
+
+La aplicación estará disponible en:
+
+| Servicio | URL |
+|---|---|
+| App web | http://localhost:5173 |
+
+---
+
+### Resumen rápido
+
+```bash
+# Terminal 1 — Backend
+cd Backend
+docker compose up --build -d
+
+# Terminal 2 — Frontend
+cd Frontend
+npm run dev
+```
+
+---
+
+## Endpoints disponibles
 
 ### Auth
 ```
@@ -112,7 +157,7 @@ DELETE /api/reviews/:tipo/:entidad_id
 
 ---
 
-## 🗂️ Estructura del proyecto
+## Estructura del proyecto
 
 ```
 SustraiApp/
@@ -138,6 +183,6 @@ SustraiApp/
 
 ---
 
-## 👥 Equipo
+## Equipo
 
 Proyecto desarrollado como parte del **Desafío Final — Inetum · BBK Bootcamps 2026**.
