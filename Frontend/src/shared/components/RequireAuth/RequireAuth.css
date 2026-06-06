@@ -1,0 +1,68 @@
+.require-auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-md, 1.25rem);
+  padding: var(--space-xl, 3rem) var(--space-lg, 1.5rem);
+  min-height: 60vh;
+  max-width: 26rem;
+  margin: 0 auto;
+}
+
+.require-auth__icon {
+  font-size: 4.5rem;
+  color: var(--brand-navy, #1a365d);
+  opacity: 0.15;
+  margin-bottom: var(--space-xs, 0.5rem);
+}
+
+.require-auth__title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.require-auth__desc {
+  color: var(--color-text-soft, #6b7280);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.require-auth__actions {
+  display: flex;
+  gap: var(--space-sm, 0.75rem);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--space-xs, 0.5rem);
+}
+
+.require-auth__btn {
+  display: inline-block;
+  padding: 0.625rem 1.75rem;
+  border-radius: var(--radius-md, 0.5rem);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.require-auth__btn:hover {
+  opacity: 0.8;
+}
+
+.require-auth__btn--primary {
+  background: var(--brand-navy, #1a365d);
+  color: #fff;
+}
+
+.require-auth__btn--ghost {
+  background: transparent;
+  color: var(--brand-navy, #1a365d);
+  border: 1.5px solid currentColor;
+}

@@ -10,31 +10,22 @@ import { FaArrowRightFromBracket, FaRegHeart, FaPen, FaCheck } from "@ui/icons";
 import { getNameById, getAll as getMunicipalities } from "@services/municipalities";
 import "./Profile.css";
 
-const fallbackUser = {
-  name: "Invitado",
-  lastName: "",
-  email: "invitado@sustrai.eus",
-  createdAt: new Date().toISOString(),
-};
-
 export default function Profile() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { favorites, removeFavorite } = useFavorites();
-  const profile = user || fallbackUser;
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
-    name: profile.name || "",
-    lastName: profile.lastName || "",
-    tlf: profile.tlf || "",
-    municipality_id: profile.municipality_id || "",
-    sexo: profile.sexo || "",
-    age: profile.age || "",
+    name: user.name || "",
+    lastName: user.lastName || "",
+    tlf: user.tlf || "",
+    municipality_id: user.municipality_id || "",
+    sexo: user.sexo || "",
+    age: user.age || "",
   });
 
   const municipalities = getMunicipalities();
-
-  const fullName = [profile.name, profile.lastName].filter(Boolean).join(" ") || "Invitado";
+  const fullName = [user.name, user.lastName].filter(Boolean).join(" ") || user.email;
 
   async function handleLogout() {
     await logout();
@@ -44,12 +35,12 @@ export default function Profile() {
   function toggleEdit() {
     if (editing) {
       setForm({
-        name: profile.name || "",
-        lastName: profile.lastName || "",
-        tlf: profile.tlf || "",
-        municipality_id: profile.municipality_id || "",
-        sexo: profile.sexo || "",
-        age: profile.age || "",
+        name: user.name || "",
+        lastName: user.lastName || "",
+        tlf: user.tlf || "",
+        municipality_id: user.municipality_id || "",
+        sexo: user.sexo || "",
+        age: user.age || "",
       });
     }
     setEditing((prev) => !prev);
@@ -65,11 +56,9 @@ export default function Profile() {
         <div className="profile__header-top">
           <h1 className="profile__name">{fullName}</h1>
           <div className="profile__header-actions">
-            {user && (
-              <Button variant="ghost" size="sm" onClick={toggleEdit}>
-                {editing ? <><FaCheck /> Hecho</> : <><FaPen /> Editar</>}
-              </Button>
-            )}
+            <Button variant="ghost" size="sm" onClick={toggleEdit}>
+              {editing ? <><FaCheck /> Hecho</> : <><FaPen /> Editar</>}
+            </Button>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <FaArrowRightFromBracket /> Salir
             </Button>
@@ -97,36 +86,36 @@ export default function Profile() {
           <dl className="profile__info-list">
             <div className="profile__info-row">
               <dt>Email</dt>
-              <dd>{profile.email}</dd>
+              <dd>{user.email}</dd>
             </div>
-            {profile.tlf && (
+            {user.tlf && (
               <div className="profile__info-row">
                 <dt>Teléfono</dt>
-                <dd>{profile.tlf}</dd>
+                <dd>{user.tlf}</dd>
               </div>
             )}
-            {profile.municipality_id && (
+            {user.municipality_id && (
               <div className="profile__info-row">
                 <dt>Municipio</dt>
-                <dd>{getNameById(profile.municipality_id)}</dd>
+                <dd>{getNameById(user.municipality_id)}</dd>
               </div>
             )}
-            {profile.sexo && (
+            {user.sexo && (
               <div className="profile__info-row">
                 <dt>Sexo</dt>
-                <dd>{profile.sexo}</dd>
+                <dd>{user.sexo}</dd>
               </div>
             )}
-            {profile.age && (
+            {user.age && (
               <div className="profile__info-row">
                 <dt>Edad</dt>
-                <dd>{profile.age} años</dd>
+                <dd>{user.age} años</dd>
               </div>
             )}
-            {profile.createdAt && (
+            {user.createdAt && (
               <div className="profile__info-row">
                 <dt>Miembro desde</dt>
-                <dd>{new Date(profile.createdAt).toLocaleDateString("es", { year: "numeric", month: "long" })}</dd>
+                <dd>{new Date(user.createdAt).toLocaleDateString("es", { year: "numeric", month: "long" })}</dd>
               </div>
             )}
           </dl>
@@ -149,7 +138,10 @@ export default function Profile() {
                 data={item}
                 isFavorite={true}
                 onToggleFavorite={() => removeFavorite(item.id, item._variant)}
-                onAction={() => navigate(`/${item._variant === "event" ? "events" : item._variant === "gastronomy" ? "gastronomy" : "culture"}/${item.id}`)}
+                onAction={() => {
+                  const base = item._variant === "event" ? "events" : item._variant === "gastronomy" ? "gastronomy" : "culture";
+                  navigate(`/${base}/${item.id}`);
+                }}
               />
             ))}
           </div>

@@ -7,8 +7,10 @@ import Culture from "@features/culture/Culture";
 import CultureDetail from "@features/culture/CultureDetail";
 import Gastronomy from "@features/gastronomy/Gastronomy";
 import GastronomyDetail from "@features/gastronomy/GastronomyDetail";
-import Favorite from "@features/Favorite/favorite";
+import Favorite from "@features/favorite/Favorite";
 import Profile from "@features/profile/Profile";
+import RequireAuth from "@shared/components/RequireAuth/RequireAuth";
+import { FaRegHeart, FaRegUser } from "@ui/icons";
 
 import MainLayout from "@shared/layout/Main";
 
@@ -57,13 +59,34 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <MainLayout />,
-    children: [{ index: true, element: <Profile /> }],
-    /*loader: mainLoader,*/
+    children: [{
+      index: true,
+      element: (
+        <RequireAuth
+          icon={FaRegUser}
+          title="Accede a tu perfil"
+          description="Inicia sesión o crea una cuenta para ver y editar tu información personal, gestionar tus datos y más."
+        >
+          <Profile />
+        </RequireAuth>
+      ),
+    }],
   },
   {
     path: "/favoritos",
     element: <MainLayout />,
-    children: [{ index: true, element: <Favorite /> }],
+    children: [{
+      index: true,
+      element: (
+        <RequireAuth
+          icon={FaRegHeart}
+          title="Tus favoritos"
+          description="Inicia sesión o crea una cuenta para guardar tus eventos, restaurantes y lugares culturales favoritos."
+        >
+          <Favorite />
+        </RequireAuth>
+      ),
+    }],
   },
 
   {
