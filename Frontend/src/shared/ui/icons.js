@@ -35,6 +35,9 @@ export {
   FaStore,                   // gestión de comercios (admin)
   FaToggleOn,                // toggle activo
   FaToggleOff,               // toggle inactivo
+  FaGear,                    // configuración
+  FaCircleQuestion,          // ayuda / soporte
+  FaFileLines,               // documento / legal
   FaMusic,                   // concierto / festival musical
   FaMasksTheater,            // teatro / danza / artes escénicas
   FaPaintbrush,              // exposición / galería / arte
