@@ -1,0 +1,63 @@
+import { useState, useEffect } from 'react'
+import { useNavigate, Navigate } from 'react-router'
+import { useAuth } from './context/AuthContext'
+import LoginSection from './sections/LoginSection'
+import RegisterSection from './sections/RegisterSection'
+import OnboardingSection from './sections/OnboardingSection'
+import BackButton from '@ui/BackButton'
+import { Card } from '@shared/components/Cards'
+import './auth.css'
+
+function AuthContent() {
+  const [step, setStep] = useState('login') // 'login' | 'register' | 'onboarding'
+  const navigate = useNavigate()
+  const { user, loading } = useAuth()
+
+  useEffect(() => {
+    const meta = document.createElement('meta')
+    meta.httpEquiv = 'Cache-Control'
+    meta.content = 'no-store, no-cache, must-revalidate'
+    document.head.appendChild(meta)
+    return () => meta.remove()
+  }, [])
+
+  if (loading) return null
+
+  if (user && step !== 'onboarding') return <Navigate to="/" replace />
+
+  return (
+    <div className="auth-page">
+      <div className="auth-page__back">
+        <BackButton onClick={() => navigate(-1)} />
+      </div>
+
+      {step === 'onboarding' ? (
+        <OnboardingSection onSuccess={() => {
+          localStorage.setItem('sustraiShowSplash', 'true');
+          navigate('/', { replace: true });
+        }} />
+      ) : (
+        <Card display="auth">
+          {step === 'login' ? (
+            <LoginSection
+              onToggle={() => setStep('register')}
+              onSuccess={() => {
+                localStorage.setItem('sustraiShowSplash', 'true');
+                navigate('/', { replace: true });
+              }}
+            />
+          ) : (
+            <RegisterSection
+              onToggle={() => setStep('login')}
+              onSuccess={() => setStep('onboarding')}
+            />
+          )}
+        </Card>
+      )}
+    </div>
+  )
+}
+
+export default function Auth() {
+  return <AuthContent />
+}

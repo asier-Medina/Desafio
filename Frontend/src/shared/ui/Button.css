@@ -1,0 +1,202 @@
+/* ─── Button: reusable component ─── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+  min-height: var(--touch-target);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  position: relative;
+  white-space: nowrap;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Sizes ─── */
+
+.btn--sm {
+  padding: 0.3rem 0.75rem;
+  font-size: var(--font-size-xs);
+  min-height: 36px;
+}
+
+.btn--md {
+  padding: 0.5rem 1rem;
+  font-size: var(--font-size-sm);
+}
+
+.btn--lg {
+  padding: 0.875rem 1.5rem;
+  font-size: var(--font-size-base);
+  min-height: 50px;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+/* ─── Variants ─── */
+
+/* Primary: solid navy */
+.btn--primary {
+  color: var(--color-text-on-dark);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background-color: #1f2b57;
+  border-color: #1f2b57;
+  box-shadow: 0 2px 8px rgba(41, 54, 109, 0.2);
+}
+
+/* Outline: transparent with navy border */
+.btn--outline {
+  color: var(--color-primary);
+  background-color: transparent;
+  border-color: var(--color-primary);
+}
+
+.btn--outline:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-dark);
+  box-shadow: 0 2px 8px rgba(41, 54, 109, 0.2);
+}
+
+/* Ghost: subtle, no border */
+.btn--ghost {
+  color: var(--color-text-soft);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn--ghost:hover:not(:disabled) {
+  color: var(--color-primary);
+  background-color: rgba(41, 54, 109, 0.06);
+}
+
+/* Soft: cream background */
+.btn--soft {
+  color: var(--color-text-soft);
+  background-color: var(--color-surface-soft);
+  border-color: var(--color-surface-soft);
+}
+
+.btn--soft:hover:not(:disabled) {
+  background-color: #d6d6b8;
+  border-color: #d6d6b8;
+}
+
+/* Accent: mauve solid */
+.btn--accent {
+  color: var(--color-text-on-dark);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.btn--accent:hover:not(:disabled) {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+/* Danger: red text, transparent */
+.btn--danger {
+  color: var(--brand-red);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn--danger:hover:not(:disabled) {
+  background-color: rgba(211, 47, 47, 0.06);
+}
+
+/* ─── Loading state ─── */
+
+.btn--loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.btn__spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+.btn--ghost .btn__spinner,
+.btn--outline .btn__spinner,
+.btn--soft .btn__spinner,
+.btn--danger .btn__spinner {
+  border-color: rgba(41, 54, 109, 0.2);
+  border-top-color: var(--color-primary);
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Icon ─── */
+
+.btn__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.btn--sm .btn__icon {
+  width: 16px;
+  height: 16px;
+}
+
+.btn--lg .btn__icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ─── Responsive text hiding ─── */
+
+.btn--hide-text-mobile .btn__text {
+  display: inline;
+}
+
+@media (max-width: 402px) {
+  .btn--hide-text-mobile .btn__text {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+  .btn:active:not(:disabled) {
+    transform: none;
+  }
+  .btn__spinner {
+    animation-duration: 0.01ms;
+  }
+}

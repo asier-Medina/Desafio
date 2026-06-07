@@ -1,0 +1,92 @@
+/* ═══════════════════════════════════════════
+   Homepage
+   ═══════════════════════════════════════════ */
+
+/* ── Hero ── */
+
+@keyframes hero-gradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.homepage__hero {
+  background: linear-gradient(-45deg, var(--brand-navy), var(--brand-plum), #3a2555, #1f2b57, var(--brand-plum));
+  background-size: 400% 400%;
+  animation: hero-gradient 12s ease infinite;
+  padding-block: clamp(4rem, 12vw, 8rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.homepage__hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 70% 50%,
+    rgba(127, 85, 123, 0.25) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.homepage__hero-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  max-width: 780px;
+}
+
+.homepage__hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  color: var(--brand-cream);
+  text-wrap: balance;
+}
+
+.homepage__hero-title-emphasis {
+  color: var(--brand-white);
+  opacity: 0.75;
+}
+
+.homepage__hero-sub {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.7;
+  color: rgba(247, 244, 232, 0.8);
+  max-width: 56ch;
+}
+
+.homepage__hero-cta {
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+  color: var(--brand-navy) !important;
+  background-color: var(--brand-cream) !important;
+  border-color: var(--brand-cream) !important;
+}
+
+.homepage__hero-cta:hover:not(:disabled) {
+  background-color: var(--brand-white) !important;
+  border-color: var(--brand-white) !important;
+  box-shadow: 0 4px 20px rgba(247, 244, 232, 0.3) !important;
+}
+
+/* ── Contenido ── */
+
+.homepage__content {
+  padding-block: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.homepage__loading {
+  color: var(--color-text-soft);
+  padding-block: var(--space-xl);
+  text-align: center;
+}
+

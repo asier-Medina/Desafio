@@ -1,8 +1,7 @@
 services:
-
   db:
     image: postgres:16
-    container_name: Desafio_db
+    container_name: sustraiapp_db
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
@@ -11,19 +10,20 @@ services:
     ports:
       - "5440:5432"
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
     networks:
       - Desafio_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: Desafio_pgadmin
+    container_name: sustraiapp_pgadmin
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
@@ -36,37 +36,55 @@ services:
     networks:
       - Desafio_net
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: Desafio_app
+  data:
+    build: ../Data
+    container_name: sustraiapp_desafio
     restart: always
+    ports:
+      - "5442:5442"
     environment:
-      NODE_ENV: development
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      PORT: 5442
+      FLASK_APP: app.py
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - Desafio_net
+
+  app:
+    build: .
+    container_name: sustraiapp_app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
       DB_HOST: db
       DB_PORT: 5432
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
       JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN}
       FRONTEND_URL: ${FRONTEND_URL}
-      PORT: 3000
-    ports:
-      - "3000:3000"
+      PORT: ${PORT}
+      ML_API_URL: http://data:5442/api
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - ./src:/usr/src/app/src
+      data:
+        condition: service_started
     networks:
       - Desafio_net
 
 volumes:
-  postgres-data:
+  postgres_data:
 
 networks:
   Desafio_net:

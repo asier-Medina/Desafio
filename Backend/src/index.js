@@ -1,20 +1,27 @@
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-
 import sequelize from "./config/postgres.js";
-import authRouter from "./routes/auth.routes.js";
-import eventsRouter from "./routes/events.js";
+import apiRouter from "./routes/api.routes.js";
+
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 
 dotenv.config();
 
 const app = express();
+app.disable("x-powered-by");
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: (origin, cb) => {
+    if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`CORS: origin ${origin} no permitido`));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -29,9 +36,7 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", mensaje: "Backend en marcha 🚀" });
 });
 
-app.use("/api/auth", authRouter);
-app.use("/api", eventsRouter);
-
+app.use("/api", apiRouter);
 app.use(notFound);
 app.use(errorHandler);
 
@@ -39,10 +44,6 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     console.log("✅ Postgres conectado");
-
-    await sequelize.sync({ alter: true });
-    console.log("✅ Modelos sincronizados");
-
     app.listen(PORT, () => {
       console.log(`\n✅ Backend escuchando en http://localhost:${PORT}`);
       console.log(`   Prueba: http://localhost:${PORT}/api/health\n`);

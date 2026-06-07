@@ -1,0 +1,28 @@
+.culture {
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-xl);
+}
+
+.culture__title {
+  font-size: var(--font-size-h1, 2.5rem);
+  margin-bottom: var(--space-lg);
+}
+
+.culture__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--space-md, 1rem);
+}
+
+.culture__item {
+  display: flex;
+}
+
+.culture__empty {
+  color: var(--color-text-soft, #6b7280);
+  font-size: var(--font-size-base, 1rem);
+  margin: var(--space-lg, 1.5rem) 0;
+}

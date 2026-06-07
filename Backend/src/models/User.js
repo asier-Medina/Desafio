@@ -2,14 +2,22 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/postgres.js";
 
 const User = sequelize.define("User", {
-  id:            { type: DataTypes.INTEGER,  primaryKey: true, autoIncrement: true },
-  name:          { type: DataTypes.STRING,   allowNull: false },
-  email:         { type: DataTypes.STRING,   allowNull: false, unique: true },
-  password_hash: { type: DataTypes.STRING,   allowNull: false },
-  role:          { type: DataTypes.STRING,   allowNull: false, defaultValue: "user" },
+  id_user:         { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  nombre:          { type: DataTypes.STRING(100), allowNull: false },
+  apellido:        { type: DataTypes.STRING(100) },
+  email:           { type: DataTypes.STRING(255), allowNull: false, unique: true },
+  password_hash:   { type: DataTypes.STRING(256), allowNull: false },
+  tlf:             { type: DataTypes.STRING(20) },
+  municipality_id: { type: DataTypes.INTEGER, allowNull: false },  
+  sexo:            { type: DataTypes.STRING(10), allowNull: false },
+  age:             { type: DataTypes.INTEGER, allowNull: false },
+  role:            { type: DataTypes.STRING(10), allowNull: false, defaultValue: "user" },
+  created_at:      { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+  updated_at:      { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 }, {
-  tableName: "users",
-  timestamps: true
+  tableName:  "users",
+  schema:     "user_data",
+  timestamps: false,
 });
 
 export default User;
