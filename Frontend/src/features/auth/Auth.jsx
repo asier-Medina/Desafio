@@ -3,12 +3,13 @@ import { useNavigate, Navigate } from 'react-router'
 import { useAuth } from './context/AuthContext'
 import LoginSection from './sections/LoginSection'
 import RegisterSection from './sections/RegisterSection'
+import OnboardingSection from './sections/OnboardingSection'
 import BackButton from '@ui/BackButton'
 import { Card } from '@shared/components/Cards'
 import './auth.css'
 
 function AuthContent() {
-  const [isLogin, setIsLogin] = useState(true)
+  const [step, setStep] = useState('login') // 'login' | 'register' | 'onboarding'
   const navigate = useNavigate()
   const { user, loading } = useAuth()
 
@@ -22,26 +23,37 @@ function AuthContent() {
 
   if (loading) return null
 
-  if (user) return <Navigate to="/" replace />
+  if (user && step !== 'onboarding') return <Navigate to="/" replace />
 
   return (
     <div className="auth-page">
       <div className="auth-page__back">
         <BackButton onClick={() => navigate(-1)} />
       </div>
-      <Card display="auth">
-        {isLogin ? (
-          <LoginSection
-            onToggle={() => setIsLogin(false)}
-            onSuccess={() => navigate('/', { replace: true })}
-          />
-        ) : (
-          <RegisterSection
-            onToggle={() => setIsLogin(true)}
-            onSuccess={() => navigate('/', { replace: true })}
-          />
-        )}
-      </Card>
+
+      {step === 'onboarding' ? (
+        <OnboardingSection onSuccess={() => {
+          localStorage.setItem('sustraiShowSplash', 'true');
+          navigate('/', { replace: true });
+        }} />
+      ) : (
+        <Card display="auth">
+          {step === 'login' ? (
+            <LoginSection
+              onToggle={() => setStep('register')}
+              onSuccess={() => {
+                localStorage.setItem('sustraiShowSplash', 'true');
+                navigate('/', { replace: true });
+              }}
+            />
+          ) : (
+            <RegisterSection
+              onToggle={() => setStep('login')}
+              onSuccess={() => setStep('onboarding')}
+            />
+          )}
+        </Card>
+      )}
     </div>
   )
 }

@@ -1,11 +1,11 @@
-import { FaLandmark, FaRegCalendar, FaUtensils, FaRegHeart } from "../../ui/icons";
+import { FaLandmark, FaRegCalendar, FaUtensils, FaRegHeart } from "@ui/icons";
 import "./MobileNav.css";
 
 const NAV_LINKS = {
   es: [
     { path: "/events", label: "Eventos", icon: FaRegCalendar },
     { path: "/gastronomy", label: "Gastronomía", icon: FaUtensils },
-    { path: "/culture", label: "Cultural", icon: FaLandmark },
+    { path: "/culture", label: "Cultura", icon: FaLandmark },
     { path: "/favoritos", label: "Favoritos", icon: FaRegHeart },
   ],
   eu: [

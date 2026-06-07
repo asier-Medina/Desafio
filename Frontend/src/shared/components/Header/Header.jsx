@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useId } from "react";
-import { FaRegUser, FaSliders, FaChevronDown } from "../../ui/icons";
+import { FaRegUser, FaSliders, FaChevronDown } from "@ui/icons";
 import HeaderNav from "./HeaderNav";
 import "./Header.css";
-import logoSvg from "../../../assets/images/logofinal.svg";
+import logoSvg from "@assets/images/logofinal.svg";
 
 const LABELS = {
   es: {
@@ -82,6 +82,7 @@ export default function Header({
   onRegister = () => {},
   onLogout = () => {},
   onNavigate = () => {},
+  currentPath = "",
   showFilters = false,
   onToggleFilters = () => {},
   lang = "es",
@@ -199,7 +200,7 @@ export default function Header({
           </a>
         </h1>
 
-        <HeaderNav onNavigate={onNavigate} lang={lang} />
+        <HeaderNav onNavigate={onNavigate} currentPath={currentPath} lang={lang} />
 
         <div className="header__actions">
           {showFilters && (

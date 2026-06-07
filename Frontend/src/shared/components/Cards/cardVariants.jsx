@@ -1,4 +1,12 @@
-import { FaLocationDot, FaRegCalendar, FaUtensils } from "../../ui/icons";
+import {
+  FaLocationDot, FaRegCalendar, FaUtensils, FaLandmark,
+  FaBuildingColumns, FaPalette, FaScroll, FaPersonChalkboard, FaMonument,
+  FaArchway, FaLandmarkFlag, FaTree, FaUmbrellaBeach,
+  FaMusic, FaMasksTheater, FaPaintbrush, FaBook,
+  FaMicrophone, FaFutbol, FaFire, FaWineGlass,
+  FaMugSaucer, FaFish, FaCampground, FaStore,
+  FaDrum, FaCrown, FaUsers,
+} from "@ui/icons";
 import michelinLogo from "./logos/michelin.png";
 import repsolLogo from "./logos/repsol.jpeg";
 import { formatDate } from "./cardHelpers.jsx";
@@ -16,11 +24,63 @@ export const LABELS = {
   },
 };
 
+const EVENT_ICONS = {
+  concierto:    FaMusic,
+  festival:     FaCampground,
+  exposición:   FaPaintbrush,
+  exposicion:   FaPaintbrush,
+  fiestas:      FaCampground,
+  teatro:       FaMasksTheater,
+  danza:        FaDrum,
+  mercado:      FaStore,
+  feria:        FaStore,
+  bertsolarismo: FaMicrophone,
+  conferencia:  FaMicrophone,
+  deportes:     FaFutbol,
+  carnaval:     FaCampground,
+};
+
+const CULTURE_ICONS = {
+  museo:            FaBuildingColumns,
+  teatro:           FaMasksTheater,
+  galeria:          FaPalette,
+  galería:          FaPalette,
+  biblioteca:       FaScroll,
+  centro_cultural:  FaPersonChalkboard,
+  monumento:        FaMonument,
+  'casco histórico': FaArchway,
+  'casco historico': FaArchway,
+  patrimonio:       FaLandmarkFlag,
+  parque:           FaTree,
+  playa:            FaUmbrellaBeach,
+};
+
+// Iconos por tipo_comida (lo que aparece en el badge)
+const GASTRONOMY_TIPO_ICONS = {
+  'vasca':              FaUtensils,
+  'vasca creativa':     FaPaintbrush,
+  'alta cocina':        FaCrown,
+  'tradicional':        FaUtensils,
+  'pescados y mariscos': FaFish,
+};
+
+// Iconos por type de establecimiento (fallback)
+const GASTRONOMY_TYPE_ICONS = {
+  'asador':      FaFire,
+  'sidrería':    FaWineGlass,
+  'sidreria':    FaWineGlass,
+  'bodega':      FaWineGlass,
+  'café':        FaMugSaucer,
+  'cafe':        FaMugSaucer,
+  'bar':         FaWineGlass,
+  'restaurante': FaUtensils,
+};
+
 export const VARIANTS = {
   event: {
     badge: (d) => d.type,
     title: (d) => d.nombre_es || d.nombre || `${d.type} · ${d.establishment || ""}`,
-    badgeIcon: null,
+    badgeIcon: (d) => EVENT_ICONS[(d.type || "").toLowerCase()] ?? FaRegCalendar,
     meta: (d, t, lang) => (
       <>
         {d.start_date && (
@@ -56,7 +116,7 @@ export const VARIANTS = {
       return map[d.tipo_lugar] || d.tipo_lugar;
     },
     title: (d) => d.nombre,
-    badgeIcon: null,
+    badgeIcon: (d) => CULTURE_ICONS[(d.tipo_lugar || "").toLowerCase()] ?? FaLandmark,
     meta: (d) => (
       <>
         {d.direccion && (
@@ -85,7 +145,11 @@ export const VARIANTS = {
       return map[d.tipo_comida] || d.tipo_comida;
     },
     title: (d) => d.nombre,
-    badgeIcon: FaUtensils,
+    badgeIcon: (d) => {
+      const byTipo = GASTRONOMY_TIPO_ICONS[(d.tipo_comida || "").toLowerCase()];
+      const byType = GASTRONOMY_TYPE_ICONS[(d.type || "").toLowerCase()];
+      return byTipo ?? byType ?? FaUtensils;
+    },
     meta: (d) => (
       <>
         {d.direccion && (

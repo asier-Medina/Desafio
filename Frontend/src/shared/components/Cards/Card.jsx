@@ -1,4 +1,4 @@
-import { FaRegHeart, FaHeart } from "../../ui/icons";
+import { FaRegHeart, FaHeart } from "@ui/icons";
 import { LABELS, VARIANTS } from "./cardVariants.jsx";
 import { getImage, renderStars } from "./cardHelpers.jsx";
 import "./Card.css";
@@ -19,7 +19,7 @@ export default function Card({
   const imageUrl = getImage(data, variant);
   const title = cfg.title(data);
   const badgeText = cfg.badge(data);
-  const BadgeIcon = cfg.badgeIcon;
+  const BadgeIcon = cfg.badgeIcon?.(data) ?? null;
   const rating = cfg.rating?.(data);
   const reviews = cfg.reviews?.(data);
   const uid = data.id || data.id_Kulturklik || data.google_place_id || data.kulturklik_id;
@@ -83,9 +83,11 @@ export default function Card({
 
         {rating > 0 && (
           <span className="card__rating">
-            <span className="card__rating-value">{Number(rating).toFixed(1)}</span>
-            {renderStars(rating)}
-            <span className="card__reviews">({t.reviews(reviews)})</span>
+            <span className="card__rating-row">
+              <span className="card__rating-value">{Number(rating).toFixed(1)}</span>
+              {renderStars(rating)}
+            </span>
+            <span className="card__reviews">{t.reviews(reviews)}</span>
           </span>
         )}
 

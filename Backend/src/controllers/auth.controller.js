@@ -9,7 +9,9 @@ const cookieOptions = {
 export const registerHandler = async (req, res) => {
   try {
     const { nombre, apellido, email, password, tlf, municipality_id, sexo, age } = req.body
-    const user = await authService.register({ nombre, apellido, email, password, tlf, municipality_id, sexo, age })
+    const { accessToken, refreshToken, user } = await authService.register({ nombre, apellido, email, password, tlf, municipality_id, sexo, age })
+    res.cookie('access_token',  accessToken,  { ...cookieOptions, maxAge: 15 * 60 * 1000 })
+    res.cookie('refresh_token', refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 })
     res.status(201).json({ user })
   } catch (error) {
     res.status(400).json({ error: error.message })

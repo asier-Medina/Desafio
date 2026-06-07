@@ -1,17 +1,12 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router'
-import SplashScreen from './SplashScreen'
+import { useState } from 'react';
+import SplashScreen from './SplashScreen';
+import HomeLanding from './HomeLanding';
 
 export default function Home() {
-  const [showSplash, setShowSplash] = useState(true)
-  const navigate = useNavigate()
+  const [showSplash, setShowSplash] = useState(true);
 
-  function handleFinish() {
-    setShowSplash(false)
-    navigate('/events', { replace: true })
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
   }
-
-  if (showSplash) return <SplashScreen onFinish={handleFinish} />
-
-  return null
+  return <HomeLanding />;
 }

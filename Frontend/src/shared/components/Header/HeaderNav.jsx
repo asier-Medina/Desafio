@@ -1,10 +1,10 @@
-import { FaLandmark, FaRegCalendar, FaUtensils, FaRegHeart } from "../../ui/icons";
+import { FaLandmark, FaRegCalendar, FaUtensils, FaRegHeart } from "@ui/icons";
 
 const NAV_LINKS = {
   es: [
     { path: "/events", label: "Eventos", icon: FaRegCalendar },
     { path: "/gastronomy", label: "Gastronomía", icon: FaUtensils },
-    { path: "/culture", label: "Cultural", icon: FaLandmark },
+    { path: "/culture", label: "Cultura", icon: FaLandmark },
     { path: "/favoritos", label: "Favoritos", icon: FaRegHeart },
   ],
   eu: [
@@ -21,13 +21,18 @@ const NAV_LINKS = {
   ],
 };
 
-export default function HeaderNav({ onNavigate = () => {}, lang = "es" }) {
+export default function HeaderNav({ onNavigate = () => {}, currentPath = "", lang = "es" }) {
   const links = NAV_LINKS[lang] ?? NAV_LINKS.es;
 
   function handleClick(e, path) {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
     onNavigate(path);
+  }
+
+  function isActive(path) {
+    if (path === "/") return currentPath === "/";
+    return currentPath.startsWith(path);
   }
 
   return (
@@ -38,7 +43,8 @@ export default function HeaderNav({ onNavigate = () => {}, lang = "es" }) {
           href={path}
           onClick={(e) => handleClick(e, path)}
           aria-label={label}
-          className="header__nav-link"
+          aria-current={isActive(path) ? "page" : undefined}
+          className={`header__nav-link${isActive(path) ? " header__nav-link--active" : ""}`}
         >
           <Icon className="header__nav-icon" aria-hidden="true" />
           <span className="header__nav-label">{label}</span>

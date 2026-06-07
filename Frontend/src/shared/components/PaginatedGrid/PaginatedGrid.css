@@ -1,0 +1,41 @@
+.paginated-grid__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--space-md, 1rem);
+}
+
+.paginated-grid__item {
+  display: flex;
+}
+
+.paginated-grid__empty {
+  color: var(--color-text-soft, #6b7280);
+  font-size: var(--font-size-base, 1rem);
+  margin: var(--space-lg, 1.5rem) 0;
+}
+
+.paginated-grid__footer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-lg, 1.5rem);
+}
+
+.paginated-grid__btn {
+  padding: 0.625rem 2rem;
+  border-radius: var(--radius-md, 0.5rem);
+  background: transparent;
+  border: 1.5px solid var(--brand-navy, #1a365d);
+  color: var(--brand-navy, #1a365d);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.paginated-grid__btn:hover {
+  background: var(--brand-navy, #1a365d);
+  color: #fff;
+}

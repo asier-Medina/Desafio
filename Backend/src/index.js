@@ -15,7 +15,13 @@ app.disable("x-powered-by");
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: (origin, cb) => {
+    if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`CORS: origin ${origin} no permitido`));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());

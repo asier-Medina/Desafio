@@ -8,7 +8,16 @@ export {
   FaRegCalendarPlus,         // añadir a calendario
   FaRegCalendar,             // eventos
   FaUtensils,                // gastronomía
-  FaLandmark,                // cultura
+  FaLandmark,                // cultura (fallback)
+  FaBuildingColumns,         // museo
+  FaPalette,                 // galería de arte
+  FaScroll,                  // biblioteca
+  FaPersonChalkboard,        // centro cultural
+  FaMonument,                // monumento
+  FaArchway,                 // casco histórico
+  FaLandmarkFlag,            // patrimonio
+  FaTree,                    // parque
+  FaUmbrellaBeach,           // playa
   FaMagnifyingGlass,         // búsqueda
   FaArrowLeft,               // volver atrás
   FaArrowUpRightFromSquare,  // enlace externo (comprar entradas / ir a la web)
@@ -22,4 +31,21 @@ export {
   FaArrowRightFromBracket,   // cerrar sesión
   FaCheck,                   // confirmar / hecho
   FaPen,                     // editar / lápiz
+  FaUsers,                   // gestión de usuarios (admin)
+  FaStore,                   // gestión de comercios (admin)
+  FaToggleOn,                // toggle activo
+  FaToggleOff,               // toggle inactivo
+  FaMusic,                   // concierto / festival musical
+  FaMasksTheater,            // teatro / danza / artes escénicas
+  FaPaintbrush,              // exposición / galería / arte
+  FaBook,                    // biblioteca
+  FaMicrophone,              // bertsolarismo / conferencia
+  FaFutbol,                  // deportes
+  FaFire,                    // asador
+  FaWineGlass,               // bar / sidrería / taberna
+  FaMugSaucer,               // cafetería
+  FaFish,                    // marisquería
+  FaCampground,              // festival / fiestas al aire libre
+  FaDrum,                    // danza / percusión
+  FaCrown,                   // alta cocina
 } from "react-icons/fa6";
