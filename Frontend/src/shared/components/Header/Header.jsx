@@ -63,6 +63,7 @@ export default function Header({
   onRegister = () => {},
   onLogout = () => {},
   onNavigate = () => {},
+  currentPath = "",
   showFilters = false,
   onToggleFilters = () => {},
   lang = "es",
@@ -180,7 +181,7 @@ export default function Header({
           </a>
         </h1>
 
-        <HeaderNav onNavigate={onNavigate} lang={lang} />
+        <HeaderNav onNavigate={onNavigate} currentPath={currentPath} lang={lang} />
 
         <div className="header__actions">
           {showFilters && (

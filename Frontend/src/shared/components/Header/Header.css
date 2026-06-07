@@ -76,6 +76,15 @@
   background-color: rgba(41, 54, 109, 0.06);
 }
 
+.header__nav-link--active {
+  color: var(--color-primary);
+  background-color: rgba(41, 54, 109, 0.12);
+}
+
+.header__nav-link--active .header__nav-label {
+  font-weight: 700;
+}
+
 .header__nav-icon {
   width: 20px;
   height: 20px;
@@ -215,7 +224,7 @@
   box-shadow: 0 2px 8px rgba(41, 54, 109, 0.2);
 }
 
-@media (max-width: 402px) {
+@media (max-width: 468px) {
   .header__login-btn > span {
     display: none;
   }

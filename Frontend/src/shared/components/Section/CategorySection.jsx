@@ -45,7 +45,6 @@ export default function CategorySection({
   title,
   seeAllTo,
   seeAllLabel = "Ver todos",
-  showArrow = true,
   items = [],
   renderCard,
   max = 5,
@@ -64,11 +63,6 @@ export default function CategorySection({
             {seeAllLabel}
             {/* Contexto para lectores de pantalla: de qué "Ver todos" se trata. */}
             <span className="sr-only"> de {title}</span>
-            {showArrow && (
-              <span className="category-section__arrow" aria-hidden="true">
-                ›
-              </span>
-            )}
           </Link>
         )}
       </div>

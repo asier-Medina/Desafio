@@ -24,6 +24,7 @@ function LayoutInner() {
         onRegister={() => navigate("/login")}
         onLogout={handleLogout}
         onNavigate={navigate}
+        currentPath={pathname}
         lang={lang}
         onLangChange={setLang}
       />

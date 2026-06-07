@@ -121,7 +121,7 @@
 }
 
 .detail__body {
-  padding: 0 var(--space-md) var(--space-xl);
+  padding: 0 0 var(--space-xl);
 }
 
 .detail__title {

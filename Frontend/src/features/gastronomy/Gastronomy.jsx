@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@features/auth/context/AuthContext';
 import { useResponsiveLimit } from '@hooks/useResponsiveLimit';
 import { useLang } from '@shared/context/LangContext';
+import { useFavorites } from '@shared/context/FavoritesContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import CategoryFilters from '@shared/components/Filters/CategoryFilters';
 import PaginatedGrid from '@shared/components/PaginatedGrid/PaginatedGrid';
@@ -103,9 +104,19 @@ export default function Gastronomy() {
   const { lang } = useLang();
   const navigate = useNavigate();
   const filterKey = searchParams.get('filter');
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
   const isAuth = !authLoading && Boolean(user);
   const limits = useResponsiveLimit(isAuth);
+
+  function toggleFavorite(item) {
+    if (!user) { navigate('/favoritos'); return; }
+    if (isFavorite(item.id, 'gastronomy')) {
+      removeFavorite(item.id, 'gastronomy');
+    } else {
+      addFavorite({ ...item, _variant: 'gastronomy' });
+    }
+  }
 
   const categories = useMemo(
     () => buildCategories(user?.municipality_id ?? 1),
@@ -156,7 +167,10 @@ export default function Gastronomy() {
                     <Card
                       variant="gastronomy"
                       data={lugar}
+                      lang={lang}
                       onAction={() => navigate(`/gastronomy/${lugar.id}`)}
+                      onToggleFavorite={() => toggleFavorite(lugar)}
+                      isFavorite={isFavorite(lugar.id, 'gastronomy')}
                     />
                   )}
                 />
@@ -219,6 +233,8 @@ export default function Gastronomy() {
                       data={data}
                       lang={lang}
                       onAction={() => navigate(`/gastronomy/${data.id}`)}
+                      onToggleFavorite={() => toggleFavorite(data)}
+                      isFavorite={isFavorite(data.id, 'gastronomy')}
                     />
                   )}
                 />

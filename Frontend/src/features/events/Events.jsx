@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@features/auth/context/AuthContext';
 import { useResponsiveLimit } from '@hooks/useResponsiveLimit';
 import { useLang } from '@shared/context/LangContext';
+import { useFavorites } from '@shared/context/FavoritesContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import CategoryFilters from '@shared/components/Filters/CategoryFilters';
 import PaginatedGrid from '@shared/components/PaginatedGrid/PaginatedGrid';
@@ -125,9 +126,19 @@ export default function Events() {
   const { lang } = useLang();
   const navigate = useNavigate();
   const filterKey = searchParams.get('filter');
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
   const isAuth = !authLoading && Boolean(user);
   const limits = useResponsiveLimit(isAuth);
+
+  function toggleFavorite(item) {
+    if (!user) { navigate('/favoritos'); return; }
+    if (isFavorite(item.id, 'event')) {
+      removeFavorite(item.id, 'event');
+    } else {
+      addFavorite({ ...item, _variant: 'event' });
+    }
+  }
 
   const categories = useMemo(
     () => buildCategories(user?.municipality_id ?? 1),
@@ -180,6 +191,8 @@ export default function Events() {
                       data={evento}
                       lang="es"
                       onAction={() => navigate(`/events/${evento.id}`)}
+                      onToggleFavorite={() => toggleFavorite(evento)}
+                      isFavorite={isFavorite(evento.id, 'event')}
                     />
                   )}
                 />
@@ -217,7 +230,7 @@ export default function Events() {
               ? isAuth ? `/events?filter=${cat.id}` : '/login'
               : undefined;
             const seeAllLabel = authResolved
-              ? isAuth ? (lang === 'eu' ? 'Guztiak ikusi' : lang === 'en' ? 'See all' : 'Ver todas') : (lang === 'eu' ? 'Gehiago ikusteko hasi saioa' : lang === 'en' ? 'Sign in to see more' : 'Inicia sesión para ver más')
+              ? isAuth ? (lang === 'eu' ? 'Guztiak ikusi' : lang === 'en' ? 'See all' : 'Ver todos') : (lang === 'eu' ? 'Gehiago ikusteko hasi saioa' : lang === 'en' ? 'Sign in to see more' : 'Inicia sesión para ver más')
               : undefined;
 
             return (
@@ -242,6 +255,8 @@ export default function Events() {
                       data={data}
                       lang={lang}
                       onAction={() => navigate(`/events/${data.id}`)}
+                      onToggleFavorite={() => toggleFavorite(data)}
+                      isFavorite={isFavorite(data.id, 'event')}
                     />
                   )}
                 />

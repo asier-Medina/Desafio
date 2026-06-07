@@ -8,7 +8,7 @@
   border: 1px solid color-mix(in srgb, var(--brand-navy) 15%, transparent);
   box-shadow: 0 2px 12px rgba(41, 54, 109, 0.08);
   overflow: hidden;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
 
 .card + .card {
@@ -17,6 +17,7 @@
 
 .card:hover {
   box-shadow: var(--shadow-md);
+  border-color: var(--brand-mauve);
 }
 
 .card__media {
@@ -120,7 +121,10 @@
 }
 
 .card__badge-icon {
-  font-size: 0.6rem;
+  font-size: 0.75rem;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
 }
 
 .card__title {
@@ -234,7 +238,10 @@
   align-items: center;
   justify-content: center;
   border: none;
-  background: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  min-height: unset;
   color: #e53e3e;
   font-size: 1.1rem;
   cursor: pointer;

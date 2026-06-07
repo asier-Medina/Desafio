@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@features/auth/context/AuthContext';
 import { useResponsiveLimit } from '@hooks/useResponsiveLimit';
 import { useLang } from '@shared/context/LangContext';
+import { useFavorites } from '@shared/context/FavoritesContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import Card from '@shared/components/Cards/Card';
 import Button from '@shared/ui/Button';
@@ -65,9 +66,19 @@ export default function HomeLanding() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { lang } = useLang();
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
   const t = LABELS[lang] ?? LABELS.es;
   const isAuth = !authLoading && Boolean(user);
   const limits = useResponsiveLimit(isAuth);
+
+  function toggleFavorite(item, variant) {
+    if (!user) { navigate('/favoritos'); return; }
+    if (isFavorite(item.id, variant)) {
+      removeFavorite(item.id, variant);
+    } else {
+      addFavorite({ ...item, _variant: variant });
+    }
+  }
 
   const [events, setEvents] = useState([]);
   const [gastronomy, setGastronomy] = useState([]);
@@ -160,6 +171,8 @@ export default function HomeLanding() {
                       data={data}
                       lang={lang}
                       onAction={() => navigate(`${path}/${data.id}`)}
+                      onToggleFavorite={() => toggleFavorite(data, variant)}
+                      isFavorite={isFavorite(data.id, variant)}
                     />
                   )}
                 />

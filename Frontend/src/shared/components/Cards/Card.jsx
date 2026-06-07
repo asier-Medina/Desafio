@@ -19,7 +19,7 @@ export default function Card({
   const imageUrl = getImage(data, variant);
   const title = cfg.title(data);
   const badgeText = cfg.badge(data);
-  const BadgeIcon = cfg.badgeIcon;
+  const BadgeIcon = cfg.badgeIcon?.(data) ?? null;
   const rating = cfg.rating?.(data);
   const reviews = cfg.reviews?.(data);
   const uid = data.id || data.id_Kulturklik || data.google_place_id || data.kulturklik_id;
