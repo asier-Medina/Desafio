@@ -32,13 +32,19 @@ function AuthContent() {
       </div>
 
       {step === 'onboarding' ? (
-        <OnboardingSection onSuccess={() => navigate('/', { replace: true })} />
+        <OnboardingSection onSuccess={() => {
+          localStorage.setItem('sustraiShowSplash', 'true');
+          navigate('/', { replace: true });
+        }} />
       ) : (
         <Card display="auth">
           {step === 'login' ? (
             <LoginSection
               onToggle={() => setStep('register')}
-              onSuccess={() => navigate('/', { replace: true })}
+              onSuccess={() => {
+                localStorage.setItem('sustraiShowSplash', 'true');
+                navigate('/', { replace: true });
+              }}
             />
           ) : (
             <RegisterSection
