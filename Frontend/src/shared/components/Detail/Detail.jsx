@@ -2,6 +2,7 @@ import BackButton from "@ui/BackButton";
 import { FaLocationDot, FaStar, FaRegClock, FaEuroSign, FaLink, FaRegHeart, FaHeart } from "@ui/icons";
 import { VARIANTS, LABELS } from "../Cards/cardVariants";
 import { getImage, formatDate, renderStars } from "../Cards/cardHelpers";
+import { getCoordsById } from "@services/municipalities";
 import "./Detail.css";
 
 export default function Detail({ variant = "event", data = {}, lang = "es", onBack, isFavorite, onToggleFavorite }) {
@@ -12,6 +13,11 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
   const title = cfg.title(data);
   const rating = cfg.rating?.(data);
   const reviews = cfg.reviews?.(data);
+
+  const coords = getCoordsById(data.municipality_id);
+  const mapSrc = coords
+    ? `https://www.openstreetmap.org/export/embed.html?bbox=${coords.lng - 0.025}%2C${coords.lat - 0.015}%2C${coords.lng + 0.025}%2C${coords.lat + 0.015}&layer=mapnik&marker=${coords.lat}%2C${coords.lng}`
+    : null;
 
   return (
     <article className="detail">
@@ -69,7 +75,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
               {data.is_free ? (
                 <div className="detail__info-row">
                   <FaEuroSign className="detail__info-icon" />
-                  <span className="detail__free">Gratuito</span>
+                  <span className="detail__free">{lang === 'eu' ? 'Dohain' : 'Gratuito'}</span>
                 </div>
               ) : data.price_eur && (
                 <div className="detail__info-row">
@@ -81,7 +87,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
                 <div className="detail__info-row">
                   <FaLink className="detail__info-icon" />
                   <a href={data.purchase_url} target="_blank" rel="noopener noreferrer" className="detail__link">
-                    Comprar entradas
+                    {lang === 'eu' ? 'Sarrerak erosi' : 'Comprar entradas'}
                   </a>
                 </div>
               )}
@@ -107,9 +113,21 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
           <p className="detail__description">{data.descripcion}</p>
         )}
 
-        <div className="detail__map-placeholder">
-          <FaLocationDot className="detail__map-icon" />
-          <span>Mapa no disponible</span>
+        <div className="detail__map">
+          {mapSrc ? (
+            <iframe
+              title={lang === 'eu' ? 'Kokapena mapan' : 'Ubicación en el mapa'}
+              src={mapSrc}
+              className="detail__map-iframe"
+              loading="lazy"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className="detail__map-placeholder">
+              <FaLocationDot className="detail__map-icon" />
+              <span>{lang === 'eu' ? 'Mapa ez dago erabilgarri' : 'Mapa no disponible'}</span>
+            </div>
+          )}
         </div>
       </div>
     </article>

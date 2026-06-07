@@ -1,11 +1,14 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router';
+import { motion } from 'framer-motion';
 import { useAuth } from '@features/auth/context/AuthContext';
 import { useResponsiveLimit } from '@hooks/useResponsiveLimit';
+import { useLang } from '@shared/context/LangContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import CategoryFilters from '@shared/components/Filters/CategoryFilters';
 import PaginatedGrid from '@shared/components/PaginatedGrid/PaginatedGrid';
 import Card from '@shared/components/Cards/Card';
+import FooterCtas from '@shared/components/FooterCtas/FooterCtas';
 import * as cultureApi from '@services/culture.api';
 import './Culture.css';
 
@@ -85,12 +88,25 @@ const FILTER2 = {
 };
 
 // ---------------------------------------------------------------------------
+// Animación
+// ---------------------------------------------------------------------------
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i = 0) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+// ---------------------------------------------------------------------------
 // Componente principal
 // ---------------------------------------------------------------------------
 
 export default function Culture() {
   const [searchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
+  const { lang } = useLang();
   const navigate = useNavigate();
   const filterKey = searchParams.get('filter');
 
@@ -124,10 +140,12 @@ export default function Culture() {
     return (
       <div className="culture container">
         {loading ? (
-          <p className="culture__empty">Cargando...</p>
+          <p className="culture__empty">
+            {lang === 'eu' ? 'Kargatzen...' : lang === 'en' ? 'Loading...' : 'Cargando...'}
+          </p>
         ) : (
           <CategoryFilters
-            title="Cultura"
+            title={lang === 'eu' ? 'Kultura' : lang === 'en' ? 'Culture' : 'Cultura'}
             baseFilter={category.baseFilter}
             items={items}
             filter1={FILTER1}
@@ -136,7 +154,9 @@ export default function Culture() {
           >
             {(filteredItems) =>
               filteredItems.length === 0 ? (
-                <p className="culture__empty">No hay resultados con los filtros seleccionados.</p>
+                <p className="culture__empty">
+                  {lang === 'eu' ? 'Ez dago emaitzarik iragazkiekin.' : lang === 'en' ? 'No results with selected filters.' : 'No hay resultados con los filtros seleccionados.'}
+                </p>
               ) : (
                 <PaginatedGrid
                   items={filteredItems}
@@ -146,6 +166,7 @@ export default function Culture() {
                     <Card
                       variant="culture"
                       data={lugar}
+                      lang={lang}
                       onAction={() => navigate(`/culture/${lugar.id}`)}
                     />
                   )}
@@ -162,40 +183,62 @@ export default function Culture() {
   const authResolved = !authLoading;
 
   return (
-    <div className="culture container">
-      <h1 className="culture__title">Cultura</h1>
-      {loading ? (
-        <p className="culture__empty">Cargando...</p>
-      ) : (
-        categories.map((cat) => {
-          const catItems = items.filter(cat.predicate);
-          const seeAllTo = authResolved
-            ? isAuth ? `/culture?filter=${cat.id}` : '/login'
-            : undefined;
-          const seeAllLabel = authResolved
-            ? isAuth ? 'Ver todos' : 'Inicia sesión para ver más'
-            : undefined;
+    <>
+      <div className="culture container">
+        <motion.h1
+          className="culture__title"
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          custom={0}
+        >
+          {lang === 'eu' ? 'Kultura' : lang === 'en' ? 'Culture' : 'Cultura'}
+        </motion.h1>
+        {loading ? (
+          <p className="culture__empty">
+            {lang === 'eu' ? 'Kargatzen...' : lang === 'en' ? 'Loading...' : 'Cargando...'}
+          </p>
+        ) : (
+          categories.map((cat, i) => {
+            const catItems = items.filter(cat.predicate);
+            const seeAllTo = authResolved
+              ? isAuth ? `/culture?filter=${cat.id}` : '/login'
+              : undefined;
+            const seeAllLabel = authResolved
+              ? isAuth ? (lang === 'eu' ? 'Guztiak ikusi' : lang === 'en' ? 'See all' : 'Ver todos') : (lang === 'eu' ? 'Gehiago ikusteko hasi saioa' : lang === 'en' ? 'Sign in to see more' : 'Inicia sesión para ver más')
+              : undefined;
 
-          return (
-            <CategorySection
-              key={cat.id}
-              title={cat.title}
-              seeAllTo={seeAllTo}
-              seeAllLabel={seeAllLabel}
-              showArrow={isAuth}
-              items={catItems}
-              max={limits.preview}
-              renderCard={(data) => (
-                <Card
-                  variant="culture"
-                  data={data}
-                  onAction={() => navigate(`/culture/${data.id}`)}
+            return (
+              <motion.div
+                key={cat.id}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-40px' }}
+                custom={i * 0.1}
+              >
+                <CategorySection
+                  title={cat.title}
+                  seeAllTo={seeAllTo}
+                  seeAllLabel={seeAllLabel}
+                  showArrow={isAuth}
+                  items={catItems}
+                  max={limits.preview}
+                  renderCard={(data) => (
+                    <Card
+                      variant="culture"
+                      data={data}
+                      lang={lang}
+                      onAction={() => navigate(`/culture/${data.id}`)}
+                    />
+                  )}
                 />
-              )}
-            />
-          );
-        })
-      )}
-    </div>
+              </motion.div>
+            );
+          })
+        )}
+      </div>
+      <FooterCtas />
+    </>
   );
 }

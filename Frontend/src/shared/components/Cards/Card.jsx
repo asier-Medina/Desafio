@@ -83,9 +83,11 @@ export default function Card({
 
         {rating > 0 && (
           <span className="card__rating">
-            <span className="card__rating-value">{Number(rating).toFixed(1)}</span>
-            {renderStars(rating)}
-            <span className="card__reviews">({t.reviews(reviews)})</span>
+            <span className="card__rating-row">
+              <span className="card__rating-value">{Number(rating).toFixed(1)}</span>
+              {renderStars(rating)}
+            </span>
+            <span className="card__reviews">{t.reviews(reviews)}</span>
           </span>
         )}
 

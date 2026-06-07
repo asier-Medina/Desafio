@@ -1,11 +1,14 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router';
+import { motion } from 'framer-motion';
 import { useAuth } from '@features/auth/context/AuthContext';
 import { useResponsiveLimit } from '@hooks/useResponsiveLimit';
+import { useLang } from '@shared/context/LangContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import CategoryFilters from '@shared/components/Filters/CategoryFilters';
 import PaginatedGrid from '@shared/components/PaginatedGrid/PaginatedGrid';
 import Card from '@shared/components/Cards/Card';
+import FooterCtas from '@shared/components/FooterCtas/FooterCtas';
 import * as eventsApi from '@services/events.api';
 import './Events.css';
 
@@ -108,9 +111,18 @@ const FILTER2 = {
 // Componente principal
 // ---------------------------------------------------------------------------
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i = 0) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
 export default function Events() {
   const [searchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
+  const { lang } = useLang();
   const navigate = useNavigate();
   const filterKey = searchParams.get('filter');
 
@@ -183,41 +195,62 @@ export default function Events() {
   const authResolved = !authLoading;
 
   return (
-    <div className="events container">
-      <h1 className="events__title">Eventos</h1>
-      {loading ? (
-        <p className="events__empty">Cargando...</p>
-      ) : (
-        categories.map((cat) => {
-          const catItems = items.filter(cat.predicate);
-          const seeAllTo = authResolved
-            ? isAuth ? `/events?filter=${cat.id}` : '/login'
-            : undefined;
-          const seeAllLabel = authResolved
-            ? isAuth ? 'Ver todas' : 'Inicia sesión para ver más'
-            : undefined;
+    <>
+      <div className="events container">
+        <motion.h1
+          className="events__title"
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          custom={0}
+        >
+          {lang === 'eu' ? 'Gertakariak' : lang === 'en' ? 'Events' : 'Eventos'}
+        </motion.h1>
+        {loading ? (
+          <p className="events__empty">
+            {lang === 'eu' ? 'Kargatzen...' : lang === 'en' ? 'Loading...' : 'Cargando...'}
+          </p>
+        ) : (
+          categories.map((cat, i) => {
+            const catItems = items.filter(cat.predicate);
+            const seeAllTo = authResolved
+              ? isAuth ? `/events?filter=${cat.id}` : '/login'
+              : undefined;
+            const seeAllLabel = authResolved
+              ? isAuth ? (lang === 'eu' ? 'Guztiak ikusi' : lang === 'en' ? 'See all' : 'Ver todas') : (lang === 'eu' ? 'Gehiago ikusteko hasi saioa' : lang === 'en' ? 'Sign in to see more' : 'Inicia sesión para ver más')
+              : undefined;
 
-          return (
-            <CategorySection
-              key={cat.id}
-              title={cat.title}
-              seeAllTo={seeAllTo}
-              seeAllLabel={seeAllLabel}
-              showArrow={isAuth}
-              items={catItems}
-              max={limits.preview}
-              renderCard={(data) => (
-                <Card
-                  variant="event"
-                  data={data}
-                  lang="es"
-                  onAction={() => navigate(`/events/${data.id}`)}
+            return (
+              <motion.div
+                key={cat.id}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-40px' }}
+                custom={i * 0.1}
+              >
+                <CategorySection
+                  title={cat.title}
+                  seeAllTo={seeAllTo}
+                  seeAllLabel={seeAllLabel}
+                  showArrow={isAuth}
+                  items={catItems}
+                  max={limits.preview}
+                  renderCard={(data) => (
+                    <Card
+                      variant="event"
+                      data={data}
+                      lang={lang}
+                      onAction={() => navigate(`/events/${data.id}`)}
+                    />
+                  )}
                 />
-              )}
-            />
-          );
-        })
-      )}
-    </div>
+              </motion.div>
+            );
+          })
+        )}
+      </div>
+      <FooterCtas />
+    </>
   );
 }
