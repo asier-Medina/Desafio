@@ -7,7 +7,7 @@ import { Card } from "@components/Cards";
 import InputField from "@features/auth/components/InputField";
 import SelectField from "@features/auth/components/SelectField";
 import MunicipalityAutocomplete from "@features/auth/components/MunicipalityAutocomplete";
-import { FaArrowRightFromBracket, FaRegHeart, FaPen, FaCheck, FaXmark } from "@ui/icons";
+import { FaArrowRightFromBracket, FaRegHeart, FaPen, FaCheck, FaXmark, FaUsers, FaStore, FaArrowRight } from "@ui/icons";
 import { getNameById, getAll as getMunicipalities } from "@services/municipalities";
 import {
   getInterestsCatalog, getMyInterests, getMyPreferences,
@@ -460,6 +460,37 @@ export default function Profile() {
           </div>
         )}
       </section>
+
+      {/* ── Panel de administración (solo admin) ── */}
+      {user?.role === "admin" && (
+        <section className="profile__admin">
+          <h2 className="profile__admin-title">Panel de administración</h2>
+          <div className="profile__admin-banners">
+            <button
+              className="profile__admin-banner"
+              onClick={() => navigate("/admin/usuarios")}
+            >
+              <FaUsers className="profile__admin-banner-icon" />
+              <div className="profile__admin-banner-text">
+                <p className="profile__admin-banner-label">Gestionar usuarios</p>
+                <p className="profile__admin-banner-desc">Ver todos los usuarios registrados</p>
+              </div>
+              <FaArrowRight className="profile__admin-banner-arrow" />
+            </button>
+            <button
+              className="profile__admin-banner"
+              onClick={() => navigate("/admin/comercios")}
+            >
+              <FaStore className="profile__admin-banner-icon" />
+              <div className="profile__admin-banner-text">
+                <p className="profile__admin-banner-label">Gestionar comercios</p>
+                <p className="profile__admin-banner-desc">Buscar, activar y patrocinar comercios</p>
+              </div>
+              <FaArrowRight className="profile__admin-banner-arrow" />
+            </button>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

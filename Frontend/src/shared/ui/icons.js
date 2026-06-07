@@ -22,4 +22,8 @@ export {
   FaArrowRightFromBracket,   // cerrar sesión
   FaCheck,                   // confirmar / hecho
   FaPen,                     // editar / lápiz
+  FaUsers,                   // gestión de usuarios (admin)
+  FaStore,                   // gestión de comercios (admin)
+  FaToggleOn,                // toggle activo
+  FaToggleOff,               // toggle inactivo
 } from "react-icons/fa6";

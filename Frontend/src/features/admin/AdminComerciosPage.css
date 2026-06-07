@@ -1,0 +1,154 @@
+@import "./admin.base.css";
+
+/* ── Comercios list ─────────────────────────────────────────── */
+
+.admin-comercios__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.admin-comercios__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--brand-navy) 10%, transparent);
+  border-radius: var(--radius-lg);
+  flex-wrap: wrap;
+}
+
+.admin-comercios__item--inactive {
+  opacity: 0.6;
+}
+
+.admin-comercios__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.admin-comercios__name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-comercios__muni {
+  font-size: 0.775rem;
+  color: var(--color-text-soft);
+}
+
+.admin-comercios__badges {
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+  margin-top: 0.125rem;
+}
+
+.admin-comercios__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.725rem;
+  font-weight: 500;
+}
+
+.admin-comercios__badge--active {
+  background: color-mix(in srgb, #2f855a 10%, transparent);
+  color: #2f855a;
+  border: 1px solid color-mix(in srgb, #2f855a 30%, transparent);
+}
+
+.admin-comercios__badge--inactive {
+  background: color-mix(in srgb, var(--brand-navy) 8%, transparent);
+  color: var(--color-text-soft);
+  border: 1px solid color-mix(in srgb, var(--brand-navy) 15%, transparent);
+}
+
+.admin-comercios__badge--sponsored {
+  background: color-mix(in srgb, #b45309 10%, transparent);
+  color: #b45309;
+  border: 1px solid color-mix(in srgb, #b45309 30%, transparent);
+}
+
+/* ── Action buttons ─────────────────────────────────────────── */
+
+.admin-comercios__actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.admin-comercios__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  font-size: 0.775rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s, background-color 0.15s;
+  white-space: nowrap;
+}
+
+.admin-comercios__toggle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-comercios__toggle--danger {
+  background: color-mix(in srgb, #c53030 8%, transparent);
+  border-color: color-mix(in srgb, #c53030 25%, transparent);
+  color: #c53030;
+}
+
+.admin-comercios__toggle--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, #c53030 15%, transparent);
+}
+
+.admin-comercios__toggle--success {
+  background: color-mix(in srgb, #2f855a 8%, transparent);
+  border-color: color-mix(in srgb, #2f855a 25%, transparent);
+  color: #2f855a;
+}
+
+.admin-comercios__toggle--success:hover:not(:disabled) {
+  background: color-mix(in srgb, #2f855a 15%, transparent);
+}
+
+.admin-comercios__toggle--sponsored-off {
+  background: color-mix(in srgb, #b45309 8%, transparent);
+  border-color: color-mix(in srgb, #b45309 25%, transparent);
+  color: #b45309;
+}
+
+.admin-comercios__toggle--sponsored-off:hover:not(:disabled) {
+  background: color-mix(in srgb, #b45309 15%, transparent);
+}
+
+.admin-comercios__toggle--sponsored-on {
+  background: color-mix(in srgb, #b45309 18%, transparent);
+  border-color: color-mix(in srgb, #b45309 40%, transparent);
+  color: #b45309;
+  font-weight: 600;
+}
+
+.admin-comercios__toggle--sponsored-on:hover:not(:disabled) {
+  background: color-mix(in srgb, #b45309 8%, transparent);
+}

@@ -295,3 +295,75 @@
   cursor: pointer;
   text-decoration: underline;
 }
+
+/* ── Admin banners ──────────────────────────────────────────── */
+
+.profile__admin {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.profile__admin-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-soft);
+  margin: 0;
+}
+
+.profile__admin-banners {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.profile__admin-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: color-mix(in srgb, #b45309 6%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, #b45309 20%, transparent);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background-color 0.15s, border-color 0.15s;
+  font-family: var(--font-body);
+}
+
+.profile__admin-banner:hover {
+  background: color-mix(in srgb, #b45309 12%, var(--color-surface));
+  border-color: color-mix(in srgb, #b45309 40%, transparent);
+}
+
+.profile__admin-banner-icon {
+  font-size: 1.25rem;
+  color: #b45309;
+  flex-shrink: 0;
+}
+
+.profile__admin-banner-text {
+  flex: 1;
+}
+
+.profile__admin-banner-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 0.125rem;
+}
+
+.profile__admin-banner-desc {
+  font-size: 0.775rem;
+  color: var(--color-text-soft);
+  margin: 0;
+}
+
+.profile__admin-banner-arrow {
+  font-size: 0.75rem;
+  color: #b45309;
+  flex-shrink: 0;
+}

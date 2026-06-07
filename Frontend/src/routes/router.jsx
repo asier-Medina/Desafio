@@ -9,6 +9,8 @@ import Gastronomy from "@features/gastronomy/Gastronomy";
 import GastronomyDetail from "@features/gastronomy/GastronomyDetail";
 import Favorite from "@features/favorite/Favorite";
 import Profile from "@features/profile/Profile";
+import AdminComerciosPage from "@features/admin/AdminComerciosPage";
+import AdminUsersPage from "@features/admin/AdminUsersPage";
 import RequireAuth from "@shared/components/RequireAuth/RequireAuth";
 import { FaRegHeart, FaRegUser } from "@ui/icons";
 
@@ -89,6 +91,36 @@ const router = createBrowserRouter([
     }],
   },
 
+  {
+    path: "/admin",
+    element: <MainLayout />,
+    children: [
+      {
+        path: "usuarios",
+        element: (
+          <RequireAuth
+            icon={FaRegUser}
+            title="Acceso restringido"
+            description="Esta sección es solo para administradores."
+          >
+            <AdminUsersPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "comercios",
+        element: (
+          <RequireAuth
+            icon={FaRegUser}
+            title="Acceso restringido"
+            description="Esta sección es solo para administradores."
+          >
+            <AdminComerciosPage />
+          </RequireAuth>
+        ),
+      },
+    ],
+  },
   {
     path: "/login",
     element: <MainLayout />,
