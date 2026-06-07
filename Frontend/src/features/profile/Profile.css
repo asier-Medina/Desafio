@@ -1,0 +1,207 @@
+.profile {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.profile__title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* ── Card overrides ── */
+
+.profile__card {
+  max-width: none !important;
+  padding: var(--space-lg) !important;
+}
+
+/* ── User block ── */
+
+.profile__user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.profile__avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--brand-mauve) 18%, transparent);
+  color: var(--brand-mauve);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.profile__user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile__user-name {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.profile__user-location {
+  font-size: 0.85rem;
+  color: var(--color-text-soft);
+  margin: 0;
+}
+
+/* ── Business conversion block ── */
+
+.profile__business {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-body);
+}
+
+.profile__business-icon {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.profile__business-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile__business-title {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 2px;
+}
+
+.profile__business-desc {
+  font-size: 0.8rem;
+  color: var(--color-text-soft);
+  margin: 0;
+}
+
+.profile__business-arrow {
+  font-size: 0.725rem;
+  color: var(--color-text-soft);
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+
+.profile__business:hover .profile__business-arrow {
+  transform: translateX(3px);
+}
+
+/* ── Menu list ── */
+
+.profile__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: color-mix(in srgb, var(--brand-navy) 8%, transparent);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--brand-navy) 10%, transparent);
+}
+
+.profile__menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  border: none;
+  background: var(--color-surface);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  transition: background-color 0.15s, color 0.15s;
+  min-height: var(--touch-target);
+}
+
+.profile__menu-item:hover {
+  background: color-mix(in srgb, var(--brand-navy) 4%, var(--color-surface));
+}
+
+.profile__menu-item:active {
+  background: color-mix(in srgb, var(--brand-navy) 8%, var(--color-surface));
+}
+
+.profile__menu-icon-wrapper {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile__menu-icon {
+  font-size: 1rem;
+  color: var(--color-text-soft);
+  transition: color 0.15s;
+}
+
+.profile__menu-item:hover .profile__menu-icon {
+  color: var(--color-primary);
+}
+
+.profile__menu-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile__menu-chevron {
+  font-size: 0.7rem;
+  color: var(--color-text-soft);
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+
+.profile__menu-item:hover .profile__menu-chevron {
+  transform: translateX(3px);
+}
+
+/* ── Last item (logout) ── */
+
+.profile__menu-item:last-child {
+  color: var(--brand-red);
+}
+
+.profile__menu-item:last-child .profile__menu-icon {
+  color: var(--brand-red);
+}
+
+.profile__menu-item:last-child:hover {
+  background: color-mix(in srgb, var(--brand-red) 4%, var(--color-surface));
+}
+
+.profile__menu-item:last-child:active {
+  background: color-mix(in srgb, var(--brand-red) 8%, var(--color-surface));
+}
