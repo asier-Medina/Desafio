@@ -62,7 +62,7 @@ export default function Gastronomy() {
     {
       id: 'michelin-repsol',
       title: tg.categories.michelinRepsol,
-      predicate: (g) => g.calidad === true,
+      predicate: (g) => g.cualificaciones?.length > 0 || g.calidad === true,
       baseFilter: { label: tg.categoryLabels.michelinRepsol },
       fetch: gastronomyApi.getMichelinRepsol,
     },
@@ -76,9 +76,9 @@ export default function Gastronomy() {
     {
       id: 'cerca-de-ti',
       title: tg.categories.cercaDeTi,
-      predicate: (g) => g.municipality_id === (user?.municipality_id ?? 1),
+      predicate: (g) => g.municipality_id === (user?.municipality_id ?? 48020),
       baseFilter: { label: tg.categoryLabels.cercaDeTi },
-      fetch: () => gastronomyApi.getCercaDeTi(user?.municipality_id ?? 1),
+      fetch: () => gastronomyApi.getCercaDeTi(user?.municipality_id || 48020),
     },
   ], [tg, user?.municipality_id]);
 

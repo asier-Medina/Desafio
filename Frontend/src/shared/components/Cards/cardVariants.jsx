@@ -61,6 +61,49 @@ const GASTRONOMY_TYPE_ICONS = {
   'restaurante': FaUtensils,
 };
 
+// Mapa de código de distinción → representación visual
+const DIST_MAP = {
+  michelin_estrella:   { logo: michelinLogo, label: 'Michelin' },
+  repsol_sol:          { logo: repsolLogo,   label: 'Repsol Sol' },
+  denominacion_origen: { emoji: '🏷️', label: 'D.O.' },
+  calidad_q:           { emoji: '🔵', label: 'Calidad Q' },
+  agricultura_eco:     { emoji: '🌱', label: 'Ecológico' },
+  euskal_baserri:      { emoji: '🐄', label: 'Euskal Baserri' },
+  euskolabel:          { emoji: '🏷️', label: 'Eusko Label' },
+};
+
+function DistincionBadges({ cualificaciones }) {
+  if (!cualificaciones?.length) return null;
+  return (
+    <>
+      {cualificaciones.map((q) => {
+        const def = DIST_MAP[q.codigo] ?? { emoji: '⭐', label: q.nombre };
+        if (def.logo) {
+          return (
+            <span key={q.codigo} className={`card__tag card__tag--${q.codigo.replace(/_/g, '-')}`}>
+              <img src={def.logo} alt="" className="card__tag-logo" />
+              {def.label}
+            </span>
+          );
+        }
+        return (
+          <span key={q.codigo} className="card__tag">
+            {def.emoji} {def.label}
+          </span>
+        );
+      })}
+    </>
+  );
+}
+
+// Devuelve el texto de localización más apropiado según los datos disponibles
+function getLocation(d) {
+  return d.direccion
+    || d.municipio
+    || d.Municipality?.nombre
+    || null;
+}
+
 export const VARIANTS = {
   event: {
     badge: (d) => d.type,
@@ -102,16 +145,15 @@ export const VARIANTS = {
     },
     title: (d) => d.nombre,
     badgeIcon: (d) => CULTURE_ICONS[(d.tipo_lugar || "").toLowerCase()] ?? FaLandmark,
-    meta: (d) => (
-      <>
-        {d.direccion && (
-          <span className="card__meta-item">
-            <FaLocationDot className="card__icon" aria-hidden="true" />
-            <span>{d.direccion}</span>
-          </span>
-        )}
-      </>
-    ),
+    meta: (d) => {
+      const loc = getLocation(d);
+      return loc ? (
+        <span className="card__meta-item">
+          <FaLocationDot className="card__icon" aria-hidden="true" />
+          <span>{loc}</span>
+        </span>
+      ) : null;
+    },
     rating: (d) => d.valoracion,
     reviews: (d) => d.numero_valoraciones,
   },
@@ -135,32 +177,17 @@ export const VARIANTS = {
       const byType = GASTRONOMY_TYPE_ICONS[(d.type || "").toLowerCase()];
       return byTipo ?? byType ?? FaUtensils;
     },
-    meta: (d) => (
-      <>
-        {d.direccion && (
-          <span className="card__meta-item">
-            <FaLocationDot className="card__icon" aria-hidden="true" />
-            <span>{d.direccion}</span>
-          </span>
-        )}
-      </>
-    ),
-    extras: (d) => (
-      <>
-        {d.michelin && (
-          <span className="card__tag card__tag--michelin">
-            <img src={michelinLogo} alt="" className="card__tag-logo" />
-            Michelin
-          </span>
-        )}
-        {d.repsol && (
-          <span className="card__tag card__tag--repsol">
-            <img src={repsolLogo} alt="" className="card__tag-logo" />
-            Repsol
-          </span>
-        )}
-      </>
-    ),
+    meta: (d) => {
+      // Gastronomía no tiene dirección → usamos municipio como referencia geográfica
+      const loc = d.municipio || d.Municipality?.nombre || null;
+      return loc ? (
+        <span className="card__meta-item">
+          <FaLocationDot className="card__icon" aria-hidden="true" />
+          <span>{loc}</span>
+        </span>
+      ) : null;
+    },
+    extras: (d) => <DistincionBadges cualificaciones={d.cualificaciones} />,
     rating: (d) => d.valoracion,
     reviews: (d) => d.num_resenas,
   },

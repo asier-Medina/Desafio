@@ -6,6 +6,20 @@ import { getImage, formatDate, renderStars } from "../Cards/cardHelpers";
 import { getCoordsById } from "@services/municipalities";
 import "./Detail.css";
 
+/** Devuelve coordenadas: prioriza lat/lng directos del item, luego busca en la lista estática */
+function resolveCoords(data) {
+  if (data.lat && data.lng) return { lat: data.lat, lng: data.lng };
+  return getCoordsById(data.municipality_id) ?? null;
+}
+
+/** Devuelve el texto de localización más útil disponible */
+function resolveLocation(data) {
+  return data.direccion
+    || data.municipio
+    || data.Municipality?.nombre
+    || null;
+}
+
 export default function Detail({ variant = "event", data = {}, onBack, isFavorite, onToggleFavorite }) {
   const { lang, t } = useLanguage();
   const cfg = VARIANTS[variant] || VARIANTS.event;
@@ -16,10 +30,15 @@ export default function Detail({ variant = "event", data = {}, onBack, isFavorit
   const reviews = cfg.reviews?.(data);
   const td = t.detail;
 
-  const coords = getCoordsById(data.municipality_id);
+  const coords = resolveCoords(data);
   const mapSrc = coords
     ? `https://www.openstreetmap.org/export/embed.html?bbox=${coords.lng - 0.025}%2C${coords.lat - 0.015}%2C${coords.lng + 0.025}%2C${coords.lat + 0.015}&layer=mapnik&marker=${coords.lat}%2C${coords.lng}`
     : null;
+
+  const location = resolveLocation(data);
+  const phone = data.national_phone_number || data.telefono || null;
+  const website = data.web || data.web_amigable || data.web_euskadi || data.purchase_url || null;
+  const province = data.Municipality?.provincia || data.provincia || null;
 
   return (
     <article className="detail">
@@ -35,10 +54,14 @@ export default function Detail({ variant = "event", data = {}, onBack, isFavorit
           </button>
         )}
         {imageUrl ? (
-          <img src={imageUrl} alt="" className="detail__hero-img" />
-        ) : (
-          <div className={`detail__hero-placeholder detail__hero-placeholder--${variant}`} />
-        )}
+          <img src={imageUrl} alt="" className="detail__hero-img"
+            onError={(e) => { e.currentTarget.style.display = "none"; e.currentTarget.nextSibling?.style.setProperty("display", "block"); }}
+          />
+        ) : null}
+        <div
+          className={`detail__hero-placeholder detail__hero-placeholder--${variant}`}
+          style={{ display: imageUrl ? "none" : "block" }}
+        />
         <div className="detail__hero-overlay">
           {badgeText && <span className={`detail__badge detail__badge--${variant}`}>{badgeText}</span>}
         </div>
@@ -57,6 +80,7 @@ export default function Detail({ variant = "event", data = {}, onBack, isFavorit
         )}
 
         <div className="detail__info">
+          {/* ── EVENTOS ─────────────────────────────────────── */}
           {variant === "event" && (
             <>
               {data.start_date && (
@@ -79,12 +103,12 @@ export default function Detail({ variant = "event", data = {}, onBack, isFavorit
                   <FaEuroSign className="detail__info-icon" />
                   <span className="detail__free">{td.free}</span>
                 </div>
-              ) : data.price_eur && (
+              ) : data.price_eur ? (
                 <div className="detail__info-row">
                   <FaEuroSign className="detail__info-icon" />
                   <span>{data.price_eur} €</span>
                 </div>
-              )}
+              ) : null}
               {data.purchase_url && (
                 <div className="detail__info-row">
                   <FaLink className="detail__info-icon" />
@@ -96,14 +120,44 @@ export default function Detail({ variant = "event", data = {}, onBack, isFavorit
             </>
           )}
 
+          {/* ── GASTRONOMÍA y CULTURA ───────────────────────── */}
           {(variant === "culture" || variant === "gastronomy") && (
             <>
-              {data.direccion && (
+              {/* Localización: dirección o municipio */}
+              {location && (
                 <div className="detail__info-row">
                   <FaLocationDot className="detail__info-icon" />
-                  <span>{data.direccion}</span>
+                  <span>{location}{province ? `, ${province}` : ""}</span>
                 </div>
               )}
+
+              {/* Teléfono */}
+              {phone && (
+                <div className="detail__info-row">
+                  <span className="detail__info-icon" aria-hidden="true">📞</span>
+                  <a href={`tel:${phone}`} className="detail__link">{phone}</a>
+                </div>
+              )}
+
+              {/* Nivel de precio (solo gastronomía) */}
+              {variant === "gastronomy" && data.nivel_precio && (
+                <div className="detail__info-row">
+                  <FaEuroSign className="detail__info-icon" />
+                  <span>{data.nivel_precio}</span>
+                </div>
+              )}
+
+              {/* Sitio web */}
+              {website && (
+                <div className="detail__info-row">
+                  <FaLink className="detail__info-icon" />
+                  <a href={website} target="_blank" rel="noopener noreferrer" className="detail__link">
+                    {td.website ?? "Sitio web"}
+                  </a>
+                </div>
+              )}
+
+              {/* Distinciones (solo gastronomía) */}
               {variant === "gastronomy" && cfg.extras && (
                 <div className="detail__tags">{cfg.extras(data)}</div>
               )}

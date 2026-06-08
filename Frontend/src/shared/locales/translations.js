@@ -182,6 +182,7 @@ const translations = {
     detail: {
       free: 'Gratuito',
       buyTickets: 'Comprar entradas',
+      website: 'Sitio web',
       mapTitle: 'Ubicación en el mapa',
       mapUnavailable: 'Mapa no disponible',
     },
@@ -500,6 +501,7 @@ const translations = {
     detail: {
       free: 'Dohain',
       buyTickets: 'Sarrerak erosi',
+      website: 'Webgunea',
       mapTitle: 'Kokapena mapan',
       mapUnavailable: 'Mapa ez dago erabilgarri',
     },
@@ -818,6 +820,7 @@ const translations = {
     detail: {
       free: 'Free',
       buyTickets: 'Buy tickets',
+      website: 'Website',
       mapTitle: 'Location on map',
       mapUnavailable: 'Map not available',
     },

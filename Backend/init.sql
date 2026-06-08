@@ -290,3 +290,10 @@ CREATE TABLE IF NOT EXISTS user_data.favorites (
 );
 
 CREATE INDEX IF NOT EXISTS idx_favorites_user ON user_data.favorites (user_id);
+
+-- Unicidad de nombre+municipio para evitar duplicados en el seeder
+CREATE UNIQUE INDEX IF NOT EXISTS idx_gastronomy_nombre_muni
+    ON market_data.gastronomy (nombre, municipality_id);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_culture_nombre_muni
+    ON market_data.culture (nombre, municipality_id);

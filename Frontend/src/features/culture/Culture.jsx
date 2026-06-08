@@ -62,7 +62,7 @@ export default function Culture() {
     {
       id: 'patrimonio',
       title: tc.categories.patrimonio,
-      predicate: (c) => PATRIMONIO_TIPOS.includes(c.tipo_lugar),
+      predicate: (c) => PATRIMONIO_TIPOS.some(t => c.tipo_lugar?.toLowerCase() === t.toLowerCase()),
       baseFilter: { label: tc.categoryLabels.patrimonio },
       fetch: cultureApi.getPatrimonio,
     },
@@ -76,9 +76,9 @@ export default function Culture() {
     {
       id: 'cerca-de-ti',
       title: tc.categories.cercaDeTi,
-      predicate: (c) => c.municipality_id === (user?.municipality_id ?? 1),
+      predicate: (c) => c.municipality_id === (user?.municipality_id ?? 48020),
       baseFilter: { label: tc.categoryLabels.cercaDeTi },
-      fetch: () => cultureApi.getCercaDeTi(user?.municipality_id ?? 1),
+      fetch: () => cultureApi.getCercaDeTi(user?.municipality_id || 48020),
     },
   ], [tc, user?.municipality_id]);
 

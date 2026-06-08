@@ -2,29 +2,31 @@ import axios from "axios";
 import { Op } from "sequelize";
 import { Culture, Municipality } from "../models/index.js";
 
-const ML_BASE = process.env.ML_API_URL || "http://localhost:5442/api";
+const ML_BASE    = process.env.ML_API_URL || "http://localhost:5442/api";
 const ML_TIMEOUT = parseInt(process.env.ML_TIMEOUT_MS) || 5000;
 
 async function fromML(path) {
+  const url = `${ML_BASE}${path}`;
   try {
-    const { data } = await axios.get(`${ML_BASE}${path}`, { timeout: ML_TIMEOUT });
+    const { data } = await axios.get(url, { timeout: ML_TIMEOUT });
     const payload = data?.data ?? data;
     if (Array.isArray(payload) && payload.length > 0) return payload;
-    if (payload?.results?.length > 0) return payload.results;
+    console.warn(`[ML] ${url} → respuesta vacía, usando DB`);
     return null;
-  } catch {
+  } catch (err) {
+    console.warn(`[ML] ${url} → error (${err.code ?? err.message}), usando DB`);
     return null;
   }
 }
 
 const BASE_WHERE = { active: true };
-const include = [{ model: Municipality, attributes: ["nombre", "provincia"] }];
+const include    = [{ model: Municipality, attributes: ["nombre", "provincia"] }];
 
-const MUSEO_TIPOS = ["Museo", "museo", "Museos"];
+const MUSEO_TIPOS      = ["Museo", "museo", "Museos"];
 const PATRIMONIO_TIPOS = ["Patrimonio", "patrimonio", "Patrimonio Cultural", "Monumento", "monumento"];
 
 export async function getAllCultura() {
-  const ml = await fromML("/cultura");
+  const ml = await fromML("/cultura?limit=9999");
   if (ml) return ml;
 
   return Culture.findAll({
@@ -35,7 +37,7 @@ export async function getAllCultura() {
 }
 
 export async function getMuseos() {
-  const ml = await fromML("/cultura/museos");
+  const ml = await fromML("/cultura/museos?limit=9999");
   if (ml) return ml;
 
   return Culture.findAll({
@@ -46,7 +48,7 @@ export async function getMuseos() {
 }
 
 export async function getPatrimonio() {
-  const ml = await fromML("/cultura/patrimonio");
+  const ml = await fromML("/cultura/patrimonio?limit=9999");
   if (ml) return ml;
 
   return Culture.findAll({
@@ -57,7 +59,7 @@ export async function getPatrimonio() {
 }
 
 export async function getVisitaGuiada() {
-  const ml = await fromML("/cultura/visita-guiada");
+  const ml = await fromML("/cultura/visita-guiada?limit=9999");
   if (ml) return ml;
 
   return Culture.findAll({
@@ -67,15 +69,35 @@ export async function getVisitaGuiada() {
   });
 }
 
+const BILBAO_ID = 48020;
+
 export async function getCercaDeTi(municipalityId) {
-  const ml = await fromML(`/cultura/cerca-de-ti?municipality_id=${municipalityId}`);
+  const targetId = municipalityId || BILBAO_ID;
+
+  // 1. Intentar Flask con el municipio solicitado
+  const ml = await fromML(`/cultura/cerca-de-ti?municipality_id=${targetId}&limit=9999`);
   if (ml) return ml;
 
-  return Culture.findAll({
-    where: { ...BASE_WHERE, municipality_id: municipalityId },
+  // 2. Fallback Sequelize con el municipio solicitado
+  const items = await Culture.findAll({
+    where: { ...BASE_WHERE, municipality_id: targetId },
     include,
     order: [["valoracion", "DESC"]],
   });
+  if (items.length > 0) return items;
+
+  // 3. Sin resultados → devolver Bilbao como fallback
+  if (targetId !== BILBAO_ID) {
+    const mlBilbao = await fromML(`/cultura/cerca-de-ti?municipality_id=${BILBAO_ID}&limit=9999`);
+    if (mlBilbao) return mlBilbao;
+    return Culture.findAll({
+      where: { ...BASE_WHERE, municipality_id: BILBAO_ID },
+      include,
+      order: [["valoracion", "DESC"]],
+    });
+  }
+
+  return [];
 }
 
 export async function getCulturaById(id) {

@@ -8,7 +8,7 @@ const router = Router();
 router.get("/mejor-valorados",        ctrl.mejorValorados);
 router.get("/michelin-repsol",        ctrl.michelinRepsol);
 router.get("/entorno-especial",       ctrl.entornoEspecial);
-router.get("/cerca-de-ti",            protect, ctrl.cercaDeTi);
+router.get("/cerca-de-ti",            ctrl.cercaDeTi);
 router.get("/",                       ctrl.todos);
 router.get("/:id",                    ctrl.porId);
 

@@ -2,7 +2,7 @@ import axios from "axios";
 import { Op } from "sequelize";
 import { Gastronomy, Municipality } from "../models/index.js";
 
-const ML_BASE = process.env.ML_API_URL || "http://localhost:5442/api";
+const ML_BASE    = process.env.ML_API_URL || "http://localhost:5442/api";
 const ML_TIMEOUT = parseInt(process.env.ML_TIMEOUT_MS) || 5000;
 
 async function fromML(path) {
@@ -20,10 +20,10 @@ async function fromML(path) {
 }
 
 const BASE_WHERE = { active: true };
-const include = [{ model: Municipality, attributes: ["nombre", "provincia"] }];
+const include    = [{ model: Municipality, attributes: ["nombre", "provincia"] }];
 
 export async function getAllGastronomia() {
-  const ml = await fromML("/gastronomia");
+  const ml = await fromML("/gastronomia?limit=9999");
   if (ml) return ml;
 
   return Gastronomy.findAll({
@@ -34,7 +34,7 @@ export async function getAllGastronomia() {
 }
 
 export async function getMejorValorados() {
-  const ml = await fromML("/gastronomia/mejor-valorados");
+  const ml = await fromML("/gastronomia/mejor-valorados?limit=9999");
   if (ml) return ml;
 
   return Gastronomy.findAll({
@@ -45,10 +45,10 @@ export async function getMejorValorados() {
 }
 
 export async function getMichelinRepsol() {
-  const ml = await fromML("/gastronomia/michelin-repsol");
+  const ml = await fromML("/gastronomia/michelin-repsol?limit=9999");
   if (ml) return ml;
 
-  // michelin/repsol ahora están en gastronomy_qualifications; sin ML devolvemos todos activos ordenados
+  // Fallback: todos activos ordenados por valoración
   return Gastronomy.findAll({
     where: BASE_WHERE,
     include,
@@ -57,7 +57,7 @@ export async function getMichelinRepsol() {
 }
 
 export async function getEntornoEspecial() {
-  const ml = await fromML("/gastronomia/entorno-especial");
+  const ml = await fromML("/gastronomia/entorno-especial?limit=9999");
   if (ml) return ml;
 
   return Gastronomy.findAll({
@@ -67,15 +67,35 @@ export async function getEntornoEspecial() {
   });
 }
 
+const BILBAO_ID = 48020;
+
 export async function getCercaDeTi(municipalityId) {
-  const ml = await fromML(`/gastronomia/cerca-de-ti?municipality_id=${municipalityId}`);
+  const targetId = municipalityId || BILBAO_ID;
+
+  // 1. Intentar Flask con el municipio solicitado
+  const ml = await fromML(`/gastronomia/cerca-de-ti?municipality_id=${targetId}&limit=9999`);
   if (ml) return ml;
 
-  return Gastronomy.findAll({
-    where: { ...BASE_WHERE, municipality_id: municipalityId },
+  // 2. Fallback Sequelize con el municipio solicitado
+  const items = await Gastronomy.findAll({
+    where: { ...BASE_WHERE, municipality_id: targetId },
     include,
     order: [["valoracion", "DESC"]],
   });
+  if (items.length > 0) return items;
+
+  // 3. Sin resultados → devolver Bilbao como fallback
+  if (targetId !== BILBAO_ID) {
+    const mlBilbao = await fromML(`/gastronomia/cerca-de-ti?municipality_id=${BILBAO_ID}&limit=9999`);
+    if (mlBilbao) return mlBilbao;
+    return Gastronomy.findAll({
+      where: { ...BASE_WHERE, municipality_id: BILBAO_ID },
+      include,
+      order: [["valoracion", "DESC"]],
+    });
+  }
+
+  return [];
 }
 
 export async function getGastronomiaById(id) {
