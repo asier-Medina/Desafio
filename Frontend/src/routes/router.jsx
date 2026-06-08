@@ -9,6 +9,7 @@ import Gastronomy from "@features/gastronomy/Gastronomy";
 import GastronomyDetail from "@features/gastronomy/GastronomyDetail";
 import Favorite from "@features/favorite/Favorite";
 import Profile from "@features/profile/Profile";
+import ProfileAccount from "@features/profile/ProfileAccount";
 import AdminComerciosPage from "@features/admin/AdminComerciosPage";
 import AdminUsersPage from "@features/admin/AdminUsersPage";
 import RequireAuth from "@shared/components/RequireAuth/RequireAuth";
@@ -61,18 +62,32 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <MainLayout />,
-    children: [{
-      index: true,
-      element: (
-        <RequireAuth
-          icon={FaRegUser}
-          title="Accede a tu perfil"
-          description="Inicia sesión o crea una cuenta para ver y editar tu información personal, gestionar tus datos y más."
-        >
-          <Profile />
-        </RequireAuth>
-      ),
-    }],
+    children: [
+      {
+        index: true,
+        element: (
+          <RequireAuth
+            icon={FaRegUser}
+            title="Accede a tu perfil"
+            description="Inicia sesión o crea una cuenta para ver y editar tu información personal, gestionar tus datos y más."
+          >
+            <Profile />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "account",
+        element: (
+          <RequireAuth
+            icon={FaRegUser}
+            title="Accede a tu perfil"
+            description="Inicia sesión o crea una cuenta para ver y editar tu información personal, gestionar tus datos y más."
+          >
+            <ProfileAccount />
+          </RequireAuth>
+        ),
+      },
+    ],
   },
   {
     path: "/favoritos",
