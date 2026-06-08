@@ -2,15 +2,15 @@ import axios from "axios";
 import { Op } from "sequelize";
 import { Gastronomy, Municipality } from "../models/index.js";
 
-const ML_BASE = process.env.ML_API_URL || "http://127.0.0.1:5442"
+const ML_BASE = process.env.ML_API_URL || "http://localhost:5442/api";
 const ML_TIMEOUT = parseInt(process.env.ML_TIMEOUT_MS) || 5000;
 
 async function fromML(path) {
   const url = `${ML_BASE}${path}`;
   try {
     const { data } = await axios.get(url, { timeout: ML_TIMEOUT });
-    if (Array.isArray(data) && data.length > 0) return data;
-    if (data?.results?.length > 0) return data.results;
+    const payload = data?.data ?? data;
+    if (Array.isArray(payload) && payload.length > 0) return payload;
     console.warn(`[ML] ${url} → respuesta vacía, usando DB`);
     return null;
   } catch (err) {

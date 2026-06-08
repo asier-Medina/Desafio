@@ -1,0 +1,127 @@
+services:
+
+  # ─── Base de datos ───────────────────────────────────────────────────────────
+  db:
+    image: postgres:16
+    container_name: sustraiapp_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB:       ${DB_NAME}
+    ports:
+      - "5440:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./Backend/init.sql:/docker-entrypoint-initdb.d/00_init.sql
+    networks:
+      - sustrai_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
+
+  # ─── pgAdmin ─────────────────────────────────────────────────────────────────
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: sustraiapp_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL:    ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5051:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sustrai_net
+
+  # ─── Seeder: carga todos los inserts de DataV2 en orden y termina ────────────
+  db-seeder:
+    build: ./DataV2
+    container_name: sustraiapp_seeder
+    restart: "no"
+    command: python insert/seeder.py
+    environment:
+      DB_HOST:     db
+      DB_PORT:     "5432"
+      DB_USER:     ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME:     ${DB_NAME}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sustrai_net
+
+  # ─── API de Data / ML (Flask — DataV2) ───────────────────────────────────────
+  data:
+    build: ./DataV2
+    container_name: sustraiapp_data
+    restart: unless-stopped
+    ports:
+      - "5442:5442"
+    environment:
+      DB_HOST:     db
+      DB_PORT:     "5432"
+      DB_USER:     ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME:     ${DB_NAME}
+      PORT:        "5442"
+    depends_on:
+      db:
+        condition: service_healthy
+      db-seeder:
+        condition: service_completed_successfully
+    networks:
+      - sustrai_net
+
+  # ─── Backend (Node.js) ───────────────────────────────────────────────────────
+  backend:
+    build: ./Backend
+    container_name: sustraiapp_backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST:               db
+      DB_PORT:               "5432"
+      DB_USER:               ${DB_USER}
+      DB_PASSWORD:           ${DB_PASSWORD}
+      DB_NAME:               ${DB_NAME}
+      JWT_SECRET:            ${JWT_SECRET}
+      JWT_REFRESH_SECRET:    ${JWT_REFRESH_SECRET}
+      JWT_EXPIRES_IN:        ${JWT_EXPIRES_IN}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN}
+      FRONTEND_URL:          ${FRONTEND_URL}
+      PORT:                  ${PORT:-3000}
+      ML_API_URL:            http://data:5442/api
+    depends_on:
+      db:
+        condition: service_healthy
+      data:
+        condition: service_started
+    networks:
+      - sustrai_net
+
+  # ─── Frontend (React + Vite) ──────────────────────────────────────────────────
+  frontend:
+    build: ./Frontend
+    container_name: sustraiapp_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - sustrai_net
+
+volumes:
+  postgres_data:
+
+networks:
+  sustrai_net:
+    driver: bridge

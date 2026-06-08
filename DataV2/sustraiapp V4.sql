@@ -148,6 +148,16 @@ CREATE TABLE IF NOT EXISTS market_data.qualifications (
     nombre  VARCHAR(100) NOT NULL
 );
 
+-- Catálogo inicial
+INSERT INTO market_data.qualifications (codigo, nombre) VALUES
+    ('repsol_sol',          'Sol Repsol'),
+    ('michelin_estrella',   'Estrella Michelin'),
+    ('denominacion_origen', 'Denominación de Origen'),
+    ('q_calidad',           'Q de Calidad Turística'),
+    ('euskolabel',          'Eusko Label'),
+    ('agricultura_eco',     'Agricultura Ecológica'),
+    ('euskal_baserri',      'Euskal Baserri')
+ON CONFLICT (codigo) DO NOTHING;
 
 -- Relación gastronomy ↔ qualifications
 CREATE TABLE IF NOT EXISTS market_data.gastronomy_qualifications (
@@ -231,8 +241,8 @@ CREATE TABLE IF NOT EXISTS user_data.preferences (
 );
 
 -- -------------------------------------------------------------------
--- Reviews (Mantenemos estructura separada o única según prefieras, 
--- aquí dejo la versión única con CHECK constraint como en v2/v3)
+-- Reviews — tres tablas separadas con FKs reales
+-- UNIQUE (user_id, entidad_id) evita reseñas duplicadas por usuario
 -- -------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS user_data.event_reviews (
@@ -245,8 +255,7 @@ CREATE TABLE IF NOT EXISTS user_data.event_reviews (
     UNIQUE (user_id, event_id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_event_reviews_event   ON user_data.event_reviews (event_id);
-CREATE INDEX IF NOT EXISTS idx_event_reviews_user    ON user_data.event_reviews (user_id);
+CREATE INDEX IF NOT EXISTS idx_event_reviews_event ON user_data.event_reviews (event_id);
 
 -- -------------------------------------------------------------------
 
@@ -290,3 +299,6 @@ CREATE TABLE IF NOT EXISTS user_data.favorites (
 );
 
 CREATE INDEX IF NOT EXISTS idx_favorites_user ON user_data.favorites (user_id);
+
+
+

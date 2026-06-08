@@ -1,14 +1,12 @@
 import { useState, useRef, useEffect, useId } from 'react'
-import { getAll } from '@services/municipalities'
+import { fetchAll } from '@services/municipalities'
 import { useLanguage } from '@shared/context/LanguageContext'
 
-const ALL = getAll()
-
-function filterMunicipalities(query) {
+function filterMunicipalities(all, query) {
   const q = query.trim().toLowerCase()
-  if (!q) return ALL.slice(0, 8)
-  const startsWith = ALL.filter(m => m.label.toLowerCase().startsWith(q))
-  const contains   = ALL.filter(m => !m.label.toLowerCase().startsWith(q) && m.label.toLowerCase().includes(q))
+  if (!q) return all.slice(0, 8)
+  const startsWith = all.filter(m => m.label.toLowerCase().startsWith(q))
+  const contains   = all.filter(m => !m.label.toLowerCase().startsWith(q) && m.label.toLowerCase().includes(q))
   return [...startsWith, ...contains].slice(0, 10)
 }
 
@@ -18,7 +16,8 @@ export default function MunicipalityAutocomplete({ value, onChange, error, id: p
   const { t } = useLanguage()
   const ta = t.auth
 
-  const selected = ALL.find(m => m.value === value) ?? null
+  const [all, setAll]               = useState([])
+  const [loadError, setLoadError]   = useState(false)
   const [query, setQuery]           = useState('')
   const [open, setOpen]             = useState(false)
   const [highlighted, setHighlighted] = useState(0)
@@ -27,7 +26,14 @@ export default function MunicipalityAutocomplete({ value, onChange, error, id: p
   const listRef      = useRef(null)
   const containerRef = useRef(null)
 
-  const results = open ? filterMunicipalities(query) : []
+  useEffect(() => {
+    fetchAll()
+      .then(setAll)
+      .catch(() => setLoadError(true))
+  }, [])
+
+  const selected = all.find(m => m.value === value) ?? null
+  const results  = open ? filterMunicipalities(all, query) : []
 
   useEffect(() => {
     function handleOutside(e) {
@@ -87,7 +93,8 @@ export default function MunicipalityAutocomplete({ value, onChange, error, id: p
           aria-controls={`${id}-list`}
           autoComplete="off"
           className={`auth-card__input muni-autocomplete__input${error ? ' auth-card__input--error' : ''}`}
-          placeholder={ta.municipalityPlaceholder}
+          placeholder={loadError ? 'Error al cargar municipios' : ta.municipalityPlaceholder}
+          disabled={loadError}
           value={displayValue}
           onChange={handleInputChange}
           onFocus={handleFocus}
