@@ -35,7 +35,7 @@
   z-index: 999;
 
   animation: mobile-nav-in 0.25s ease;
-  min-width: 380px;
+  min-width: 340px;
 }
 
 .mobile-nav::before {
@@ -70,26 +70,28 @@
   gap: 2px;
   padding: 8px 14px;
   border-radius: 20px;
-  color: #1c355e;
+  color: var(--color-text-soft);
   text-decoration: none;
-  transition: all 0.25s ease;
+  transition: color 0.2s ease, background-color 0.2s ease;
   font-size: 0.75rem;
   font-weight: 500;
 }
 
 .mobile-nav__link:hover {
-  color: #1a3a6c;
+  color: var(--color-primary);
+  background-color: rgba(41, 54, 109, 0.06);
 }
 
 .mobile-nav__link--active {
-  color: #1a3a6c;
-  background: rgba(24, 43, 114, 0.05);
+  color: var(--color-primary);
+  background: rgba(24, 43, 114, 0.12);
   box-shadow:
     inset 0 1px 3px rgba(0, 0, 0, 0.06),
     inset 0 -1px 0px rgba(255, 255, 255, 0.6);
 }
 
 .mobile-nav__link--active .mobile-nav__label {
+  color: inherit;
   font-weight: 600;
 }
 
