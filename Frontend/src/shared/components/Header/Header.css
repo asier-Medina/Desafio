@@ -224,7 +224,7 @@
   box-shadow: 0 2px 8px rgba(41, 54, 109, 0.2);
 }
 
-@media (max-width: 468px) {
+@media (max-width: 880px) {
   .header__login-btn > span {
     display: none;
   }

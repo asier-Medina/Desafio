@@ -290,16 +290,6 @@ export default function Header({
                         {t.profile}
                       </MenuItem>
                     </li>
-                    <li>
-                      <MenuItem onSelect={() => handleMenuAction(() => onNavigate("/favoritos"))}>
-                        {t.favorites}
-                      </MenuItem>
-                    </li>
-                    <li>
-                      <MenuItem onSelect={() => handleMenuAction(() => onNavigate("/ajustes"))}>
-                        {t.settings}
-                      </MenuItem>
-                    </li>
                     {isAdmin && (
                       <li>
                         <MenuItem onSelect={() => handleMenuAction(() => onNavigate("/admin"))} highlight>
