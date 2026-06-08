@@ -1,28 +1,15 @@
 import { FaLandmark, FaRegCalendar, FaUtensils, FaRegHeart } from "@ui/icons";
+import { useLanguage } from "@shared/context/LanguageContext";
 
-const NAV_LINKS = {
-  es: [
-    { path: "/events", label: "Eventos", icon: FaRegCalendar },
-    { path: "/gastronomy", label: "Gastronomía", icon: FaUtensils },
-    { path: "/culture", label: "Cultura", icon: FaLandmark },
-    { path: "/favoritos", label: "Favoritos", icon: FaRegHeart },
-  ],
-  eu: [
-    { path: "/events", label: "Ekitaldiak", icon: FaRegCalendar },
-    { path: "/gastronomy", label: "Gastronomia", icon: FaUtensils },
-    { path: "/culture", label: "Kultura", icon: FaLandmark },
-    { path: "/favoritos", label: "Gogokoak", icon: FaRegHeart },
-  ],
-  en: [
-    { path: "/events", label: "Events", icon: FaRegCalendar },
-    { path: "/gastronomy", label: "Gastronomy", icon: FaUtensils },
-    { path: "/culture", label: "Culture", icon: FaLandmark },
-    { path: "/favoritos", label: "Favorites", icon: FaRegHeart },
-  ],
-};
+export default function HeaderNav({ onNavigate = () => {}, currentPath = "" }) {
+  const { t } = useLanguage();
 
-export default function HeaderNav({ onNavigate = () => {}, currentPath = "", lang = "es" }) {
-  const links = NAV_LINKS[lang] ?? NAV_LINKS.es;
+  const links = [
+    { path: "/events",     label: t.nav.events,     icon: FaRegCalendar },
+    { path: "/gastronomy", label: t.nav.gastronomy,  icon: FaUtensils    },
+    { path: "/culture",    label: t.nav.culture,     icon: FaLandmark    },
+    { path: "/favoritos",  label: t.nav.favorites,   icon: FaRegHeart    },
+  ];
 
   function handleClick(e, path) {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;

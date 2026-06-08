@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { useAuth } from '@features/auth/context/AuthContext';
+import { useLanguage } from '@shared/context/LanguageContext';
 import { useResponsiveLimit } from '@hooks/useResponsiveLimit';
-import { useLang } from '@shared/context/LangContext';
 import { useFavorites } from '@shared/context/FavoritesContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import Card from '@shared/components/Cards/Card';
@@ -13,45 +13,6 @@ import * as eventsApi from '@services/events.api';
 import * as gastronomyApi from '@services/gastronomy.api';
 import * as cultureApi from '@services/culture.api';
 import './Home.css';
-
-const LABELS = {
-  es: {
-    heroTitle: 'Lo mejor de Euskadi para ocio, gastronomía y cultura.',
-    heroEmphasis: 'En un solo lugar.',
-    heroSub: 'Eventos, restaurantes y espacios culturales seleccionados para ti. Filtrado para quien prefiere la calidad a la cantidad.',
-    heroCta: 'Ver la selección',
-    loading: 'Cargando...',
-    seeAll: 'Ver todos',
-    loginPrompt: 'Inicia sesión para ver más',
-    gastronomy: 'Gastronomía',
-    culture: 'Cultura',
-    events: 'Eventos',
-  },
-  eu: {
-    heroTitle: 'Euskadiko onena aisia, gastronomia eta kulturarentzat.',
-    heroEmphasis: 'Leku bakarrean.',
-    heroSub: 'Zuretzat hautatutako gertakariak, jatetxeak eta kultur guneak. Kalitatea kopuruaren gainetik jartzen dutenentzat iragazita.',
-    heroCta: 'Hautaketa ikusi',
-    loading: 'Kargatzen...',
-    seeAll: 'Guztiak ikusi',
-    loginPrompt: 'Gehiago ikusteko hasi saioa',
-    gastronomy: 'Gastronomia',
-    culture: 'Kultura',
-    events: 'Gertakariak',
-  },
-  en: {
-    heroTitle: 'The best of the Basque Country for leisure, gastronomy and culture.',
-    heroEmphasis: 'All in one place.',
-    heroSub: 'Events, restaurants and cultural venues selected for you. Filtered for those who prefer quality over quantity.',
-    heroCta: 'See the selection',
-    loading: 'Loading...',
-    seeAll: 'See all',
-    loginPrompt: 'Sign in to see more',
-    gastronomy: 'Gastronomy',
-    culture: 'Culture',
-    events: 'Events',
-  },
-};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -65,9 +26,8 @@ const fadeUp = {
 export default function HomeLanding() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { lang } = useLang();
+  const { lang, t } = useLanguage();
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
-  const t = LABELS[lang] ?? LABELS.es;
   const isAuth = !authLoading && Boolean(user);
   const limits = useResponsiveLimit(isAuth);
 
@@ -108,8 +68,8 @@ export default function HomeLanding() {
             animate="visible"
             custom={0}
           >
-            {t.heroTitle}{' '}
-            <span className="homepage__hero-title-emphasis">{t.heroEmphasis}</span>
+            {t.home.heroTitle}{' '}
+            <span className="homepage__hero-title-emphasis">{t.home.heroEmphasis}</span>
           </motion.h1>
 
           <motion.p
@@ -119,7 +79,7 @@ export default function HomeLanding() {
             animate="visible"
             custom={1}
           >
-            {t.heroSub}
+            {t.home.heroSub}
           </motion.p>
 
           <motion.div
@@ -134,7 +94,7 @@ export default function HomeLanding() {
               className="homepage__hero-cta"
               onClick={() => navigate('/events')}
             >
-              {t.heroCta}
+              {t.home.heroCta}
             </Button>
           </motion.div>
         </div>
@@ -169,7 +129,6 @@ export default function HomeLanding() {
                     <Card
                       variant={variant}
                       data={data}
-                      lang={lang}
                       onAction={() => navigate(`${path}/${data.id}`)}
                       onToggleFavorite={() => toggleFavorite(data, variant)}
                       isFavorite={isFavorite(data.id, variant)}

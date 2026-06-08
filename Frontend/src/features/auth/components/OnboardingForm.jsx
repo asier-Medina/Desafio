@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getInterestsCatalog, updateInterests, updatePreferences } from '@services/user.service'
 import { getAll as getMunicipalities } from '@services/municipalities'
+import { useLanguage } from '@shared/context/LanguageContext'
 
 function buildTree(items) {
   const map = {}
@@ -50,13 +51,16 @@ function InterestNode({ node, selected, onToggle }) {
   )
 }
 
-const PRECIO_OPTIONS = [
-  { value: 'bajo',  label: 'Económico' },
-  { value: 'medio', label: 'Estándar' },
-  { value: 'alto',  label: 'Premium' },
-]
-
 export default function OnboardingForm({ onSuccess, onSkip }) {
+  const { t } = useLanguage()
+  const ta = t.auth
+
+  const PRECIO_OPTIONS = [
+    { value: 'bajo',  label: ta.priceEconomic },
+    { value: 'medio', label: ta.priceStandard },
+    { value: 'alto',  label: ta.pricePremium },
+  ]
+
   const [tree, setTree] = useState([])
   const [selected, setSelected] = useState([])
   const [rango, setRango] = useState('')
@@ -101,8 +105,8 @@ export default function OnboardingForm({ onSuccess, onSkip }) {
     <form onSubmit={handleSubmit} className="onboarding-form" noValidate>
       {tree.length > 0 && (
         <section className="onboarding__section">
-          <h3 className="onboarding__section-title">¿Qué te interesa?</h3>
-          <p className="onboarding__section-hint">Selecciona todo lo que quieras — usaremos esto para personalizar tu experiencia.</p>
+          <h3 className="onboarding__section-title">{ta.interestsTitle}</h3>
+          <p className="onboarding__section-hint">{ta.interestsHint}</p>
           {tree.map(root => (
             <div key={root.id_interes} className="onboarding__category">
               <h4 className="onboarding__category-title">{root.nombre}</h4>
@@ -119,10 +123,10 @@ export default function OnboardingForm({ onSuccess, onSkip }) {
       <div className="onboarding__divider" />
 
       <section className="onboarding__section">
-        <h3 className="onboarding__section-title">Preferencias</h3>
+        <h3 className="onboarding__section-title">{ta.preferencesTitle}</h3>
 
         <div className="onboarding__pref-block">
-          <p className="onboarding__pref-label">Rango de precio</p>
+          <p className="onboarding__pref-label">{ta.priceRange}</p>
           <div className="onboarding__btn-group">
             {PRECIO_OPTIONS.map(opt => (
               <button
@@ -144,12 +148,12 @@ export default function OnboardingForm({ onSuccess, onSkip }) {
               checked={movilidad}
               onChange={e => setMovilidad(e.target.checked)}
             />
-            <span>Necesito accesibilidad para movilidad reducida</span>
+            <span>{ta.accessibilityLabel}</span>
           </label>
         </div>
 
         <div className="onboarding__pref-block">
-          <p className="onboarding__pref-label">Municipios de interés</p>
+          <p className="onboarding__pref-label">{ta.municipalitiesInterest}</p>
           <div className="onboarding__chips onboarding__chips--wrap">
             {municipalities.map(m => (
               <Chip
@@ -165,10 +169,10 @@ export default function OnboardingForm({ onSuccess, onSkip }) {
 
       <div className="onboarding__actions">
         <button type="button" className="onboarding__skip-btn" onClick={onSkip}>
-          Saltar por ahora
+          {ta.skip}
         </button>
         <button type="submit" className="onboarding__submit-btn" disabled={loading}>
-          {loading ? <span className="onboarding__spinner" /> : 'Guardar y continuar'}
+          {loading ? <span className="onboarding__spinner" /> : ta.saveAndContinue}
         </button>
       </div>
     </form>

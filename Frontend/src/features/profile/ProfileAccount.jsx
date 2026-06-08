@@ -6,7 +6,9 @@ import InputField from "@features/auth/components/InputField";
 import SelectField from "@features/auth/components/SelectField";
 import MunicipalityAutocomplete from "@features/auth/components/MunicipalityAutocomplete";
 import { useAuth } from "@features/auth/context/AuthContext";
+import { useLanguage } from "@shared/context/LanguageContext";
 import { getNameById, getAll as getMunicipalities } from "@services/municipalities";
+
 import {
   getInterestsCatalog, getMyInterests, getMyPreferences,
   updateMe, updateInterests, updatePreferences,
@@ -48,18 +50,6 @@ function groupSelected(tree, selectedIds) {
   return groups;
 }
 
-const PRECIO_OPTS = [
-  { value: "bajo",  label: "Económico" },
-  { value: "medio", label: "Estándar"  },
-  { value: "alto",  label: "Premium"   },
-];
-
-const SEXO_OPTS = [
-  { value: "hombre", label: "Hombre" },
-  { value: "mujer",  label: "Mujer"  },
-  { value: "otro",   label: "Otro"   },
-];
-
 function InterestChip({ label, selected, onToggle, readOnly }) {
   if (readOnly) return <span className="profile-account__chip">{label}</span>;
   return (
@@ -97,6 +87,22 @@ function InterestNode({ node, selectedIds, onToggle, readOnly }) {
 export default function ProfileAccount() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useLanguage();
+  const tpa = t.profileAccount;
+  const editLabel = t.profile.edit;
+
+  const PRECIO_OPTS = [
+    { value: "bajo",  label: tpa.priceEconomic },
+    { value: "medio", label: tpa.priceStandard  },
+    { value: "alto",  label: tpa.pricePremium   },
+  ];
+
+  const SEXO_OPTS = [
+    { value: "hombre", label: tpa.genderMale   },
+    { value: "mujer",  label: tpa.genderFemale },
+    { value: "otro",   label: tpa.genderOther  },
+  ];
+
   const profile = user;
   const allMunis = getMunicipalities();
 
@@ -216,19 +222,19 @@ export default function ProfileAccount() {
         <button className="profile-account__back" type="button" onClick={() => navigate("/profile")}>
           <FaArrowLeft />
         </button>
-        <h1 className="profile-account__title">Mi cuenta</h1>
+        <h1 className="profile-account__title">{tpa.title}</h1>
         {!editing && (
           <Button variant="outline" size="sm" onClick={startEdit}>
-            <FaPen /> Editar
+            <FaPen /> {editLabel}
           </Button>
         )}
         {editing && (
           <div className="profile-account__header-actions">
             <Button variant="ghost" size="sm" onClick={cancelEdit} disabled={saving}>
-              <FaXmark /> Cancelar
+              <FaXmark /> {tpa.cancel}
             </Button>
             <Button variant="soft" size="sm" onClick={handleSave} disabled={saving}>
-              {saving ? "Guardando…" : <><FaCheck /> Guardar</>}
+              {saving ? tpa.saving : <><FaCheck /> {tpa.save}</>}
             </Button>
           </div>
         )}
@@ -241,21 +247,21 @@ export default function ProfileAccount() {
         animate="visible"
         custom={1}
       >
-        <h2 className="profile-account__section-title">Información personal</h2>
+        <h2 className="profile-account__section-title">{tpa.personalInfo}</h2>
         {editing ? (
           <div className="profile-account__form">
-            <InputField label="Nombre" id="edit-name" type="text" value={form.name} onChange={handleFormChange("name")} maxLength={100} />
+            <InputField label={tpa.name} id="edit-name" type="text" value={form.name} onChange={handleFormChange("name")} maxLength={100} />
             <MunicipalityAutocomplete id="edit-municipality" value={form.municipality_id} onChange={v => setForm(prev => ({ ...prev, municipality_id: v }))} />
-            <SelectField label="Sexo" id="edit-sexo" options={SEXO_OPTS} value={form.sexo} onChange={handleFormChange("sexo")} />
-            <InputField label="Edad" id="edit-age" type="number" value={form.age} onChange={handleFormChange("age")} min={1} max={119} />
+            <SelectField label={tpa.gender} id="edit-sexo" options={SEXO_OPTS} value={form.sexo} onChange={handleFormChange("sexo")} />
+            <InputField label={tpa.age} id="edit-age" type="number" value={form.age} onChange={handleFormChange("age")} min={1} max={119} />
           </div>
         ) : (
           <dl className="profile-account__info-list">
-            <div className="profile-account__info-row"><dt>Email</dt><dd>{profile?.email || "—"}</dd></div>
-            {profile?.municipality_id && <div className="profile-account__info-row"><dt>Municipio</dt><dd>{getNameById(user?.municipality_id)}</dd></div>}
-            {user?.sexo && <div className="profile-account__info-row"><dt>Sexo</dt><dd>{SEXO_OPTS.find(o => o.value === profile?.sexo)?.label ?? profile?.sexo}</dd></div>}
-            {profile?.age && <div className="profile-account__info-row"><dt>Edad</dt><dd>{profile.age} años</dd></div>}
-            {user?.createdAt && <div className="profile-account__info-row"><dt>Miembro desde</dt><dd>{new Date(user.createdAt).toLocaleDateString("es", { year: "numeric", month: "long" })}</dd></div>}
+            <div className="profile-account__info-row"><dt>{tpa.emailLabel}</dt><dd>{profile?.email || "—"}</dd></div>
+            {profile?.municipality_id && <div className="profile-account__info-row"><dt>{tpa.municipality}</dt><dd>{getNameById(user?.municipality_id)}</dd></div>}
+            {user?.sexo && <div className="profile-account__info-row"><dt>{tpa.gender}</dt><dd>{SEXO_OPTS.find(o => o.value === profile?.sexo)?.label ?? profile?.sexo}</dd></div>}
+            {profile?.age && <div className="profile-account__info-row"><dt>{tpa.age}</dt><dd>{profile.age} {tpa.years}</dd></div>}
+            {user?.createdAt && <div className="profile-account__info-row"><dt>{tpa.memberSince}</dt><dd>{new Date(user.createdAt).toLocaleDateString("es", { year: "numeric", month: "long" })}</dd></div>}
           </dl>
         )}
       </motion.div>
@@ -267,10 +273,10 @@ export default function ProfileAccount() {
         animate="visible"
         custom={2}
       >
-        <h2 className="profile-account__section-title">Intereses</h2>
+        <h2 className="profile-account__section-title">{tpa.interests}</h2>
         {editing ? (
-          loading ? <p className="profile-account__empty">Cargando…</p>
-          : catalog.length === 0 ? <p className="profile-account__empty">No se pudo cargar el catálogo de intereses.</p>
+          loading ? <p className="profile-account__empty">{tpa.loading}</p>
+          : catalog.length === 0 ? <p className="profile-account__empty">{tpa.interestsCatalogError}</p>
           : (
             <div className="profile-account__tree">
               {catalog.map(root => (
@@ -285,7 +291,7 @@ export default function ProfileAccount() {
               ))}
             </div>
           )
-        ) : loading ? <p className="profile-account__empty">Cargando…</p>
+        ) : loading ? <p className="profile-account__empty">{tpa.loading}</p>
         : hasInterests ? (
           <div className="profile-account__tree">
             {interestGroups.map(g => g.items.length > 0 && (
@@ -299,8 +305,8 @@ export default function ProfileAccount() {
           </div>
         ) : (
           <p className="profile-account__empty">
-            Aún no has añadido intereses.{" "}
-            <button className="profile-account__link" onClick={startEdit}>Añadir ahora</button>
+            {tpa.noInterests}{" "}
+            <button className="profile-account__link" onClick={startEdit}>{tpa.addNow}</button>
           </p>
         )}
       </motion.div>
@@ -312,11 +318,11 @@ export default function ProfileAccount() {
         animate="visible"
         custom={3}
       >
-        <h2 className="profile-account__section-title">Preferencias</h2>
+        <h2 className="profile-account__section-title">{tpa.preferences}</h2>
         {editing ? (
           <div className="profile-account__form">
             <div className="profile-account__pref">
-              <p className="profile-account__pref-label">Rango de precio</p>
+              <p className="profile-account__pref-label">{tpa.priceRange}</p>
               <div className="profile-account__btn-group">
                 {PRECIO_OPTS.map(opt => (
                   <button key={opt.value} type="button"
@@ -330,11 +336,11 @@ export default function ProfileAccount() {
               <label className="profile-account__check">
                 <input type="checkbox" checked={editPrefs.movilidad_reducida}
                   onChange={e => setEditPrefs(prev => ({ ...prev, movilidad_reducida: e.target.checked }))} />
-                <span>Necesito accesibilidad para movilidad reducida</span>
+                <span>{tpa.reducedMobilityFull}</span>
               </label>
             </div>
             <div className="profile-account__pref">
-              <p className="profile-account__pref-label">Municipios de interés</p>
+              <p className="profile-account__pref-label">{tpa.municipalitiesInterest}</p>
               <div className="profile-account__chips profile-account__chips--scroll">
                 {allMunis.map(m => (
                   <button key={m.value} type="button"
@@ -345,17 +351,17 @@ export default function ProfileAccount() {
               </div>
             </div>
           </div>
-        ) : loading ? <p className="profile-account__empty">Cargando…</p>
+        ) : loading ? <p className="profile-account__empty">{tpa.loading}</p>
         : hasPrefs ? (
           <dl className="profile-account__info-list">
-            {prefs.rango_precio && <div className="profile-account__info-row"><dt>Precio</dt><dd>{PRECIO_OPTS.find(o => o.value === prefs.rango_precio)?.label}</dd></div>}
-            {prefs.movilidad_reducida && <div className="profile-account__info-row"><dt>Accesibilidad</dt><dd>Movilidad reducida</dd></div>}
-            {selectedMuniNames.length > 0 && <div className="profile-account__info-row"><dt>Municipios</dt><dd>{selectedMuniNames.join(", ")}</dd></div>}
+            {prefs.rango_precio && <div className="profile-account__info-row"><dt>{tpa.priceLabel}</dt><dd>{PRECIO_OPTS.find(o => o.value === prefs.rango_precio)?.label}</dd></div>}
+            {prefs.movilidad_reducida && <div className="profile-account__info-row"><dt>{tpa.accessibilityLabel}</dt><dd>{tpa.reducedMobility}</dd></div>}
+            {selectedMuniNames.length > 0 && <div className="profile-account__info-row"><dt>{tpa.municipalitiesLabel}</dt><dd>{selectedMuniNames.join(", ")}</dd></div>}
           </dl>
         ) : (
           <p className="profile-account__empty">
-            Aún no has configurado tus preferencias.{" "}
-            <button className="profile-account__link" onClick={startEdit}>Añadir ahora</button>
+            {tpa.noPreferences}{" "}
+            <button className="profile-account__link" onClick={startEdit}>{tpa.addNow}</button>
           </p>
         )}
       </motion.div>

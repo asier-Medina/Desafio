@@ -2,8 +2,8 @@ import { useMemo, useState, useEffect } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router';
 import { motion } from 'framer-motion';
 import { useAuth } from '@features/auth/context/AuthContext';
+import { useLanguage } from '@shared/context/LanguageContext';
 import { useResponsiveLimit } from '@hooks/useResponsiveLimit';
-import { useLang } from '@shared/context/LangContext';
 import { useFavorites } from '@shared/context/FavoritesContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import CategoryFilters from '@shared/components/Filters/CategoryFilters';
@@ -13,82 +13,7 @@ import FooterCtas from '@shared/components/FooterCtas/FooterCtas';
 import * as gastronomyApi from '@services/gastronomy.api';
 import './Gastronomy.css';
 
-// ---------------------------------------------------------------------------
-// Categorías
-// ---------------------------------------------------------------------------
-
-function buildCategories(municipioId) {
-  return [
-    {
-      id: 'todos',
-      title: 'Todos los restaurantes',
-      predicate: () => true,
-      baseFilter: null,
-      fetch: gastronomyApi.list,
-    },
-    {
-      id: 'mejor-valorados',
-      title: 'Mejor valorados',
-      predicate: (g) => g.valoracion != null,
-      baseFilter: { label: 'mejor valorados' },
-      fetch: gastronomyApi.getMejorValorados,
-    },
-    {
-      id: 'michelin-repsol',
-      title: 'Con distinción',
-      predicate: (g) => g.calidad === true,
-      baseFilter: { label: 'con distinción' },
-      fetch: gastronomyApi.getMichelinRepsol,
-    },
-    {
-      id: 'entorno-especial',
-      title: 'Entorno especial',
-      predicate: (g) => g.entorno != null,
-      baseFilter: { label: 'de entorno especial' },
-      fetch: gastronomyApi.getEntornoEspecial,
-    },
-    {
-      id: 'cerca-de-ti',
-      title: 'Cerca de ti',
-      predicate: (g) => g.municipality_id === municipioId,
-      baseFilter: { label: 'cerca de ti' },
-      fetch: () => gastronomyApi.getCercaDeTi(municipioId),
-    },
-  ];
-}
-
-// ---------------------------------------------------------------------------
-// Filtros del nivel 2
-// ---------------------------------------------------------------------------
-
-const FILTER1 = {
-  label: 'Tipo',
-  allLabel: 'Todos',
-  options: [
-    { id: 'restaurante', label: 'Restaurante', predicate: (g) => g.type === 'Restaurante' },
-    { id: 'bar',         label: 'Bar',         predicate: (g) => g.type === 'Bar' },
-    { id: 'sidreria',    label: 'Sidrería',    predicate: (g) => g.type === 'Sidrería' },
-    { id: 'bodega',      label: 'Bodega',      predicate: (g) => g.type === 'Bodega' },
-    { id: 'asador',      label: 'Asador',      predicate: (g) => g.type === 'Asador' },
-    { id: 'cafe',        label: 'Café',        predicate: (g) => g.type === 'Café' },
-  ],
-};
-
-const FILTER2 = {
-  label: 'Ordenar por',
-  defaultLabel: 'Sin ordenar',
-  options: [
-    {
-      id: 'mejor-valorados',
-      label: 'Mejor valorados',
-      comparator: (a, b) => (b.valoracion ?? 0) - (a.valoracion ?? 0),
-    },
-  ],
-};
-
-// ---------------------------------------------------------------------------
-// Componente principal
-// ---------------------------------------------------------------------------
+const PATRIMONIO_TIPOS = ['Patrimonio', 'Patrimonio Cultural', 'Monumento', 'Casco Histórico'];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -101,10 +26,11 @@ const fadeUp = {
 export default function Gastronomy() {
   const [searchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
-  const { lang } = useLang();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const filterKey = searchParams.get('filter');
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const tg = t.gastronomyPage;
 
   const isAuth = !authLoading && Boolean(user);
   const limits = useResponsiveLimit(isAuth);
@@ -118,10 +44,68 @@ export default function Gastronomy() {
     }
   }
 
-  const categories = useMemo(
-    () => buildCategories(user?.municipality_id ?? 1),
-    [user],
-  );
+  const categories = useMemo(() => [
+    {
+      id: 'todos',
+      title: tg.categories.todos,
+      predicate: () => true,
+      baseFilter: null,
+      fetch: gastronomyApi.list,
+    },
+    {
+      id: 'mejor-valorados',
+      title: tg.categories.mejorValorados,
+      predicate: (g) => g.valoracion != null,
+      baseFilter: { label: tg.categoryLabels.mejorValorados },
+      fetch: gastronomyApi.getMejorValorados,
+    },
+    {
+      id: 'michelin-repsol',
+      title: tg.categories.michelinRepsol,
+      predicate: (g) => g.calidad === true,
+      baseFilter: { label: tg.categoryLabels.michelinRepsol },
+      fetch: gastronomyApi.getMichelinRepsol,
+    },
+    {
+      id: 'entorno-especial',
+      title: tg.categories.entornoEspecial,
+      predicate: (g) => g.entorno != null,
+      baseFilter: { label: tg.categoryLabels.entornoEspecial },
+      fetch: gastronomyApi.getEntornoEspecial,
+    },
+    {
+      id: 'cerca-de-ti',
+      title: tg.categories.cercaDeTi,
+      predicate: (g) => g.municipality_id === (user?.municipality_id ?? 1),
+      baseFilter: { label: tg.categoryLabels.cercaDeTi },
+      fetch: () => gastronomyApi.getCercaDeTi(user?.municipality_id ?? 1),
+    },
+  ], [tg, user?.municipality_id]);
+
+  const filter1 = useMemo(() => ({
+    label: tg.filter1.label,
+    allLabel: tg.filter1.allLabel,
+    options: [
+      { id: 'restaurante', label: tg.filter1.restaurante, predicate: (g) => g.type === 'Restaurante' },
+      { id: 'bar',         label: tg.filter1.bar,         predicate: (g) => g.type === 'Bar' },
+      { id: 'sidreria',    label: tg.filter1.sidreria,    predicate: (g) => g.type === 'Sidrería' },
+      { id: 'bodega',      label: tg.filter1.bodega,      predicate: (g) => g.type === 'Bodega' },
+      { id: 'asador',      label: tg.filter1.asador,      predicate: (g) => g.type === 'Asador' },
+      { id: 'cafe',        label: tg.filter1.cafe,        predicate: (g) => g.type === 'Café' },
+    ],
+  }), [tg]);
+
+  const filter2 = useMemo(() => ({
+    label: tg.filter2.label,
+    defaultLabel: tg.filter2.defaultLabel,
+    options: [
+      {
+        id: 'mejor-valorados',
+        label: tg.filter2.mejorValorados,
+        comparator: (a, b) => (b.valoracion ?? 0) - (a.valoracion ?? 0),
+      },
+    ],
+  }), [tg]);
 
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -138,36 +122,34 @@ export default function Gastronomy() {
       .finally(() => setLoading(false));
   }, [filterKey, category?.id]);
 
-  // ---- Nivel 2: listado con filtros y paginación -------------------------
   if (filterKey) {
     if (!category) return <Navigate to="/gastronomy" replace />;
 
     return (
       <div className="gastronomy container">
         {loading ? (
-          <p className="gastronomy__empty">Cargando...</p>
+          <p className="gastronomy__empty">{t.loading}</p>
         ) : (
           <CategoryFilters
-            title="Gastronomía"
+            title={tg.title}
             baseFilter={category.baseFilter}
             items={items}
-            filter1={FILTER1}
-            filter2={FILTER2}
+            filter1={filter1}
+            filter2={filter2}
             onReset={() => navigate('/gastronomy')}
           >
             {(filteredItems) =>
               filteredItems.length === 0 ? (
-                <p className="gastronomy__empty">No hay resultados con los filtros seleccionados.</p>
+                <p className="gastronomy__empty">{tg.noResults}</p>
               ) : (
                 <PaginatedGrid
                   items={filteredItems}
                   limit={limits.detail}
-                  emptyMessage="No hay resultados con los filtros seleccionados."
+                  emptyMessage={tg.noResults}
                   renderItem={(lugar) => (
                     <Card
                       variant="gastronomy"
                       data={lugar}
-                      lang={lang}
                       onAction={() => navigate(`/gastronomy/${lugar.id}`)}
                       onToggleFavorite={() => toggleFavorite(lugar)}
                       isFavorite={isFavorite(lugar.id, 'gastronomy')}
@@ -182,7 +164,6 @@ export default function Gastronomy() {
     );
   }
 
-  // ---- Nivel 1: overview con categorías prefiltradas --------------------
   const authResolved = !authLoading;
 
   return (
@@ -195,12 +176,10 @@ export default function Gastronomy() {
           animate="visible"
           custom={0}
         >
-          {lang === 'eu' ? 'Gastronomia' : lang === 'en' ? 'Gastronomy' : 'Gastronomía'}
+          {tg.title}
         </motion.h1>
         {loading ? (
-          <p className="gastronomy__empty">
-            {lang === 'eu' ? 'Kargatzen...' : lang === 'en' ? 'Loading...' : 'Cargando...'}
-          </p>
+          <p className="gastronomy__empty">{t.loading}</p>
         ) : (
           categories.map((cat, i) => {
             const catItems = items.filter(cat.predicate);
@@ -208,7 +187,7 @@ export default function Gastronomy() {
               ? isAuth ? `/gastronomy?filter=${cat.id}` : '/login'
               : undefined;
             const seeAllLabel = authResolved
-              ? isAuth ? (lang === 'eu' ? 'Guztiak ikusi' : lang === 'en' ? 'See all' : 'Ver todos') : (lang === 'eu' ? 'Gehiago ikusteko hasi saioa' : lang === 'en' ? 'Sign in to see more' : 'Inicia sesión para ver más')
+              ? isAuth ? t.seeAll : t.loginPrompt
               : undefined;
 
             return (
@@ -231,7 +210,6 @@ export default function Gastronomy() {
                     <Card
                       variant="gastronomy"
                       data={data}
-                      lang={lang}
                       onAction={() => navigate(`/gastronomy/${data.id}`)}
                       onToggleFavorite={() => toggleFavorite(data)}
                       isFavorite={isFavorite(data.id, 'gastronomy')}

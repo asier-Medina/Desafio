@@ -1,18 +1,20 @@
 import BackButton from "@ui/BackButton";
 import { FaLocationDot, FaStar, FaRegClock, FaEuroSign, FaLink, FaRegHeart, FaHeart } from "@ui/icons";
-import { VARIANTS, LABELS } from "../Cards/cardVariants";
+import { useLanguage } from "@shared/context/LanguageContext";
+import { VARIANTS } from "../Cards/cardVariants";
 import { getImage, formatDate, renderStars } from "../Cards/cardHelpers";
 import { getCoordsById } from "@services/municipalities";
 import "./Detail.css";
 
-export default function Detail({ variant = "event", data = {}, lang = "es", onBack, isFavorite, onToggleFavorite }) {
-  const t = LABELS[lang] ?? LABELS.es;
+export default function Detail({ variant = "event", data = {}, onBack, isFavorite, onToggleFavorite }) {
+  const { lang, t } = useLanguage();
   const cfg = VARIANTS[variant] || VARIANTS.event;
   const imageUrl = getImage(data, variant);
-  const badgeText = cfg.badge(data, lang);
+  const badgeText = cfg.badge(data);
   const title = cfg.title(data);
   const rating = cfg.rating?.(data);
   const reviews = cfg.reviews?.(data);
+  const td = t.detail;
 
   const coords = getCoordsById(data.municipality_id);
   const mapSrc = coords
@@ -27,7 +29,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
           <button
             className="detail__favorite-btn"
             onClick={(e) => { e.stopPropagation(); onToggleFavorite(data); }}
-            aria-label={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
+            aria-label={isFavorite ? t.card.removeFav : t.card.addFav}
           >
             {isFavorite ? <FaHeart /> : <FaRegHeart />}
           </button>
@@ -50,7 +52,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
             <FaStar className="detail__rating-icon" />
             <span className="detail__rating-value">{Number(rating).toFixed(1)}</span>
             {renderStars(rating)}
-            <span className="detail__reviews">({t.reviews(reviews)})</span>
+            <span className="detail__reviews">({t.card.reviews(reviews)})</span>
           </div>
         )}
 
@@ -75,7 +77,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
               {data.is_free ? (
                 <div className="detail__info-row">
                   <FaEuroSign className="detail__info-icon" />
-                  <span className="detail__free">{lang === 'eu' ? 'Dohain' : 'Gratuito'}</span>
+                  <span className="detail__free">{td.free}</span>
                 </div>
               ) : data.price_eur && (
                 <div className="detail__info-row">
@@ -87,7 +89,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
                 <div className="detail__info-row">
                   <FaLink className="detail__info-icon" />
                   <a href={data.purchase_url} target="_blank" rel="noopener noreferrer" className="detail__link">
-                    {lang === 'eu' ? 'Sarrerak erosi' : 'Comprar entradas'}
+                    {td.buyTickets}
                   </a>
                 </div>
               )}
@@ -116,7 +118,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
         <div className="detail__map">
           {mapSrc ? (
             <iframe
-              title={lang === 'eu' ? 'Kokapena mapan' : 'Ubicación en el mapa'}
+              title={td.mapTitle}
               src={mapSrc}
               className="detail__map-iframe"
               loading="lazy"
@@ -125,7 +127,7 @@ export default function Detail({ variant = "event", data = {}, lang = "es", onBa
           ) : (
             <div className="detail__map-placeholder">
               <FaLocationDot className="detail__map-icon" />
-              <span>{lang === 'eu' ? 'Mapa ez dago erabilgarri' : 'Mapa no disponible'}</span>
+              <span>{td.mapUnavailable}</span>
             </div>
           )}
         </div>

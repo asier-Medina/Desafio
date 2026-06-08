@@ -1,68 +1,9 @@
 import { useEffect, useRef, useState, useId } from "react";
 import { FaRegUser, FaSliders, FaChevronDown } from "@ui/icons";
+import { useLanguage } from "@shared/context/LanguageContext";
 import HeaderNav from "./HeaderNav";
 import "./Header.css";
 import logoSvg from "@assets/images/logofinal.svg";
-
-const LABELS = {
-  es: {
-    appBar: "Cabecera principal",
-    home: "Bilbao Insider, ir a inicio",
-    login: "Iniciar sesión",
-    register: "Crear cuenta",
-    filters: "Filtros",
-    openFilters: "Abrir filtros",
-    userMenu: "Abrir menú de usuario",
-    profile: "Mi perfil",
-    favorites: "Mis favoritos",
-    settings: "Ajustes",
-    adminPanel: "Panel de administración",
-    logout: "Cerrar sesión",
-    roleAdmin: "Administrador",
-    roleUser: "Usuario",
-    avatarAlt: (name) => `Avatar de ${name}`,
-    langSelector: "Seleccionar idioma",
-    lang: "Idioma",
-  },
-  eu: {
-    appBar: "Goiburu nagusia",
-    home: "Bilbao Insider, hasierara joan",
-    login: "Saioa hasi",
-    register: "Kontua sortu",
-    filters: "Iragazkiak",
-    openFilters: "Iragazkiak ireki",
-    userMenu: "Erabiltzailearen menua ireki",
-    profile: "Nire profila",
-    favorites: "Nire gogokoak",
-    settings: "Ezarpenak",
-    adminPanel: "Administrazio panela",
-    logout: "Saioa itxi",
-    roleAdmin: "Administratzailea",
-    roleUser: "Erabiltzailea",
-    avatarAlt: (name) => `${name}(r)en avatarra`,
-    langSelector: "Hizkuntza hautatu",
-    lang: "Hizkuntza",
-  },
-  en: {
-    appBar: "Main header",
-    home: "Bilbao Insider, go to home",
-    login: "Log in",
-    register: "Sign up",
-    filters: "Filters",
-    openFilters: "Open filters",
-    userMenu: "Open user menu",
-    profile: "My profile",
-    favorites: "My favorites",
-    settings: "Settings",
-    adminPanel: "Admin panel",
-    logout: "Log out",
-    roleAdmin: "Administrator",
-    roleUser: "User",
-    avatarAlt: (name) => `${name}'s avatar`,
-    langSelector: "Select language",
-    lang: "Language",
-  },
-};
 
 const LANGUAGES = [
   { code: "es", label: "ES" },
@@ -85,12 +26,11 @@ export default function Header({
   currentPath = "",
   showFilters = false,
   onToggleFilters = () => {},
-  lang = "es",
-  onLangChange = () => {},
   logoSrc = logoSvg,
   homePath = "/",
 }) {
-  const t = LABELS[lang] ?? LABELS.es;
+  const { lang, setLang, t } = useLanguage();
+  const labels = t.header;
   const isAuthenticated = Boolean(user);
   const isAdmin = user?.role === "admin";
 
@@ -175,7 +115,7 @@ export default function Header({
   }
 
   function handleLangSelect(code) {
-    if (code !== lang) onLangChange(code);
+    if (code !== lang) setLang(code);
     setLangOpen(false);
   }
 
@@ -185,7 +125,7 @@ export default function Header({
 
   return (
     <header
-      aria-label={t.appBar}
+      aria-label={labels.appBar}
       className={`header${scrolled ? " header--scrolled" : ""}`}
     >
       <div className="header__inner">
@@ -193,25 +133,25 @@ export default function Header({
           <a
             href={homePath}
             onClick={handleLogoClick}
-            aria-label={t.home}
+            aria-label={labels.home}
             className="header__logo-link"
           >
             <img src={logoSrc} alt="" className="header__logo-img" />
           </a>
         </h1>
 
-        <HeaderNav onNavigate={onNavigate} currentPath={currentPath} lang={lang} />
+        <HeaderNav onNavigate={onNavigate} currentPath={currentPath} />
 
         <div className="header__actions">
           {showFilters && (
             <button
               type="button"
               onClick={onToggleFilters}
-              aria-label={t.openFilters}
+              aria-label={labels.openFilters}
               className="header__filters-btn header__desktop-only"
             >
               <FaSliders className="header__icon" aria-hidden="true" />
-              <span className="header__desktop-only">{t.filters}</span>
+              <span className="header__desktop-only">{labels.filters}</span>
             </button>
           )}
 
@@ -221,7 +161,7 @@ export default function Header({
               onClick={() => setLangOpen((o) => !o)}
               aria-haspopup="listbox"
               aria-expanded={langOpen}
-              aria-label={t.langSelector}
+              aria-label={labels.langSelector}
               className="header__lang-trigger"
             >
               <span className="header__lang-current">{currentLangLabel()}</span>
@@ -233,7 +173,7 @@ export default function Header({
             {langOpen && (
               <ul
                 role="listbox"
-                aria-label={t.lang}
+                aria-label={labels.lang}
                 id={langId}
                 className="header__lang-menu"
               >
@@ -255,7 +195,7 @@ export default function Header({
           {!isAuthenticated && (
             <button type="button" onClick={onLogin} className="header__login-btn">
               <FaRegUser className="header__icon" aria-hidden="true" />
-              <span>{t.login}</span>
+              <span>{labels.login}</span>
             </button>
           )}
 
@@ -268,13 +208,13 @@ export default function Header({
                 aria-haspopup="menu"
                 aria-expanded={menuOpen}
                 aria-controls={menuId}
-                aria-label={t.userMenu}
+                aria-label={labels.userMenu}
                 className="header__user-trigger"
               >
                 {user.avatarUrl ? (
                   <img
                     src={user.avatarUrl}
-                    alt={t.avatarAlt(user.name)}
+                    alt={labels.avatarAlt(user.name)}
                     className="header__avatar-img"
                   />
                 ) : (
@@ -293,32 +233,25 @@ export default function Header({
                   ref={menuRef}
                   id={menuId}
                   role="menu"
-                  aria-label={t.userMenu}
+                  aria-label={labels.userMenu}
                   className="header__menu"
                 >
                   <div className="header__menu-header">
                     <p className="header__menu-name">{user.name}</p>
                     {user.email && <p className="header__menu-email">{user.email}</p>}
                     <span className="header__menu-role">
-                      {isAdmin ? t.roleAdmin : t.roleUser}
+                      {isAdmin ? labels.roleAdmin : labels.roleUser}
                     </span>
                   </div>
                   <ul className="header__menu-list">
                     <li>
                       <MenuItem onSelect={() => handleMenuAction(() => onNavigate("/profile"))}>
-                        {t.profile}
+                        {labels.profile}
                       </MenuItem>
                     </li>
-                    {isAdmin && (
-                      <li>
-                        <MenuItem onSelect={() => handleMenuAction(() => onNavigate("/admin"))} highlight>
-                          {t.adminPanel}
-                        </MenuItem>
-                      </li>
-                    )}
                     <li>
                       <MenuItem onSelect={() => handleMenuAction(onLogout)} danger>
-                        {t.logout}
+                        {labels.logout}
                       </MenuItem>
                     </li>
                   </ul>

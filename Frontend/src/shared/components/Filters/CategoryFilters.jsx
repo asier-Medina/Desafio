@@ -1,11 +1,13 @@
 import { useId, useMemo, useState } from "react";
 import Button from "@shared/ui/Button";
+import { useLanguage } from "@shared/context/LanguageContext";
 import "./CategoryFilters.css";
 
 export default function CategoryFilters({ title, items, filter1, filter2, baseFilter, onChange, onReset, children }) {
   const baseId = useId();
+  const { t } = useLanguage();
+  const tf = t.categoryFilters;
 
-  // Validación defensiva: descartamos opciones mal formadas (OWASP, fallar seguro).
   const options1 = useMemo(
     () => (filter1 && Array.isArray(filter1.options) ? filter1.options.filter(isValidFilter1) : []),
     [filter1],
@@ -43,9 +45,7 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
       if (ord) {
         try {
           list = [...list].sort(ord.comparator);
-        } catch {
-          /* si el comparador falla, mantenemos el orden de llegada */
-        }
+        } catch {}
       }
     }
 
@@ -75,14 +75,12 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
   const group1Id = `${baseId}-f1`;
   const sortId = `${baseId}-f2`;
   const total = filteredItems.length;
-  const allLabel = filter1?.allLabel ?? "Todas";
+  const allLabel = filter1?.allLabel ?? t.categoryFilters.allLabel;
   const baseLabel = baseFilter?.label ?? null;
   const displayTitle = baseLabel ? `${title} ${baseLabel}` : title;
   const resultsText = baseLabel
-    ? `${total === 1 ? "1 resultado" : `${total} resultados`} ${baseLabel}`
-    : total === 1
-      ? "1 resultado"
-      : `${total} resultados`;
+    ? `${tf.results(total)} ${baseLabel}`
+    : tf.results(total);
 
   return (
     <section className="category-filters" aria-labelledby={titleId}>
@@ -96,16 +94,15 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
             className="category-filters__reset"
             onClick={resetFilters}
           >
-            Restablecer filtros
+            {tf.reset}
           </button>
         )}
       </div>
 
       <div className="category-filters__groups">
-        {/* ----- Filtro 1: categoría (select única) ----- */}
         <div className="category-filters__group">
           <label className="category-filters__group-label" htmlFor={group1Id}>
-            {filter1?.label ?? "Categorías"}
+            {filter1?.label ?? ""}
           </label>
           <select
             id={group1Id}
@@ -122,11 +119,10 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
           </select>
         </div>
 
-        {/* ----- Filtro 2: ordenar por (no recorta) ----- */}
         {filter2 && options2.length > 0 && (
           <div className="category-filters__group">
             <label className="category-filters__group-label" htmlFor={sortId}>
-              {filter2.label ?? "Ordenar por"}
+              {filter2.label ?? ""}
             </label>
             <select
               id={sortId}
@@ -134,7 +130,7 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
               value={sort ?? ""}
               onChange={(e) => selectSort(e.target.value === "" ? null : e.target.value)}
             >
-              <option value="">{filter2.defaultLabel ?? "Ordenar por"}</option>
+              <option value="">{filter2.defaultLabel ?? ""}</option>
               {options2.map((op) => (
                 <option key={op.id} value={op.id}>
                   {op.label}
@@ -145,7 +141,6 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
         )}
       </div>
 
-      {/* Región viva: anuncia a lectores de pantalla cuántos resultados hay. */}
       <p className="category-filters__result" role="status" aria-live="polite">
         {resultsText}
       </p>
@@ -153,11 +148,6 @@ export default function CategoryFilters({ title, items, filter1, filter2, baseFi
       {children(filteredItems)}
     </section>
   );
-}
-
-function chipClass(active) {
-  const base = "category-filters__option";
-  return active ? `${base} is-active` : base;
 }
 
 function isValidFilter1(o) {

@@ -2,8 +2,8 @@ import { useMemo, useState, useEffect } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router';
 import { motion } from 'framer-motion';
 import { useAuth } from '@features/auth/context/AuthContext';
+import { useLanguage } from '@shared/context/LanguageContext';
 import { useResponsiveLimit } from '@hooks/useResponsiveLimit';
-import { useLang } from '@shared/context/LangContext';
 import { useFavorites } from '@shared/context/FavoritesContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import CategoryFilters from '@shared/components/Filters/CategoryFilters';
@@ -13,84 +13,7 @@ import FooterCtas from '@shared/components/FooterCtas/FooterCtas';
 import * as cultureApi from '@services/culture.api';
 import './Culture.css';
 
-// ---------------------------------------------------------------------------
-// Categorías
-// ---------------------------------------------------------------------------
-
 const PATRIMONIO_TIPOS = ['Patrimonio', 'Patrimonio Cultural', 'Monumento', 'Casco Histórico'];
-
-function buildCategories(municipioId) {
-  return [
-    {
-      id: 'todos',
-      title: 'Todos los lugares',
-      predicate: () => true,
-      baseFilter: null,
-      fetch: cultureApi.list,
-    },
-    {
-      id: 'museos',
-      title: 'Museos',
-      predicate: (c) => c.tipo_lugar?.toLowerCase().includes('museo'),
-      baseFilter: { label: 'museos' },
-      fetch: cultureApi.getMuseos,
-    },
-    {
-      id: 'patrimonio',
-      title: 'Patrimonio',
-      predicate: (c) => PATRIMONIO_TIPOS.includes(c.tipo_lugar),
-      baseFilter: { label: 'patrimonio' },
-      fetch: cultureApi.getPatrimonio,
-    },
-    {
-      id: 'visita-guiada',
-      title: 'Con visita guiada',
-      predicate: (c) => c.visita_guiada === true,
-      baseFilter: { label: 'con visita guiada' },
-      fetch: cultureApi.getVisitaGuiada,
-    },
-    {
-      id: 'cerca-de-ti',
-      title: 'Cerca de ti',
-      predicate: (c) => c.municipality_id === municipioId,
-      baseFilter: { label: 'cerca de ti' },
-      fetch: () => cultureApi.getCercaDeTi(municipioId),
-    },
-  ];
-}
-
-// ---------------------------------------------------------------------------
-// Filtros del nivel 2
-// ---------------------------------------------------------------------------
-
-const FILTER1 = {
-  label: 'Tipo de lugar',
-  allLabel: 'Todos',
-  options: [
-    { id: 'museo',          label: 'Museo',          predicate: (c) => c.tipo_lugar?.toLowerCase().includes('museo') },
-    { id: 'monumento',      label: 'Monumento',      predicate: (c) => c.tipo_lugar === 'Monumento' },
-    { id: 'casco-historico',label: 'Casco histórico',predicate: (c) => c.tipo_lugar === 'Casco Histórico' },
-    { id: 'patrimonio',     label: 'Patrimonio',     predicate: (c) => c.tipo_lugar?.includes('Patrimonio') },
-    { id: 'teatro',         label: 'Teatro',         predicate: (c) => c.tipo_lugar === 'Teatro' },
-    { id: 'parque-playa',   label: 'Parque / Playa', predicate: (c) => c.tipo_lugar === 'Parque' || c.tipo_lugar === 'Playa' },
-  ],
-};
-
-const FILTER2 = {
-  label: 'Ordenar por',
-  defaultLabel: 'Sin ordenar',
-  options: [
-    {
-      id: 'mejor-valorados',
-      label: 'Mejor valorados',
-      comparator: (a, b) => (b.valoracion ?? 0) - (a.valoracion ?? 0),
-    },
-  ],
-};
-
-// ---------------------------------------------------------------------------
-// Animación
-// ---------------------------------------------------------------------------
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -100,17 +23,14 @@ const fadeUp = {
   }),
 };
 
-// ---------------------------------------------------------------------------
-// Componente principal
-// ---------------------------------------------------------------------------
-
 export default function Culture() {
   const [searchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
-  const { lang } = useLang();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const filterKey = searchParams.get('filter');
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const tc = t.culturePage;
 
   const isAuth = !authLoading && Boolean(user);
   const limits = useResponsiveLimit(isAuth);
@@ -124,10 +44,68 @@ export default function Culture() {
     }
   }
 
-  const categories = useMemo(
-    () => buildCategories(user?.municipality_id ?? 1),
-    [user],
-  );
+  const categories = useMemo(() => [
+    {
+      id: 'todos',
+      title: tc.categories.todos,
+      predicate: () => true,
+      baseFilter: null,
+      fetch: cultureApi.list,
+    },
+    {
+      id: 'museos',
+      title: tc.categories.museos,
+      predicate: (c) => c.tipo_lugar?.toLowerCase().includes('museo'),
+      baseFilter: { label: tc.categoryLabels.museos },
+      fetch: cultureApi.getMuseos,
+    },
+    {
+      id: 'patrimonio',
+      title: tc.categories.patrimonio,
+      predicate: (c) => PATRIMONIO_TIPOS.includes(c.tipo_lugar),
+      baseFilter: { label: tc.categoryLabels.patrimonio },
+      fetch: cultureApi.getPatrimonio,
+    },
+    {
+      id: 'visita-guiada',
+      title: tc.categories.visitaGuiada,
+      predicate: (c) => c.visita_guiada === true,
+      baseFilter: { label: tc.categoryLabels.visitaGuiada },
+      fetch: cultureApi.getVisitaGuiada,
+    },
+    {
+      id: 'cerca-de-ti',
+      title: tc.categories.cercaDeTi,
+      predicate: (c) => c.municipality_id === (user?.municipality_id ?? 1),
+      baseFilter: { label: tc.categoryLabels.cercaDeTi },
+      fetch: () => cultureApi.getCercaDeTi(user?.municipality_id ?? 1),
+    },
+  ], [tc, user?.municipality_id]);
+
+  const filter1 = useMemo(() => ({
+    label: tc.filter1.label,
+    allLabel: tc.filter1.allLabel,
+    options: [
+      { id: 'museo',           label: tc.filter1.museo,          predicate: (c) => c.tipo_lugar?.toLowerCase().includes('museo') },
+      { id: 'monumento',       label: tc.filter1.monumento,      predicate: (c) => c.tipo_lugar === 'Monumento' },
+      { id: 'casco-historico', label: tc.filter1.cascoHistorico, predicate: (c) => c.tipo_lugar === 'Casco Histórico' },
+      { id: 'patrimonio',      label: tc.filter1.patrimonio,     predicate: (c) => c.tipo_lugar?.includes('Patrimonio') },
+      { id: 'teatro',          label: tc.filter1.teatro,         predicate: (c) => c.tipo_lugar === 'Teatro' },
+      { id: 'parque-playa',    label: tc.filter1.parquePlaya,    predicate: (c) => c.tipo_lugar === 'Parque' || c.tipo_lugar === 'Playa' },
+    ],
+  }), [tc]);
+
+  const filter2 = useMemo(() => ({
+    label: tc.filter2.label,
+    defaultLabel: tc.filter2.defaultLabel,
+    options: [
+      {
+        id: 'mejor-valorados',
+        label: tc.filter2.mejorValorados,
+        comparator: (a, b) => (b.valoracion ?? 0) - (a.valoracion ?? 0),
+      },
+    ],
+  }), [tc]);
 
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -144,40 +122,34 @@ export default function Culture() {
       .finally(() => setLoading(false));
   }, [filterKey, category?.id]);
 
-  // ---- Nivel 2: listado con filtros y paginación -------------------------
   if (filterKey) {
     if (!category) return <Navigate to="/culture" replace />;
 
     return (
       <div className="culture container">
         {loading ? (
-          <p className="culture__empty">
-            {lang === 'eu' ? 'Kargatzen...' : lang === 'en' ? 'Loading...' : 'Cargando...'}
-          </p>
+          <p className="culture__empty">{t.loading}</p>
         ) : (
           <CategoryFilters
-            title={lang === 'eu' ? 'Kultura' : lang === 'en' ? 'Culture' : 'Cultura'}
+            title={tc.title}
             baseFilter={category.baseFilter}
             items={items}
-            filter1={FILTER1}
-            filter2={FILTER2}
+            filter1={filter1}
+            filter2={filter2}
             onReset={() => navigate('/culture')}
           >
             {(filteredItems) =>
               filteredItems.length === 0 ? (
-                <p className="culture__empty">
-                  {lang === 'eu' ? 'Ez dago emaitzarik iragazkiekin.' : lang === 'en' ? 'No results with selected filters.' : 'No hay resultados con los filtros seleccionados.'}
-                </p>
+                <p className="culture__empty">{tc.noResults}</p>
               ) : (
                 <PaginatedGrid
                   items={filteredItems}
                   limit={limits.detail}
-                  emptyMessage="No hay resultados con los filtros seleccionados."
+                  emptyMessage={tc.noResults}
                   renderItem={(lugar) => (
                     <Card
                       variant="culture"
                       data={lugar}
-                      lang={lang}
                       onAction={() => navigate(`/culture/${lugar.id}`)}
                       onToggleFavorite={() => toggleFavorite(lugar)}
                       isFavorite={isFavorite(lugar.id, 'culture')}
@@ -192,7 +164,6 @@ export default function Culture() {
     );
   }
 
-  // ---- Nivel 1: overview con categorías prefiltradas --------------------
   const authResolved = !authLoading;
 
   return (
@@ -205,12 +176,10 @@ export default function Culture() {
           animate="visible"
           custom={0}
         >
-          {lang === 'eu' ? 'Kultura' : lang === 'en' ? 'Culture' : 'Cultura'}
+          {tc.title}
         </motion.h1>
         {loading ? (
-          <p className="culture__empty">
-            {lang === 'eu' ? 'Kargatzen...' : lang === 'en' ? 'Loading...' : 'Cargando...'}
-          </p>
+          <p className="culture__empty">{t.loading}</p>
         ) : (
           categories.map((cat, i) => {
             const catItems = items.filter(cat.predicate);
@@ -218,7 +187,7 @@ export default function Culture() {
               ? isAuth ? `/culture?filter=${cat.id}` : '/login'
               : undefined;
             const seeAllLabel = authResolved
-              ? isAuth ? (lang === 'eu' ? 'Guztiak ikusi' : lang === 'en' ? 'See all' : 'Ver todos') : (lang === 'eu' ? 'Gehiago ikusteko hasi saioa' : lang === 'en' ? 'Sign in to see more' : 'Inicia sesión para ver más')
+              ? isAuth ? t.seeAll : t.loginPrompt
               : undefined;
 
             return (
@@ -241,7 +210,6 @@ export default function Culture() {
                     <Card
                       variant="culture"
                       data={data}
-                      lang={lang}
                       onAction={() => navigate(`/culture/${data.id}`)}
                       onToggleFavorite={() => toggleFavorite(data)}
                       isFavorite={isFavorite(data.id, 'culture')}

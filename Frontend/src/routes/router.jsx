@@ -17,18 +17,6 @@ import { FaRegHeart, FaRegUser } from "@ui/icons";
 
 import MainLayout from "@shared/layout/Main";
 
-//import { isAuthenticated } from "@services/auth.services.js";
-
-/*export async function mainLoader() {
-  const hasAccess = isAuthenticated();
-
-  if (!hasAccess) {
-    return redirect("/login");
-  }
-
-  return hasAccess;
-}*/
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -66,11 +54,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <RequireAuth
-            icon={FaRegUser}
-            title="Accede a tu perfil"
-            description="Inicia sesión o crea una cuenta para ver y editar tu información personal, gestionar tus datos y más."
-          >
+          <RequireAuth icon={FaRegUser} variant="profile">
             <Profile />
           </RequireAuth>
         ),
@@ -78,11 +62,7 @@ const router = createBrowserRouter([
       {
         path: "account",
         element: (
-          <RequireAuth
-            icon={FaRegUser}
-            title="Accede a tu perfil"
-            description="Inicia sesión o crea una cuenta para ver y editar tu información personal, gestionar tus datos y más."
-          >
+          <RequireAuth icon={FaRegUser} variant="profile">
             <ProfileAccount />
           </RequireAuth>
         ),
@@ -95,17 +75,12 @@ const router = createBrowserRouter([
     children: [{
       index: true,
       element: (
-        <RequireAuth
-          icon={FaRegHeart}
-          title="Tus favoritos"
-          description="Inicia sesión o crea una cuenta para guardar tus eventos, restaurantes y lugares culturales favoritos."
-        >
+        <RequireAuth icon={FaRegHeart} variant="favorites">
           <Favorite />
         </RequireAuth>
       ),
     }],
   },
-
   {
     path: "/admin",
     element: <MainLayout />,
@@ -113,11 +88,7 @@ const router = createBrowserRouter([
       {
         path: "usuarios",
         element: (
-          <RequireAuth
-            icon={FaRegUser}
-            title="Acceso restringido"
-            description="Esta sección es solo para administradores."
-          >
+          <RequireAuth icon={FaRegUser} variant="admin">
             <AdminUsersPage />
           </RequireAuth>
         ),
@@ -125,11 +96,7 @@ const router = createBrowserRouter([
       {
         path: "comercios",
         element: (
-          <RequireAuth
-            icon={FaRegUser}
-            title="Acceso restringido"
-            description="Esta sección es solo para administradores."
-          >
+          <RequireAuth icon={FaRegUser} variant="admin">
             <AdminComerciosPage />
           </RequireAuth>
         ),
@@ -141,21 +108,6 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [{ index: true, element: <Auth /> }],
   },
-  /* {
-    path: "/dashboard",
-    element: <DashboardLayout />,
-    /*loader: mainLoader,*/
-    /* children: [
-      { index: true, element: <DashboardHome /> },
-      { path: "shelters", element: <SheltersManagement /> },
-      { path: "animals", element: <AnimalsManagement /> },
-      { path: "users", element: <UsersManagement /> },
-      { path: "requests", element: <RequestsManagement /> },
-      { path: "sponsorships", element: <SponsorshipsManagement /> },
-    ],
-  }, 
-  */
-
 ]);
 
 export default router;

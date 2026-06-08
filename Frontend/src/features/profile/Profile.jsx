@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useAuth } from "@features/auth/context/AuthContext";
+import { useLanguage } from "@shared/context/LanguageContext";
 import Button from "@ui/Button";
 import { Card } from "@components/Cards";
 import {
@@ -21,19 +22,22 @@ const fallbackUser = {
   createdAt: new Date().toISOString(),
 };
 
-const menuItems = [
-  { id: "mi-cuenta",     label: "Mi cuenta",                icon: FaRegUser,               path: "/profile/account" },
-  { id: "configuracion", label: "Configuración de la cuenta", icon: FaGear,               path: null },
-  { id: "soporte",       label: "Contacta con soporte",     icon: FaCircleQuestion,         path: null },
-  { id: "legal",         label: "Legal",                    icon: FaFileLines,              path: null },
-  { id: "cerrar-sesion", label: "Cierra sesión",            icon: FaArrowRightFromBracket, isLogout: true },
-];
-
 export default function Profile() {
   const navigate  = useNavigate();
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
+  const tp = t.profile;
+
   const profile = user || fallbackUser;
   const initial = (profile.name || "?").charAt(0).toUpperCase();
+
+  const menuItems = [
+    { id: "mi-cuenta",     label: tp.menuAccount,   icon: FaRegUser,               path: "/profile/account" },
+    { id: "configuracion", label: tp.menuSettings,   icon: FaGear,                  path: null },
+    { id: "soporte",       label: tp.menuSupport,    icon: FaCircleQuestion,         path: null },
+    { id: "legal",         label: tp.menuLegal,      icon: FaFileLines,              path: null },
+    { id: "cerrar-sesion", label: tp.menuLogout,     icon: FaArrowRightFromBracket, isLogout: true },
+  ];
 
   async function handleLogout() {
     await logout();
@@ -43,27 +47,25 @@ export default function Profile() {
   return (
     <div className="profile">
 
-      <h1 className="profile__title">Perfil</h1>
+      <h1 className="profile__title">{tp.title}</h1>
 
-      {/* ── User card ── */}
       <Card display="auth" data={{}} className="profile__card">
         <div className="profile__user">
           <div className="profile__avatar" aria-hidden="true">{initial}</div>
           <div className="profile__user-info">
             <p className="profile__user-name">{profile.name}</p>
-            <p className="profile__user-location">Bilbao, España</p>
+            <p className="profile__user-location">{tp.location}</p>
           </div>
           <div className="profile__user-actions">
             {user && (
               <Button variant="ghost" size="sm" onClick={() => navigate("/profile/account")}>
-                <FaPen /> Editar
+                <FaPen /> {tp.edit}
               </Button>
             )}
           </div>
         </div>
       </Card>
 
-      {/* ── Business card ── */}
       <Card display="auth" data={{}} className="profile__card">
         <button className="profile__business" type="button">
           <div className="profile__business-icon" aria-hidden="true">
@@ -76,14 +78,13 @@ export default function Profile() {
             </svg>
           </div>
           <div className="profile__business-text">
-            <p className="profile__business-title">¿Eres un negocio?</p>
+            <p className="profile__business-title">{tp.businessCta}</p>
           </div>
           <FaArrowRight className="profile__business-arrow" aria-hidden="true" />
         </button>
       </Card>
 
-      {/* ── Navigation menu ── */}
-      <nav className="profile__menu" aria-label="Opciones del perfil">
+      <nav className="profile__menu" aria-label={tp.title}>
         {menuItems.map(({ id, label, icon: Icon, path, isLogout }) => (
           <button
             key={id}
@@ -105,24 +106,23 @@ export default function Profile() {
         ))}
       </nav>
 
-      {/* ── Admin panel ── */}
       {user?.role === "admin" && (
         <section className="profile__admin">
-          <h2 className="profile__admin-title">Panel de administración</h2>
+          <h2 className="profile__admin-title">{tp.adminTitle}</h2>
           <div className="profile__admin-banners">
             <button className="profile__admin-banner" onClick={() => navigate("/admin/usuarios")}>
               <FaUsers className="profile__admin-banner-icon" />
               <div className="profile__admin-banner-text">
-                <p className="profile__admin-banner-label">Gestionar usuarios</p>
-                <p className="profile__admin-banner-desc">Ver todos los usuarios registrados</p>
+                <p className="profile__admin-banner-label">{tp.adminUsers}</p>
+                <p className="profile__admin-banner-desc">{tp.adminUsersDesc}</p>
               </div>
               <FaArrowRight className="profile__admin-banner-arrow" />
             </button>
             <button className="profile__admin-banner" onClick={() => navigate("/admin/comercios")}>
               <FaStore className="profile__admin-banner-icon" />
               <div className="profile__admin-banner-text">
-                <p className="profile__admin-banner-label">Gestionar comercios</p>
-                <p className="profile__admin-banner-desc">Buscar, activar y patrocinar comercios</p>
+                <p className="profile__admin-banner-label">{tp.adminBusinesses}</p>
+                <p className="profile__admin-banner-desc">{tp.adminBusinessesDesc}</p>
               </div>
               <FaArrowRight className="profile__admin-banner-arrow" />
             </button>

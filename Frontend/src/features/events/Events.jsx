@@ -2,8 +2,8 @@ import { useMemo, useState, useEffect } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router';
 import { motion } from 'framer-motion';
 import { useAuth } from '@features/auth/context/AuthContext';
+import { useLanguage } from '@shared/context/LanguageContext';
 import { useResponsiveLimit } from '@hooks/useResponsiveLimit';
-import { useLang } from '@shared/context/LangContext';
 import { useFavorites } from '@shared/context/FavoritesContext';
 import CategorySection from '@shared/components/Section/CategorySection';
 import CategoryFilters from '@shared/components/Filters/CategoryFilters';
@@ -12,10 +12,6 @@ import Card from '@shared/components/Cards/Card';
 import FooterCtas from '@shared/components/FooterCtas/FooterCtas';
 import * as eventsApi from '@services/events.api';
 import './Events.css';
-
-// ---------------------------------------------------------------------------
-// Helpers de fecha para filtrado local en nivel 1
-// ---------------------------------------------------------------------------
 
 function isThisWeek(dateStr) {
   const date = new Date(dateStr);
@@ -33,85 +29,6 @@ function isWeekend(dateStr) {
   return day === 0 || day === 5 || day === 6;
 }
 
-// ---------------------------------------------------------------------------
-// Categorías
-// ---------------------------------------------------------------------------
-
-function buildCategories(municipioId) {
-  return [
-    {
-      id: 'todos',
-      title: 'Todos los eventos',
-      predicate: () => true,
-      baseFilter: null,
-      fetch: eventsApi.list,
-    },
-    {
-      id: 'esta-semana',
-      title: 'Esta semana',
-      predicate: (e) => isThisWeek(e.start_date),
-      baseFilter: { label: 'de esta semana' },
-      fetch: eventsApi.getEstaSemana,
-    },
-    {
-      id: 'fin-de-semana',
-      title: 'Fin de semana',
-      predicate: (e) => isWeekend(e.start_date),
-      baseFilter: { label: 'del fin de semana' },
-      fetch: eventsApi.getFinDeSemana,
-    },
-    {
-      id: 'cerca-de-ti',
-      title: 'Cerca de ti',
-      predicate: (e) => e.municipality_id === municipioId,
-      baseFilter: { label: 'cerca de ti' },
-      fetch: () => eventsApi.getCercaDeTi(municipioId),
-    },
-    {
-      id: 'en-euskera',
-      title: 'En euskera',
-      predicate: (e) => e.language?.toLowerCase().startsWith('eu'),
-      baseFilter: { label: 'en euskera' },
-      fetch: eventsApi.getEnEuskera,
-    },
-  ];
-}
-
-// ---------------------------------------------------------------------------
-// Filtros del nivel 2
-// ---------------------------------------------------------------------------
-
-const FILTER1 = {
-  label: 'Categorías',
-  allLabel: 'Todas',
-  options: [
-    { id: 'concierto',   label: 'Concierto',     predicate: (e) => e.type === 'Concierto' },
-    { id: 'festival',    label: 'Festival',      predicate: (e) => e.type === 'Festival' },
-    { id: 'teatro',      label: 'Teatro',        predicate: (e) => e.type === 'Teatro' },
-    { id: 'danza',       label: 'Danza',         predicate: (e) => e.type === 'Danza' },
-    { id: 'bertso',      label: 'Bertsolarismo', predicate: (e) => e.type === 'Bertsolarismo' },
-    { id: 'exposicion',  label: 'Exposición',    predicate: (e) => e.type === 'Exposición' },
-    { id: 'conferencia', label: 'Conferencia',   predicate: (e) => e.type === 'Conferencia' },
-    { id: 'feria',       label: 'Feria',         predicate: (e) => e.type === 'Feria' },
-  ],
-};
-
-const FILTER2 = {
-  label: 'Ordenar por',
-  defaultLabel: 'Sin ordenar',
-  options: [
-    {
-      id: 'proximos',
-      label: 'Próximos primero',
-      comparator: (a, b) => new Date(a.start_date) - new Date(b.start_date),
-    },
-  ],
-};
-
-// ---------------------------------------------------------------------------
-// Componente principal
-// ---------------------------------------------------------------------------
-
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i = 0) => ({
@@ -123,10 +40,11 @@ const fadeUp = {
 export default function Events() {
   const [searchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
-  const { lang } = useLang();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const filterKey = searchParams.get('filter');
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const te = t.eventsPage;
 
   const isAuth = !authLoading && Boolean(user);
   const limits = useResponsiveLimit(isAuth);
@@ -140,10 +58,70 @@ export default function Events() {
     }
   }
 
-  const categories = useMemo(
-    () => buildCategories(user?.municipality_id ?? 1),
-    [user],
-  );
+  const categories = useMemo(() => [
+    {
+      id: 'todos',
+      title: te.categories.todos,
+      predicate: () => true,
+      baseFilter: null,
+      fetch: eventsApi.list,
+    },
+    {
+      id: 'esta-semana',
+      title: te.categories.estaSemana,
+      predicate: (e) => isThisWeek(e.start_date),
+      baseFilter: { label: te.categoryLabels.estaSemana },
+      fetch: eventsApi.getEstaSemana,
+    },
+    {
+      id: 'fin-de-semana',
+      title: te.categories.finDeSemana,
+      predicate: (e) => isWeekend(e.start_date),
+      baseFilter: { label: te.categoryLabels.finDeSemana },
+      fetch: eventsApi.getFinDeSemana,
+    },
+    {
+      id: 'cerca-de-ti',
+      title: te.categories.cercaDeTi,
+      predicate: (e) => e.municipality_id === (user?.municipality_id ?? 1),
+      baseFilter: { label: te.categoryLabels.cercaDeTi },
+      fetch: () => eventsApi.getCercaDeTi(user?.municipality_id ?? 1),
+    },
+    {
+      id: 'en-euskera',
+      title: te.categories.enEuskera,
+      predicate: (e) => e.language?.toLowerCase().startsWith('eu'),
+      baseFilter: { label: te.categoryLabels.enEuskera },
+      fetch: eventsApi.getEnEuskera,
+    },
+  ], [te, user?.municipality_id]);
+
+  const filter1 = useMemo(() => ({
+    label: te.filter1.label,
+    allLabel: te.filter1.allLabel,
+    options: [
+      { id: 'concierto',   label: te.filter1.concierto,   predicate: (e) => e.type === 'Concierto' },
+      { id: 'festival',    label: te.filter1.festival,    predicate: (e) => e.type === 'Festival' },
+      { id: 'teatro',      label: te.filter1.teatro,      predicate: (e) => e.type === 'Teatro' },
+      { id: 'danza',       label: te.filter1.danza,       predicate: (e) => e.type === 'Danza' },
+      { id: 'bertso',      label: te.filter1.bertso,      predicate: (e) => e.type === 'Bertsolarismo' },
+      { id: 'exposicion',  label: te.filter1.exposicion,  predicate: (e) => e.type === 'Exposición' },
+      { id: 'conferencia', label: te.filter1.conferencia, predicate: (e) => e.type === 'Conferencia' },
+      { id: 'feria',       label: te.filter1.feria,       predicate: (e) => e.type === 'Feria' },
+    ],
+  }), [te]);
+
+  const filter2 = useMemo(() => ({
+    label: te.filter2.label,
+    defaultLabel: te.filter2.defaultLabel,
+    options: [
+      {
+        id: 'proximos',
+        label: te.filter2.proximos,
+        comparator: (a, b) => new Date(a.start_date) - new Date(b.start_date),
+      },
+    ],
+  }), [te]);
 
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -160,36 +138,34 @@ export default function Events() {
       .finally(() => setLoading(false));
   }, [filterKey, category?.id]);
 
-  // ---- Nivel 2: listado con filtros y paginación -------------------------
   if (filterKey) {
     if (!category) return <Navigate to="/events" replace />;
 
     return (
       <div className="events container">
         {loading ? (
-          <p className="events__empty">Cargando...</p>
+          <p className="events__empty">{t.loading}</p>
         ) : (
           <CategoryFilters
-            title="Eventos"
+            title={te.title}
             baseFilter={category.baseFilter}
             items={items}
-            filter1={FILTER1}
-            filter2={FILTER2}
+            filter1={filter1}
+            filter2={filter2}
             onReset={() => navigate('/events')}
           >
             {(filteredItems) =>
               filteredItems.length === 0 ? (
-                <p className="events__empty">No hay eventos con los filtros seleccionados.</p>
+                <p className="events__empty">{te.noResults}</p>
               ) : (
                 <PaginatedGrid
                   items={filteredItems}
                   limit={limits.detail}
-                  emptyMessage="No hay eventos con los filtros seleccionados."
+                  emptyMessage={te.noResults}
                   renderItem={(evento) => (
                     <Card
                       variant="event"
                       data={evento}
-                      lang="es"
                       onAction={() => navigate(`/events/${evento.id}`)}
                       onToggleFavorite={() => toggleFavorite(evento)}
                       isFavorite={isFavorite(evento.id, 'event')}
@@ -204,7 +180,6 @@ export default function Events() {
     );
   }
 
-  // ---- Nivel 1: overview con categorías prefiltradas --------------------
   const authResolved = !authLoading;
 
   return (
@@ -217,12 +192,10 @@ export default function Events() {
           animate="visible"
           custom={0}
         >
-          {lang === 'eu' ? 'Gertakariak' : lang === 'en' ? 'Events' : 'Eventos'}
+          {te.title}
         </motion.h1>
         {loading ? (
-          <p className="events__empty">
-            {lang === 'eu' ? 'Kargatzen...' : lang === 'en' ? 'Loading...' : 'Cargando...'}
-          </p>
+          <p className="events__empty">{t.loading}</p>
         ) : (
           categories.map((cat, i) => {
             const catItems = items.filter(cat.predicate);
@@ -230,7 +203,7 @@ export default function Events() {
               ? isAuth ? `/events?filter=${cat.id}` : '/login'
               : undefined;
             const seeAllLabel = authResolved
-              ? isAuth ? (lang === 'eu' ? 'Guztiak ikusi' : lang === 'en' ? 'See all' : 'Ver todos') : (lang === 'eu' ? 'Gehiago ikusteko hasi saioa' : lang === 'en' ? 'Sign in to see more' : 'Inicia sesión para ver más')
+              ? isAuth ? t.seeAll : t.loginPrompt
               : undefined;
 
             return (
@@ -253,7 +226,6 @@ export default function Events() {
                     <Card
                       variant="event"
                       data={data}
-                      lang={lang}
                       onAction={() => navigate(`/events/${data.id}`)}
                       onToggleFavorite={() => toggleFavorite(data)}
                       isFavorite={isFavorite(data.id, 'event')}

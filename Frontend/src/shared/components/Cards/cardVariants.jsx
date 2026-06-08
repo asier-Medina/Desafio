@@ -11,19 +11,6 @@ import michelinLogo from "./logos/michelin.png";
 import repsolLogo from "./logos/repsol.jpeg";
 import { formatDate } from "./cardHelpers.jsx";
 
-export const LABELS = {
-  es: {
-    featured: "Destacado",
-    ended: "Finalizado",
-    reviews: (n) => `${n} reseñas`,
-  },
-  eu: {
-    featured: "Nabarmendua",
-    ended: "Amaitua",
-    reviews: (n) => `${n} iritzi`,
-  },
-};
-
 const EVENT_ICONS = {
   concierto:    FaMusic,
   festival:     FaCampground,
@@ -55,7 +42,6 @@ const CULTURE_ICONS = {
   playa:            FaUmbrellaBeach,
 };
 
-// Iconos por tipo_comida (lo que aparece en el badge)
 const GASTRONOMY_TIPO_ICONS = {
   'vasca':              FaUtensils,
   'vasca creativa':     FaPaintbrush,
@@ -64,7 +50,6 @@ const GASTRONOMY_TIPO_ICONS = {
   'pescados y mariscos': FaFish,
 };
 
-// Iconos por type de establecimiento (fallback)
 const GASTRONOMY_TYPE_ICONS = {
   'asador':      FaFire,
   'sidrería':    FaWineGlass,

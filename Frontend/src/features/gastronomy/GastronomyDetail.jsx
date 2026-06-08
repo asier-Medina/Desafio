@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useFavorites } from "@shared/context/FavoritesContext";
-import { useLanguage } from "@features/language/LanguageContext";
+import { useLanguage } from "@shared/context/LanguageContext";
 import Detail from "@components/Detail/Detail";
 import * as gastronomyApi from "@services/gastronomy.api";
 
 export default function GastronomyDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { translate } = useLanguage();
+  const { t, translate } = useLanguage();
   const { addFavorite, removeFavorite, isFavorite, user } = useFavorites();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,12 +28,12 @@ export default function GastronomyDetail() {
     }
   }
 
-  if (loading) return <div className="p-8">Cargando restaurante...</div>;
+  if (loading) return <div className="p-8">{t.gastronomyPage.loading}</div>;
 
   if (!data) return (
     <div className="p-8 text-center">
-      <h1>Restaurante no encontrado</h1>
-      <button onClick={() => navigate("/gastronomy")}>Volver a gastronomía</button>
+      <h1>{t.gastronomyPage.notFound}</h1>
+      <button onClick={() => navigate("/gastronomy")}>{t.gastronomyPage.backToList}</button>
     </div>
   );
 

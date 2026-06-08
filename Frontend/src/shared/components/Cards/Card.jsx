@@ -1,5 +1,6 @@
 import { FaRegHeart, FaHeart } from "@ui/icons";
-import { LABELS, VARIANTS } from "./cardVariants.jsx";
+import { useLanguage } from "@shared/context/LanguageContext";
+import { VARIANTS } from "./cardVariants.jsx";
 import { getImage, renderStars } from "./cardHelpers.jsx";
 import "./Card.css";
 
@@ -10,11 +11,11 @@ export default function Card({
   onAction,
   onToggleFavorite,
   isFavorite = false,
-  lang = "es",
   children,
   className = "",
 }) {
-  const t = LABELS[lang] ?? LABELS.es;
+  const { lang, t } = useLanguage();
+  const cardT = t.card;
   const cfg = VARIANTS[variant] || VARIANTS.event;
   const imageUrl = getImage(data, variant);
   const title = cfg.title(data);
@@ -48,7 +49,7 @@ export default function Card({
           <button
             className="card__favorite-btn"
             onClick={(e) => { e.stopPropagation(); onToggleFavorite(data); }}
-            aria-label={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
+            aria-label={isFavorite ? cardT.removeFav : cardT.addFav}
           >
             {isFavorite ? <FaHeart /> : <FaRegHeart />}
           </button>
@@ -78,7 +79,7 @@ export default function Card({
         <h3 className="card__title">{title}</h3>
 
         <div className="card__meta">
-          {cfg.meta(data, t, lang)}
+          {cfg.meta(data, cardT, lang)}
         </div>
 
         {rating > 0 && (
@@ -87,7 +88,7 @@ export default function Card({
               <span className="card__rating-value">{Number(rating).toFixed(1)}</span>
               {renderStars(rating)}
             </span>
-            <span className="card__reviews">{t.reviews(reviews)}</span>
+            <span className="card__reviews">{cardT.reviews(reviews)}</span>
           </span>
         )}
 
