@@ -22,7 +22,6 @@ const Gastronomy = sequelize.define("Gastronomy", {
   num_resenas:            { type: DataTypes.INTEGER },
   nivel_precio:           { type: DataTypes.STRING(50) },
   national_phone_number:  { type: DataTypes.STRING(20) },
-  direccion:              { type: DataTypes.STRING(255) },
   is_sponsored:           { type: DataTypes.BOOLEAN, defaultValue: false },
   active:                 { type: DataTypes.BOOLEAN, defaultValue: true },
   created_at:             { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
