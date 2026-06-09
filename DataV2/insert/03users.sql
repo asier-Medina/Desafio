@@ -2009,8 +2009,11 @@ VALUES
     (1997, 'Imanol', 'Muñoz Zabaleta', 'imanol.munoz123@euskador.eus', '95392d1f2ad36f998695e78e63a19d33740b138711d83f8c3dd9f554d33f0dbd', '+34 98719044', 48003, 'hombre', 54, 'user', '2026-03-28 08:13:00', '2026-03-28 08:13:00'),
     (1998, 'Iñaki', 'Goikoetxea Barandiaran', 'inaki.goikoetxea1517@euskador.eus', '7c93c49fc521604ae3f6c9e7144a4c4edfbc0ef503a9a79b7130ca6004508b8a', '+34 65387151', 20055, 'hombre', 63, 'user', '2026-03-28 15:54:00', '2026-03-28 15:54:00'),
     (1999, 'Miren', 'Goikoetxea Basabe', 'miren.goikoetxea1707@euskador.eus', 'bd9ac7b1d4dd6b10cdcd4870a792cda2b7696e349f42b0ee29f46313de19cb3e', '+34 73993656', 1043, 'mujer', 58, 'user', '2026-03-18 09:40:00', '2026-03-18 09:40:00'),
-    (2000, 'Manuel', 'Goikoetxea Martínez', 'manuel.goikoetxea59@euskador.eus', 'f18bc895766b16f56bb5f6363588eb72eae5f134493a3d307c4f880606eba218', '+34 95645769', 48015, 'hombre', 64, 'user', '2026-03-23 06:34:00', '2026-03-23 06:34:00')
+    (2000, 'Manuel', 'Goikoetxea Martínez', 'manuel.goikoetxea59@euskador.eus', 'f18bc895766b16f56bb5f6363588eb72eae5f134493a3d307c4f880606eba218', '+34 95645769', 48015, 'hombre', 64, 'user', '2026-03-23 06:34:00', '2026-03-23 06:34:00'),
+    (2001, 'Test', 'Test', 'test@gmail.com', '$2b$10$3/DmOdAcxTWpTslAGuMjKeYkMYD7N45FcBbArUjgKpkIHqWgmit6C', '+34 612345678', 48020, 'hombre', 30, 'user', '2026-06-09 10:00:00', '2026-06-09 10:00:00'),
+    (2002, 'Admin', 'Admin', 'admin@gmail.com', '$2b$10$3/DmOdAcxTWpTslAGuMjKeYkMYD7N45FcBbArUjgKpkIHqWgmit6C', '+34 612345678', 48020, 'hombre', 30, 'admin', '2026-06-09 10:00:00', '2026-06-09 10:00:00')
+
 ON CONFLICT (id_user) DO NOTHING;
 
 -- Resetear la secuencia del SERIAL para que arranque tras el último id insertado
-SELECT setval('user_data.users_id_user_seq', 2000, true);
+SELECT setval('user_data.users_id_user_seq', 2001, true);
