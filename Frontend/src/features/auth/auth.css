@@ -44,6 +44,16 @@
   width: 100%;
 }
 
+.auth-card__form-row {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.auth-card__form-row > * {
+  flex: 1;
+  min-width: 0;
+}
+
 .auth-card__error {
   background-color: #fef2f2;
   color: #dc2626;

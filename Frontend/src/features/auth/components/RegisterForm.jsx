@@ -123,25 +123,27 @@ export default function RegisterForm({ onSuccess }) {
         onChange={handleMunicipality}
         error={fieldErrors.municipality_id}
       />
-      <SelectField
-        label={ta.gender}
-        id="register-sexo"
-        options={genderOptions}
-        value={form.sexo}
-        onChange={handleChange('sexo')}
-        error={fieldErrors.sexo}
-      />
-      <InputField
-        label={ta.age}
-        id="register-age"
-        type="number"
-        placeholder="30"
-        value={form.age}
-        onChange={handleChange('age')}
-        error={fieldErrors.age}
-        min={18}
-        max={99}
-      />
+      <div className="auth-card__form-row">
+        <SelectField
+          label={ta.gender}
+          id="register-sexo"
+          options={genderOptions}
+          value={form.sexo}
+          onChange={handleChange('sexo')}
+          error={fieldErrors.sexo}
+        />
+        <InputField
+          label={ta.age}
+          id="register-age"
+          type="number"
+          placeholder="45"
+          value={form.age}
+          onChange={handleChange('age')}
+          error={fieldErrors.age}
+          min={18}
+          max={99}
+        />
+      </div>
       <PasswordInput
         label={ta.password}
         id="register-password"
