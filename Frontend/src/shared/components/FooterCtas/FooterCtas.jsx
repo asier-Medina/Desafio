@@ -1,11 +1,8 @@
-import { useNavigate } from 'react-router';
-import Button from '@shared/ui/Button';
 import { FaArrowUpRightFromSquare } from '@ui/icons';
 import { useLanguage } from '@shared/context/LanguageContext';
 import './FooterCtas.css';
 
 export default function FooterCtas() {
-  const navigate = useNavigate();
   const { t } = useLanguage();
   const tc = t.footerCtas;
 
@@ -14,23 +11,23 @@ export default function FooterCtas() {
       <div className="container">
         <div className="footer-ctas__grid">
 
-          <div className="footer-ctas__card footer-ctas__card--business">
+          <a
+            href="https://olatzglez.github.io/SustraiApp_LandingPage/landing-sustrai/landing.html"
+            className="footer-ctas__card footer-ctas__card--business"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <div className="footer-ctas__body">
               <h2 className="footer-ctas__title">{tc.businessTitle}</h2>
               <p className="footer-ctas__desc">{tc.businessDesc}</p>
             </div>
-            <Button
-              variant="outline"
-              size="md"
-              className="footer-ctas__btn"
-              onClick={() => navigate('/login')}
-            >
-              {tc.businessBtn}
-            </Button>
-          </div>
+            <span className="btn btn--outline btn--md footer-ctas__btn">
+              <span className="btn__text">{tc.businessBtn}</span>
+            </span>
+          </a>
 
           <a
-            href="#"
+            href="https://olatzglez.github.io/SustraiApp_LandingPage/landing-sustrai/blog.html"
             className="footer-ctas__card footer-ctas__card--blog"
             target="_blank"
             rel="noopener noreferrer"
