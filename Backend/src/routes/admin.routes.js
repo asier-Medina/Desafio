@@ -12,4 +12,10 @@ router.delete("/users/:id",    ctrl.deleteUser);
 router.get("/comercios",       ctrl.getComercio);
 router.patch("/comercios/:id", ctrl.updateComercio);
 
+router.get("/cultura",         ctrl.getCultura);
+router.patch("/cultura/:id",   ctrl.updateCultura);
+
+router.get("/eventos",         ctrl.getEventos);
+router.patch("/eventos/:id",   ctrl.updateEvento);
+
 export default router;

@@ -1,5 +1,82 @@
 @import "./admin.base.css";
 
+/* ── Tabs ───────────────────────────────────────────────────── */
+
+.admin-comercios__tabs {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+  border-bottom: 1.5px solid color-mix(in srgb, var(--brand-navy) 12%, transparent);
+  padding-bottom: var(--space-xs);
+}
+
+.admin-comercios__tab {
+  padding: 0.4rem 1rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-soft);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.admin-comercios__tab:hover {
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--brand-navy) 5%, transparent);
+}
+
+.admin-comercios__tab--active {
+  color: var(--color-primary);
+  font-weight: 700;
+  border-color: color-mix(in srgb, var(--brand-navy) 18%, transparent);
+  border-bottom-color: var(--color-surface);
+  background: var(--color-surface);
+  margin-bottom: -1.5px;
+}
+
+/* ── Filters row ─────────────────────────────────────────────── */
+
+.admin-page__filters {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.admin-page__filters .admin-page__search-wrap {
+  flex: 1;
+  min-width: 160px;
+}
+
+.admin-comercios__category-select {
+  padding: 0.45rem 0.75rem;
+  border: 1.5px solid color-mix(in srgb, var(--brand-navy) 18%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-text);
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.admin-comercios__category-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* ── Category badge ──────────────────────────────────────────── */
+
+.admin-comercios__badge--type {
+  background: color-mix(in srgb, var(--brand-navy) 8%, transparent);
+  color: var(--color-text-soft);
+  border: 1px solid color-mix(in srgb, var(--brand-navy) 18%, transparent);
+}
+
 /* ── Comercios list ─────────────────────────────────────────── */
 
 .admin-comercios__list {

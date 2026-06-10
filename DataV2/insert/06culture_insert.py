@@ -104,7 +104,7 @@ placeholders = ", ".join(["%s"] * len(df_db.columns))
 query_insert = f"""
     INSERT INTO market_data.culture ({cols})
     VALUES ({placeholders})
-    ON CONFLICT (nombre, municipality_id) DO NOTHING;
+    ON CONFLICT (nombre, municipality_id) DO UPDATE SET is_sponsored = EXCLUDED.is_sponsored;
 """
 
 try:

@@ -110,6 +110,11 @@ export default function Culture() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const sponsoredFirst = useMemo(
+    () => [...items].sort((a, b) => (b.is_sponsored ? 1 : 0) - (a.is_sponsored ? 1 : 0)),
+    [items],
+  );
+
   const category = filterKey ? categories.find((c) => c.id === filterKey) : null;
 
   useEffect(() => {
@@ -133,7 +138,7 @@ export default function Culture() {
           <CategoryFilters
             title={tc.title}
             baseFilter={category.baseFilter}
-            items={items}
+            items={sponsoredFirst}
             filter1={filter1}
             filter2={filter2}
             onReset={() => navigate('/culture')}

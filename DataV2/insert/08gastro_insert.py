@@ -78,7 +78,7 @@ placeholders = ", ".join(["%s"] * len(df_db.columns))
 query_insert = f"""
     INSERT INTO market_data.gastronomy ({cols})
     VALUES ({placeholders})
-    ON CONFLICT (nombre, municipality_id) DO NOTHING;
+    ON CONFLICT (nombre, municipality_id) DO UPDATE SET is_sponsored = EXCLUDED.is_sponsored;
 """
 
 records = df_db.where(pd.notnull(df_db), None).values.tolist()

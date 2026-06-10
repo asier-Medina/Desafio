@@ -17,3 +17,9 @@ export const updateUser     = (id, body)   => request('PATCH',  `/users/${id}`, 
 export const deleteUser     = (id)         => request('DELETE', `/users/${id}`)
 export const getComercio    = ()           => request('GET',    '/comercios')
 export const updateComercio = (id, body)   => request('PATCH',  `/comercios/${id}`, body)
+
+export const getCultura     = ()           => request('GET',    '/cultura')
+export const updateCultura  = (id, body)   => request('PATCH',  `/cultura/${id}`, body)
+
+export const getEventos     = ()           => request('GET',    '/eventos')
+export const updateEvento   = (id, body)   => request('PATCH',  `/eventos/${id}`, body)

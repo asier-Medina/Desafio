@@ -45,6 +45,9 @@ export default function Card({
         ) : (
           <div className={`card__img-placeholder card__img-placeholder--${variant}`} />
         )}
+        {data.is_sponsored && (
+          <span className="card__sponsored-badge" aria-label="Patrocinado">Promo</span>
+        )}
         {onToggleFavorite && (
           <button
             className="card__favorite-btn"

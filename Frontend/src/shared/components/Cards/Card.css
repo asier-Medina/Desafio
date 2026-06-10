@@ -230,6 +230,24 @@
   background: color-mix(in srgb, var(--brand-plum) 8%, transparent);
 }
 
+.card__sponsored-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: var(--radius-pill);
+  color: #CD3700;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  line-height: 1.4;
+}
+
 .card__favorite-btn {
   position: absolute;
   top: 6px;
@@ -239,15 +257,19 @@
   justify-content: center;
   border: none;
   outline: none;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
   padding: 0;
   min-height: unset;
   color: #e53e3e;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   cursor: pointer;
   pointer-events: auto;
-  z-index: 2;
-  transition: transform 0.15s;
+  z-index: 10;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s, background 0.15s;
 }
 
 .card__favorite-btn:hover {

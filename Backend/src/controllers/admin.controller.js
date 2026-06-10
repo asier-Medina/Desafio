@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import { Gastronomy, Municipality } from "../models/index.js";
+import { Gastronomy, Culture, Event, Municipality } from "../models/index.js";
 
 export const getUsers = async (req, res) => {
   try {
@@ -56,6 +56,68 @@ export const deleteUser = async (req, res) => {
 
     await u.destroy();
     res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const getCultura = async (req, res) => {
+  try {
+    const items = await Culture.findAll({
+      include: [{ model: Municipality, attributes: ["nombre", "provincia"] }],
+      order: [["nombre", "ASC"]],
+    });
+    res.json(items);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const updateCultura = async (req, res) => {
+  try {
+    const item = await Culture.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ error: "Elemento no encontrado" });
+
+    const allowed = {};
+    if (typeof req.body.active       === "boolean") allowed.active       = req.body.active;
+    if (typeof req.body.is_sponsored === "boolean") allowed.is_sponsored = req.body.is_sponsored;
+
+    if (Object.keys(allowed).length === 0)
+      return res.status(400).json({ error: "Nada que actualizar" });
+
+    await item.update(allowed);
+    res.json({ id: item.id, active: item.active, is_sponsored: item.is_sponsored });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const getEventos = async (req, res) => {
+  try {
+    const items = await Event.findAll({
+      include: [{ model: Municipality, attributes: ["nombre", "provincia"] }],
+      order: [["start_date", "DESC"]],
+    });
+    res.json(items);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const updateEvento = async (req, res) => {
+  try {
+    const item = await Event.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ error: "Evento no encontrado" });
+
+    const allowed = {};
+    if (typeof req.body.active       === "boolean") allowed.active       = req.body.active;
+    if (typeof req.body.is_sponsored === "boolean") allowed.is_sponsored = req.body.is_sponsored;
+
+    if (Object.keys(allowed).length === 0)
+      return res.status(400).json({ error: "Nada que actualizar" });
+
+    await item.update(allowed);
+    res.json({ id: item.id, active: item.active, is_sponsored: item.is_sponsored });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
