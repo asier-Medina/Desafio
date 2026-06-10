@@ -41,9 +41,7 @@ export function FavoritesProvider({ children }) {
         if (!cancelled) {
           setFavorites(items.filter(Boolean));
         }
-      } catch (err) {
-        console.error('[Favorites] Error cargando favoritos:', err)
-      }
+      } catch {}
     }
     load();
     return () => { cancelled = true; };
@@ -61,8 +59,7 @@ export function FavoritesProvider({ children }) {
     try {
       await favoritesApi.add(item.id, entidad_tipo);
     } catch (err) {
-      if (err.message === 'Ya existe en favoritos') return; // ya estaba en BD, mantener optimistic
-      console.error('[Favorites] Error añadiendo favorito:', err)
+      if (err.message === 'Ya existe en favoritos') return;
       // Rollback
       setFavorites(prev => prev.filter(f => !(f.id === item.id && f._variant === item._variant)));
     }
@@ -76,8 +73,7 @@ export function FavoritesProvider({ children }) {
     if (!entidad_tipo || !user) return;
     try {
       await favoritesApi.remove(entidad_tipo, id);
-    } catch (err) {
-      console.error('[Favorites] Error eliminando favorito:', err)
+    } catch {
       // Rollback
       if (removed) setFavorites(prev => [...prev, removed]);
     }

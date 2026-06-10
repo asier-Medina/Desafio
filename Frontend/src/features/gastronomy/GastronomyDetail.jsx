@@ -16,7 +16,7 @@ export default function GastronomyDetail() {
   useEffect(() => {
     gastronomyApi.getById(id)
       .then(item => translate(item, ["nombre", "direccion", "descripcion", "tipo_comida"]).then(setData))
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [id, translate]);
 

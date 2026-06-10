@@ -21,11 +21,6 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use((req, _res, next) => {
-  console.log(`${new Date().toISOString()}  ${req.method} ${req.url}`);
-  next();
-});
-
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", mensaje: "Backend en marcha 🚀" });
 });
@@ -37,13 +32,9 @@ app.use(errorHandler);
 const start = async () => {
   try {
     await sequelize.authenticate();
-    console.log("✅ Postgres conectado");
-    app.listen(PORT, () => {
-      console.log(`\n✅ Backend escuchando en http://localhost:${PORT}`);
-      console.log(`   Prueba: http://localhost:${PORT}/api/health\n`);
-    });
+    app.listen(PORT);
   } catch (error) {
-    console.error("❌ Error al arrancar:", error.message);
+    process.stderr.write(`Error al arrancar: ${error.message}\n`);
     process.exit(1);
   }
 };

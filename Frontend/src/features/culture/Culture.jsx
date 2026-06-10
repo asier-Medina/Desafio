@@ -123,7 +123,7 @@ export default function Culture() {
     const fetcher = category ? category.fetch() : cultureApi.list();
     fetcher
       .then((data) => setItems(Array.isArray(data) ? data : []))
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [filterKey, category?.id]);
 

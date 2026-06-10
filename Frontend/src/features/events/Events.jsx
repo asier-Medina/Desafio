@@ -139,7 +139,7 @@ export default function Events() {
     const fetcher = category ? category.fetch() : eventsApi.list();
     fetcher
       .then((data) => setItems(Array.isArray(data) ? data : []))
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [filterKey, category?.id]);
 

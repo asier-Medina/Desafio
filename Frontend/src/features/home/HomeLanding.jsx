@@ -52,7 +52,7 @@ export default function HomeLanding() {
         setGastronomy(Array.isArray(gas) ? gas : []);
         setCulture(Array.isArray(cul) ? cul : []);
       })
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 

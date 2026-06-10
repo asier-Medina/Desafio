@@ -16,7 +16,7 @@ export default function CultureDetail() {
   useEffect(() => {
     cultureApi.getById(id)
       .then(item => translate(item, ["nombre", "direccion", "descripcion", "tipo_lugar"]).then(setData))
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [id, translate]);
 

@@ -123,7 +123,7 @@ export default function Gastronomy() {
     const fetcher = category ? category.fetch() : gastronomyApi.list();
     fetcher
       .then((data) => setItems(Array.isArray(data) ? data : []))
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [filterKey, category?.id]);
 

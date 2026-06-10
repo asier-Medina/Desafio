@@ -11,10 +11,8 @@ async function fromML(path) {
     const { data } = await axios.get(url, { timeout: ML_TIMEOUT });
     const payload = data?.data ?? data;
     if (Array.isArray(payload) && payload.length > 0) return payload;
-    console.warn(`[ML] ${url} → respuesta vacía, usando DB`);
     return null;
-  } catch (err) {
-    console.warn(`[ML] ${url} → error (${err.code ?? err.message}), usando DB`);
+  } catch {
     return null;
   }
 }

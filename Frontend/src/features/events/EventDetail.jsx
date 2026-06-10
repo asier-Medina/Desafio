@@ -16,7 +16,7 @@ export default function EventDetail() {
   useEffect(() => {
     eventsApi.getById(id)
       .then(item => translate(item, ["nombre_es", "type", "establishment", "place", "descripcion"]).then(setData))
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [id, translate]);
 
