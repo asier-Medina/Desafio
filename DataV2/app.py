@@ -3,6 +3,7 @@ from config import Config
 from models import (db, Municipio, Usuario, Preferencia, Interes,
                     UserInteres, Resena, Evento, Gastronomia, Cultura,
                     Qualification, GastronomyQualification)
+from assistant_logic import manejar_chat_flask
 from flask_cors import CORS
 from sqlalchemy import text
 from datetime import datetime
@@ -416,6 +417,29 @@ def create_app():
         }
         resenas = Resena.query.filter(fk_col[entidad_tipo] == entidad_id).all()
         return ok([r.to_dict() for r in resenas])
+
+    # =========================================================================
+    # CHATBOT
+    # =========================================================================
+
+    @app.route('/api/chat', methods=['POST'])
+    def chat_assistant():
+        data = request.get_json()
+        if not data or 'message' not in data:
+            return err("Falta el mensaje")
+
+        user_id = request.headers.get('X-User-Id', type=int)
+
+        try:
+            respuesta = manejar_chat_flask(
+                message=data['message'],
+                session_id=data.get('session_id', 'default'),
+                user_id=user_id
+            )
+            return ok(respuesta.dict())
+        except Exception as e:
+            logging.error(f"Error en chat: {e}")
+            return err(f"Error en el asistente: {str(e)}", 500)
 
     return app
 
