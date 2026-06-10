@@ -8,6 +8,7 @@ import favoriteRouter       from './favorite.routes.js';
 import reviewRouter         from './review.routes.js';
 import adminRouter          from './admin.routes.js';
 import municipalitiesRouter from './municipalities.routes.js';
+import chatRouter           from './chat.routes.js';
 
 const router = Router()
 
@@ -20,5 +21,6 @@ router.use("/users/me/favorites", favoriteRouter)
 router.use("/reviews",            reviewRouter)
 router.use("/admin",              adminRouter)
 router.use("/municipalities",     municipalitiesRouter)
+router.use("/chat",               chatRouter)
 
 export default router

@@ -2,6 +2,7 @@ import { Outlet, useNavigate, useLocation } from "react-router";
 import { useAuth } from "@features/auth/context/AuthContext";
 import Header from "@shared/components/Header/Header.jsx";
 import MobileNav from "@shared/components/MobileNav/MobileNav";
+import Chatbot from "@features/chatbot/Chatbot";
 import { FavoritesProvider } from "@shared/context/FavoritesContext";
 
 function LayoutInner() {
@@ -28,6 +29,7 @@ function LayoutInner() {
         <Outlet />
       </main>
       <MobileNav onNavigate={navigate} currentPath={pathname} hidden={pathname === "/login"} />
+      {user && ["/", "/gastronomy", "/culture", "/events"].includes(pathname) && <Chatbot />}
     </FavoritesProvider>
   );
 }
