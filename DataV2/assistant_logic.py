@@ -327,3 +327,126 @@ def manejar_chat_flask(message: str, session_id: str, user_id: Optional[int] = N
         suggestion = f"No he encontrado resultados de {tipos_str} cerca de {lugar_str}."
 
     return ChatResponse(suggestion=suggestion, items=items_db, aviso=None)
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+# BLOQUE DESCONECTADO — Recomendación por contenido (GradientBoosting)
+# ─────────────────────────────────────────────────────────────────────────────
+# Este bloque NO está conectado a nada. No se importa ni se llama desde ningún
+# sitio. Está aquí para cuando se quiera activar el filtrado por contenido
+# como alternativa o complemento al SVD colaborativo.
+#
+# PARA ACTIVAR:
+#   1. Asegurar scikit-learn >= 1.8 (los .pkl se generaron con esa versión)
+#   2. Descomentar este bloque
+#   3. En buscar_recomendaciones(), sustituir el order_by(valoracion.desc())
+#      por _rankear_por_contenido(items_df, categoria)
+#   4. Opcionalmente pasar user_afines (intereses del usuario como dict de
+#      columnas afin_*) para personalizar la predicción de eventos
+#
+# MODELOS DISPONIBLES EN ML/models/:
+#   content_gastro.pkl      → Pipeline(SimpleImputer + GradientBoostingRegressor)
+#   content_patrimonio.pkl  → ídem
+#   scaler_gastro.pkl       → MinMaxScaler(feature_range=(1,5)) sobre 'valoracion'
+#   scaler_valoracion.pkl   → MinMaxScaler(feature_range=(1,5)) sobre 'valoracion'
+#   feature_cols_patrimonio.csv → columnas exactas que espera content_patrimonio.pkl
+#
+# NOTA: content_eventos.pkl y svd_eventos.pkl no están en este proyecto todavía.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# import pickle, os, numpy as np, pandas as pd
+#
+# _MODELS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ML", "models")
+#
+# def _cargar(nombre):
+#     with open(os.path.join(_MODELS_DIR, nombre), "rb") as f:
+#         return pickle.load(f)
+#
+# # Carga diferida — descomentar cuando se quiera activar
+# # _model_content_gastro      = _cargar("content_gastro.pkl")
+# # _model_content_patrimonio  = _cargar("content_patrimonio.pkl")
+# # _scaler_gastro             = _cargar("scaler_gastro.pkl")
+# # _scaler_valoracion         = _cargar("scaler_valoracion.pkl")
+#
+#
+# # ── Features esperadas por cada modelo ───────────────────────────────────────
+# # Gastro: 'Tipo de lugar' (Asador/Bodega/Bodega Txakoli/Restaurante/Sidreria/
+# #         queseria), 'Nivel precio' (Caro/Moderado/Muy caro), 'Provincia'
+# #         (Araba/Bizkaia/Gipuzkoa), 'Entorno' (Bilbao/Costa Vasca/
+# #         Montes y Valles vascos/Rioja Alavesa/San Sebastián/Vitoria-Gasteiz),
+# #         'Michelin', 'Euskal Baserri', 'Eusko Label', 'valoracion'
+# #
+# # Patrimonio: columnas exactas en ML/models/feature_cols_patrimonio.csv
+# #             Incluye 'tipo_cultura_Patrimonio Cultural', 'Capacidad',
+# #             'Visita Guiada', 'culture_id', 'valoracion'
+#
+#
+# def _build_features_gastro(items_df: pd.DataFrame) -> pd.DataFrame:
+#     """Construye el DataFrame de features para el modelo de gastronomía."""
+#     df = items_df.copy()
+#     df = pd.get_dummies(df, columns=["Tipo de lugar", "Nivel precio",
+#                                      "Provincia", "Entorno"])
+#     for col in ["Michelin", "Euskal Baserri", "Eusko Label"]:
+#         if col not in df.columns:
+#             df[col] = False
+#     return df
+#
+#
+# def _build_features_patrimonio(items_df: pd.DataFrame) -> pd.DataFrame:
+#     """
+#     Construye el DataFrame de features para el modelo de patrimonio.
+#     Usa feature_cols_patrimonio.csv para garantizar el orden exacto de columnas.
+#     """
+#     df = items_df.copy()
+#     cols_path = os.path.join(_MODELS_DIR, "feature_cols_patrimonio.csv")
+#     expected_cols = pd.read_csv(cols_path).columns.tolist()
+#     df["tipo_cultura_Patrimonio Cultural"] = (
+#         df.get("tipo_lugar", pd.Series(dtype=str)) == "Patrimonio Cultural"
+#     ).astype(int)
+#     for col in ["Capacidad", "Visita Guiada"]:
+#         if col not in df.columns:
+#             df[col] = 0
+#     for col in expected_cols:
+#         if col not in df.columns:
+#             df[col] = 0
+#     return df[expected_cols]
+#
+#
+# def _rankear_por_contenido(items_df: pd.DataFrame,
+#                             categoria: str,
+#                             top_n: int = 5) -> pd.DataFrame:
+#     """
+#     Puntúa y ordena items usando el modelo de contenido correspondiente.
+#
+#     Parámetros
+#     ----------
+#     items_df  : DataFrame con los ítems del catálogo (columnas de la BD)
+#     categoria : 'gastro' | 'patrimonio'
+#     top_n     : número de resultados a devolver
+#
+#     Devuelve
+#     --------
+#     DataFrame con columna 'score_contenido' añadida, ordenado desc.
+#     Sustituye al order_by(valoracion.desc()) actual en buscar_recomendaciones().
+#     """
+#     if categoria == "gastro":
+#         modelo   = _model_content_gastro
+#         features = _build_features_gastro(items_df)
+#     elif categoria == "patrimonio":
+#         modelo   = _model_content_patrimonio
+#         features = _build_features_patrimonio(items_df)
+#     else:
+#         raise ValueError(f"Categoría desconocida: {categoria}")
+#
+#     # Alinear columnas con las que espera el modelo
+#     if hasattr(modelo, "feature_names_in_"):
+#         for col in modelo.feature_names_in_:
+#             if col not in features.columns:
+#                 features[col] = 0
+#         features = features.reindex(columns=modelo.feature_names_in_, fill_value=0)
+#
+#     items_df = items_df.copy()
+#     items_df["score_contenido"] = modelo.predict(features)
+#     return items_df.sort_values("score_contenido", ascending=False).head(top_n)
+#
+# ═════════════════════════════════════════════════════════════════════════════
