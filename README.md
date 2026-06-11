@@ -280,7 +280,7 @@ SustraiApp/
 | Guardar favoritos | — | ✓ | ✓ |
 | Escribir reseñas | — | ✓ | ✓ |
 | Editar perfil e intereses | — | ✓ | ✓ |
-| Usar chatbot | ✓ (sin personalizar) | ✓ (personalizado) | ✓ |
+| Usar chatbot |       | ✓ (personalizado) | ✓ |
 | Panel de administración | — | — | ✓ |
 | Activar / patrocinar contenido | — | — | ✓ |
 | Gestionar usuarios | — | — | ✓ |
